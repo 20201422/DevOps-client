@@ -1,5 +1,5 @@
 <script>
-const name='global'
+const name='global_color'
 
 // 颜色集 在这里添加颜色
 const blue = '#007bff'  // 主题蓝

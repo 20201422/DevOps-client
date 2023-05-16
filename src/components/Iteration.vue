@@ -1,16 +1,13 @@
 <template>
-工作列表
+迭代计划
 </template>
 
 <script>
-
 export default {
-    name: "Work",
+    name: "Iteration",
 
     props: {
         msg: String,
-        userName: String,
-        userType: String,
     },
 
     components:{

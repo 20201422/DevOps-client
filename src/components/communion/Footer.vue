@@ -14,17 +14,17 @@
 </template>
 
 <script>
-import global from "@/app/Global.vue"
+import Global_color from "@/app/Global_color.vue"
 
 export default {
-    userId: "Footer",
+    name: "Footer",
     props: {
         msg: String
     },
     data(){
         return{
-            background_color:global.main_color,
-            font_color:global.black1,
+            background_color:Global_color.main_color,
+            font_color:Global_color.black1,
         }
     }
 }

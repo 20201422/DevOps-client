@@ -11,13 +11,15 @@
 </template>
 
 <script>
-import global from "@/app/Global.vue"
+import Global_color from "@/app/Global_color.vue"
 
 export default {
-    userId: "Advertisement",
+    name: "Advertisement",
+
     props: {
         msg: String
     },
+
     data(){
         return{
             advertisementId:Math.floor(Math.random()*6),
@@ -44,8 +46,8 @@ export default {
                 'https://www.apple.com.cn/apple-watch-ultra/',
                 'https://www.apple.com.cn/education-initiative/',],
             advertisementLinkName:['LFouse','Apple','Not Found','堃芃','Apple','Apple',],
-            link_color: global.main_color,
-            link_color1: global.main_color1,
+            link_color: Global_color.main_color,
+            link_color1: Global_color.main_color1,
         }
     }
 }

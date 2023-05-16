@@ -5,14 +5,14 @@
                 <h1>Login</h1>
                 <div class="form">
                     <div class="item">
-                        <label>账号：</label><input type="text" name="username"
-                                                     v-model.trim="name" placeholder="请输入账号">
+                        <label>账号：</label><input type="text" name="userId"
+                                                     v-model.trim="login_form.userId" placeholder="请输入账号">
                         <!-- v-model把输入的值传输给name变量 -->
                         <br />
                     </div>
                     <div class="item">
-                        <label>密码：</label><input type="password" name="password"
-                                                   v-model.trim="password" placeholder="请输入密码">
+                        <label>密码：</label><input type="password" name="userPassword"
+                                                   v-model.trim="login_form.userPassword" placeholder="请输入密码">
                         <br />
                     </div>
                     <!-- <div class="keep">
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import global from "@/app/Global"
+import Global_color from "@/app/Global_color.vue"
 
 export default {
     data() {
@@ -42,18 +42,18 @@ export default {
                 userName: "",   // 名字
                 userPassword: "",   // 密码
                 userType: "",   // 类型
+                userImage:"",   // 图片
             },
             st: "false",    // false为不保存登录
-            button_t: global.button_color1,
-            button_b: global.button_color,
-            font_grey: global.grey1,
-            grey: global.grey2,
+            button_t: Global_color.button_color1,
+            button_b: Global_color.button_color,
+            font_grey: Global_color.grey1,
+            grey: Global_color.grey2,
         };
     },
+
     computed: {
         background_style: function() {
-            // 计算body可用高度
-            let cHeight = window.outerHeight - (window.outerHeight - window.innerHeight)
             // 计算背景图
             let img = [
                 "/background1.jpeg",
@@ -61,9 +61,8 @@ export default {
                 "/background3.jpeg",
                 "/background4.jpeg",
                 "/background5.jpeg",
-                "/background6.jpeg",
             ]
-            let imgName = img[Math.floor(Math.random() * 6)]
+            let imgName = img[Math.floor(Math.random() * 5)]
             return "background: url('" + imgName + "'); " +
                 "background-repeat: round; " +
                 "width: 100%; " +
@@ -75,20 +74,31 @@ export default {
         },
 
     },
+
     methods: {
         handle_login: function () {
-            if (this.userId === '') { // 名字为空
-                alert('用户名不为空');
-            } else if (this.userPassword === '') {    // 密码为空
-                alert('密码不为空');
+            if (this.login_form.userId === '') { // 名字为空
+                alert('⚠️ 用户名为空 ⚠️');
+            } else if (this.login_form.userPassword === '') {    // 密码为空
+                alert('⚠️ 密码为空 ⚠️');
             } else {
-                this.axios.post('http://localhost:9090/login', this.login_form).then((resp) => {
+                this.$axios.post('/login', this.login_form).then((resp) => {
                     let data = resp.data
                     console.log(data)
-                    if (data.success) {
-                        this.$router.replace('/Main/Project');  // 如果输入的名字以及密码正确路由跳转至个人页面
+                    if (data.message === "登录成功") {
+                        this.$router.replace('/Main')  // 如果输入的名字以及密码正确路由跳转至个人页面
+                        //将用户名放入sessionStorage中
+                        sessionStorage.setItem("user", JSON.stringify(data.data));
+                        sessionStorage.setItem("userToken", data.data.userPassword)
+                        //将用户名放入vuex中
+                        this.$store.dispatch("setUser", JSON.stringify(data.data));
+                        this.$store.dispatch("setToken", data.data.userPassword);
+                    } else if (data.message === "用户不存在"){
+                        alert('用户不存在❗')
+                    } else if (data.message === "密码错误") {
+                        alert('密码错误❗')
                     } else {
-                        alert('账号或密码错误');
+                        alert('账号或密码错误❗')
                     }
                 })
             }
@@ -102,7 +112,19 @@ export default {
         //   localStorage.setItem('s', this.st);
         //   console.log(localStorage.s);
         // }
-    }
+    },
+
+    //此方法写在method外面
+    //to: Route: 即将要进入的目标路由对象
+    //from: Route: 当前导航正要离开的路由
+    //next()：必须执行
+    beforeRouteEnter: (to, from, next) => {
+        next(vm => {
+            // vm 就是当前组件的实例相当于上面的 this，所以在 next 方法里你就可以把 vm 当 this 来用了。
+            vm.$store.dispatch("setUser", null);
+        });
+    },
+
 };
 </script>
 
@@ -148,7 +170,7 @@ input {
     margin-left: -5px;
     padding: 4px;
     border: solid 0;
-    border-radius:8px;
+    border-radius: 4px;
     outline: 0;
     font: normal 13px/100% Verdana, Tahoma, sans-serif;
     width: 200px;
