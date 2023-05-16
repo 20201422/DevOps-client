@@ -6,7 +6,7 @@
                 DevOps
             </a>
             <a class="text-body">{{sayHello()}}</a>
-            <button type="button" class="btn btn-outline-primary btn-sm">退出登录</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" @click.prevent="login_out">退出登录</button>
         </nav>
         <br>
     </header>
@@ -16,7 +16,7 @@
 import global from "@/app/Global.vue"
 
 export default {
-    name: "Header",
+    userId: "Header",
     props: {
         msg: String
     },
@@ -34,6 +34,9 @@ export default {
                 return `👋您好，${this.username}‍！`
             else
                 return `👋您好，${this.username}！`
+        },
+        login_out: function() {
+            this.$router.replace('/');//路由跳转至登录页面
         }
     }
 

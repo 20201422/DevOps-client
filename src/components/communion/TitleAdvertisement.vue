@@ -8,7 +8,7 @@
 import global from "@/app/Global.vue"
 
 export default {
-    name: "TitleAdvertisement",
+    userId: "TitleAdvertisement",
     data(){
         return{
             a:'热烈庆祝中国共产党第二十次全国代表大会',

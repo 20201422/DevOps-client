@@ -14,7 +14,7 @@
 import global from "@/app/Global.vue"
 
 export default {
-    name: "Advertisement",
+    userId: "Advertisement",
     props: {
         msg: String
     },

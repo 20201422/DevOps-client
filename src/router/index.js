@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import MainView from "@/views/MainView.vue";
+import Login from "@/views/LoginView.vue";
+import Main from "@/views/MainView.vue";
 
 import Project from "@/components/Project.vue";
 import Iteration from "@/components/IterationVue.vue";
@@ -10,14 +11,19 @@ import Story from "@/components/Story.vue";
 const routes = [
   {
     path: '/',
-    redirect: '/MainView'
+    redirect: '/Login'
   },
   {
-    path: '/MainView',
-    name: 'mainView',
-    component: MainView,
+    path: '/Login',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/Main',
+    name: 'main',
+    component: Main,
     children: [
-      { path: '/MainView', redirect: '/MainView/Project', },
+      { path: '/Main', redirect: '/Main/Project', },
       { path: 'Project', component: Project },
       { path: 'Iteration', component: Iteration },
       { path: 'Work', component: Work },

@@ -38,7 +38,7 @@ const shadow_color = grey // 阴影色
 const font_grey = grey2 // 字体色
 
 export default {
-    name: name,
+    userId: name,
     blue: blue,
     blue1: blue1,
     red: red,

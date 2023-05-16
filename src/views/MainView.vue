@@ -48,7 +48,7 @@ import Footer from '../components/communion/Footer.vue'
 import global from "@/app/Global"
 
 export default {
-    name: "TeacherView",
+    userId: "Main",
     components: {
         Header,
         // TitleAdvertisement,

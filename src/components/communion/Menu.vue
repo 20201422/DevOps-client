@@ -10,7 +10,7 @@
 
 <script>
 export default {
-    name: "Menu",
+    userId: "Menu",
     props: {
         msg: String
     },
