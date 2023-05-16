@@ -9,17 +9,16 @@
                 <div class="col-sm-2 menu">
                     <Menu></Menu>
                     <div class="nav flex-column nav-pills menus" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        <router-link to="/MainView/Project" class="navs">🌏&nbsp;&nbsp;项目概览</router-link>
+                        <router-link to="/Main/Project" class="navs">🌏&nbsp;&nbsp;&nbsp;项目概览</router-link>
                         <div class="dropdown-divider"></div>
-                        <router-link to="/MainView/Iteration" class="navs">💻&nbsp;&nbsp;迭代计划</router-link>
-                        <router-link to="/MainView/Work" class="navs">🧾&nbsp;&nbsp;工作列表</router-link>
-                        <router-link to="/MainView/Story" class="navs">🗺️&nbsp;&nbsp;故事地图</router-link>
+                        <router-link to="/Main/Iteration" class="navs">💻&nbsp;&nbsp;&nbsp;迭代计划</router-link>
+                        <router-link to="/Main/Work" class="navs">🧾&nbsp;&nbsp;&nbsp;工作列表</router-link>
+                        <router-link to="/Main/Story" class="navs">🗺️&nbsp;&nbsp;&nbsp;故事地图</router-link>
                     </div>
 
-                    <br>
+                    <br><br>
                     <Advertisement></Advertisement>
                     <br>
-
                     <!--          <img src="../assets/国旗4096.png" style="width:100%;">-->
                     <!--          <br>-->
                     <br>
@@ -45,10 +44,11 @@ import Header from '@/components/communion/Header.vue'
 import Menu from '../components/communion/Menu.vue'
 import Advertisement from "@/components/communion/Advertisement.vue"
 import Footer from '../components/communion/Footer.vue'
-import global from "@/app/Global"
+import global_color from "@/app/Global_color.vue"
 
 export default {
-    userId: "Main",
+    name: "Main",
+
     components: {
         Header,
         // TitleAdvertisement,
@@ -56,22 +56,50 @@ export default {
         Advertisement,
         Footer,
     },
+
     data() {
         return {
             temp1: 'false',
             temp2: 'false',
             temp3: 'false',
             temp4: 'false',
-            shadow: global.shadow_color,
-            model_color: global.model_color,
-            button_color: global.button_color,
-            white_color: global.white1,
+            shadow: global_color.shadow_color,
+            model_color: global_color.model_color,
+            button_color: global_color.button_color,
+            white_color: global_color.white1,
         }
     },
 
     methods: {
+        // 判断是否已经登录状态
+        isLogin() {
+            // 判断sessionStorage中是否有登录信息
+            if (sessionStorage.getItem("user") != null && sessionStorage.getItem("userToken")) {
+                // 存在登录信息就从sessionStorage中提取状态再传值给vuex中
+                this.$store.commit("user", sessionStorage.getItem("user"));
+            } else {
+                // 登录不成功就将vuex中的state清空
+                this.$store.commit("user", null);
+            }
+            // 返回登录状态isLogin
+            return this.$store.getters.isLogin;
+        },
 
+        // 通过登录状态来判断用户是否登录执行相关的操作
+        ver() {
+            if (this.$store.state.isLogin) {
+                console.log("已登录")
+            } else {
+                //如果没有登录就返回登录界面
+                this.$router.push("/")
+            }
+        },
     },
+    created() {
+        this.isLogin();
+        this.ver();
+    }
+
 
 }
 </script>
@@ -96,12 +124,10 @@ export default {
 
 .navs {
     color: v-bind(button_color);
-    /*text-align: center;*/
+    text-align: center;
     display: block;
     padding: 0.5rem 1rem;
     transition: all 0.15s;
-    /*color: #fff;*/
-    /*background-color: #007bff;*/
 }
 
 .navs:hover {

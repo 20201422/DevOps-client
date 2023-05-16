@@ -23,7 +23,7 @@
 
 <script>
 export default {
-    userId: "DeleteAlert"
+    name: "DeleteAlert"
 }
 </script>
 

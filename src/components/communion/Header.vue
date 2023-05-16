@@ -1,11 +1,11 @@
 <template>
     <header>
         <nav class="navbar navbar-light bg-light shadow fixed-top" id="head">
-            <a class="navbar-brand" href="/public">
+            <a class="navbar-brand" href="/Main/Project">
                 <img src="../../assets/24(圆形）.png" width="30" height="30" class="d-inline-block align-top" alt="Vue logo">
                 DevOps
             </a>
-            <a class="text-body">{{sayHello()}}</a>
+            <div class="text-body">{{sayHello()}}</div>
             <button type="button" class="btn btn-outline-primary btn-sm" @click.prevent="login_out">退出登录</button>
         </nav>
         <br>
@@ -13,29 +13,34 @@
 </template>
 
 <script>
-import global from "@/app/Global.vue"
+import Global_color from "@/app/Global_color.vue"
 
 export default {
-    userId: "Header",
+    name: "Header",
+
     props: {
-        msg: String
+        msg: String,
     },
+
     data(){
         return {
-            username:"堃芃",
-            userSex:"男",
-            button_color: global.button_color,
-            button_color1: global.button_color1,
+            button_color: Global_color.button_color,
+            button_color1: Global_color.button_color1,
         }
     },
+
     methods:{
         sayHello(){
-            if(this.userSex==="男")
-                return `👋您好，${this.username}‍！`
-            else
-                return `👋您好，${this.username}！`
+            if (this.$store.state.userType === "组长" ) {
+                return `👋 您好，${this.$store.state.userName} 🧑🏼‍💻‍`
+            } else {
+                return `👋 您好，${this.$store.state.userName} 🧑🏼‍🔬‍`
+            }
         },
+
         login_out: function() {
+
+
             this.$router.replace('/');//路由跳转至登录页面
         }
     }
@@ -44,6 +49,11 @@ export default {
 </script>
 
 <style scoped>
+
+.navbar-brand{
+    cursor:pointer;
+}
+
 button{
     color:v-bind(button_color);
     border-color:v-bind(border_color);
