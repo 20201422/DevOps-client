@@ -1,27 +1,37 @@
 <template>
     <br>
     <div id="users" class="users">
-        <a href="/public"><img src="../../assets/24.png" class="rounded-circle shadow" alt="..." width="70" height="70"></a>
+        <a href="/Main"><img :src="userImage" class="rounded-circle shadow" alt="..." width="70" height="70"></a>
         <br>
         <h5>{{userName}}</h5>
+        <p>{{userId}}&nbsp;&nbsp;&nbsp;&nbsp;{{userType}}</p>
     </div>
     <br>
 </template>
 
 <script>
+import Global_color from "@/app/Global_color.vue"
+
 export default {
-    userId: "Menu",
+    name: "Menu",
+
     props: {
-        msg: String
+        msg: String,
     },
+
     components:{
     },
+
     data(){
         return{
-            userName:"堃芃",
-            userSex:"男",
+            userId: this.$store.state.userId,
+            userName: this.$store.state.userName,
+            userType: this.$store.state.userType,
+            userImage: "/" + this.$store.state.userImage,
+
+            font_grey: Global_color.grey2,
         }
-    }
+    },
 }
 </script>
 
@@ -33,6 +43,12 @@ export default {
     padding-top:8px;
 }
 .users h5{
-    padding-top:8px;
+    padding-top:12px;
+}
+.users p{
+    color: v-bind(font_grey);
+}
+a{
+    cursor: pointer;
 }
 </style>

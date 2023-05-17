@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import global from "@/app/Global.vue"
+import Global_color from "@/app/Global_color.vue"
 
 export default {
     userId: "TitleAdvertisement",
@@ -15,11 +15,11 @@ export default {
             b:'胜利召开',
             c:' 。新时代征程中国共产党的使命任务。',
             href:'http://www.news.cn/politics/cpc20/mobile/index.htm',
-            color1: global.main_color,
-            color2: global.main_color1,
-            yellow1: global.font_color,
-            yellow2: global.font_color1,
-            shadow: global.shadow_color,
+            color1: Global_color.main_color,
+            color2: Global_color.main_color1,
+            yellow1: Global_color.font_color,
+            yellow2: Global_color.font_color1,
+            shadow: Global_color.shadow_color,
         }
     }
 }
