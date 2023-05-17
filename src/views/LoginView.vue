@@ -82,6 +82,8 @@ export default {
             } else if (this.userPassword === '') {    // 密码为空
                 alert('密码不为空');
             } else {
+                alert(userName);
+                alert(userPassword);
                 this.axios.post('http://localhost:9090/login', this.login_form).then((resp) => {
                     let data = resp.data
                     console.log(data)
