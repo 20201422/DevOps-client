@@ -1,7 +1,7 @@
 <template>
     <div id="background" :style="background_style">
         <div class="container">
-            <form action="">
+            <form action="" @submit.prevent="handle_login">
                 <h1>Login</h1>
                 <div class="form">
                     <div class="item">
@@ -11,7 +11,7 @@
                         <br />
                     </div>
                     <div class="item">
-                        <label>密码：</label><input type="password" name="userPassword"
+                        <label>密码：</label><input type="password" name="userPassword" @keyup.enter="handle_login"
                                                    v-model.trim="login_form.userPassword" placeholder="请输入密码">
                         <br />
                     </div>
