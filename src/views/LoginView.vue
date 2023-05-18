@@ -5,7 +5,7 @@
                 <h1>Login</h1>
                 <div class="form">
                     <div class="item">
-                        <label>账号：</label><input type="text" name="userId"
+                        <label>账号：</label><input type="text" name="userId" @keyup.enter="handle_login"
                                                      v-model.trim="login_form.userId" placeholder="请输入账号">
                         <!-- v-model把输入的值传输给name变量 -->
                         <br />
