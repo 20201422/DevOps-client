@@ -15,16 +15,15 @@
     </el-descriptions>
   </div>
   <div class="projects">
-    <h4>待完成的任务：</h4>
-  </div>
-  <div class="projects">
-    <h4>已完成的任务：</h4>
+    <h5>所有问题：</h5>
+    <Table></Table>
   </div>
 </template>
 
 <script>
 import global_color from "@/app/Global_color.vue"
 import {user} from "@/store/mutations";
+import Table from "@/components/Table.vue";
 
 export default {
   name: "Project",
@@ -35,6 +34,7 @@ export default {
   },
 
   components:{
+    Table
   },
 
   data(){
@@ -63,6 +63,63 @@ export default {
         },
       ],
       projectState: '进行中',
+
+      questions: [
+        {
+          questionId: '2427-1-1',
+          questionName: '需求分析',
+          questionPriority: '高',
+          userName: '慧强',
+          questionState: '待完成',
+          questionBeginTime: '2023-10-06',
+          questionEndTime: '2023-12-24',
+        },
+        {
+          questionId: '2427-1-1',
+          questionName: '需求分析',
+          questionPriority: '高',
+          userName: '慧强',
+          questionState: '进行中',
+          questionBeginTime: '2023-10-06',
+          questionEndTime: '2023-12-24',
+        },
+        {
+          questionId: '2427-1-1',
+          questionName: '需求分析',
+          questionPriority: '高',
+          userName: '慧强',
+          questionState: '已完成',
+          questionBeginTime: '2023-10-06',
+          questionEndTime: '2023-12-24',
+        },
+        {
+          questionId: '2427-1-1',
+          questionName: '需求分析',
+          questionPriority: '高',
+          userName: '慧强',
+          questionState: '进行中',
+          questionBeginTime: '2023-10-06',
+          questionEndTime: '2023-12-24',
+        },
+        {
+          questionId: '2427-1-1',
+          questionName: '需求分析',
+          questionPriority: '高',
+          userName: '慧强',
+          questionState: '已完成',
+          questionBeginTime: '2023-10-06',
+          questionEndTime: '2023-12-24',
+        },
+        {
+          questionId: '2427-1-1',
+          questionName: '需求分析',
+          questionPriority: '高',
+          userName: '慧强',
+          questionState: '进行中',
+          questionBeginTime: '2023-10-06',
+          questionEndTime: '2023-12-24',
+        },
+      ],
 
       model_color: global_color.model_color,
     }

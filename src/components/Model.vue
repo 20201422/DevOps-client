@@ -23,7 +23,7 @@
             <el-radio-button label="高" />
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="分配任务">
+        <el-form-item label="经办人">
           <el-select v-model="form.userId" placeholder="Select">
             <el-option
                 v-for="item in options"
@@ -33,6 +33,17 @@
                 :disabled="item.disabled"
             />
           </el-select>
+        </el-form-item>
+        <el-form-item label="开始时间">
+          <div class="block">
+            <el-date-picker v-model="beginTime" type="datetime" placeholder="选择开始时间" :default-time="defaultTime"/>
+          </div>
+        </el-form-item>
+        <el-form-item label="结束时间">
+          <div class="block">
+            <el-date-picker v-model="endTime" type="datetime" placeholder="选择结束时间"
+                            :default-time="defaultTime" :disabled-date="disabledDate"/>
+          </div>
         </el-form-item>
       </el-form>
     </template>
@@ -59,6 +70,9 @@ export default {
   setup(props) {
     const drawer = ref(false)
     const direction = ref('rtl')
+    const beginTime = ref('')
+    const endTime = ref('')
+    const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
 
     const form = reactive({
       modelId: '',
@@ -91,6 +105,10 @@ export default {
       },
     ]
 
+    const disabledDate = (time) => {  // 开始时间之前的不能选
+      return time.getTime() < beginTime.value
+    }
+
     const cancelClick = () => {
       drawer.value = false
     }
@@ -107,10 +125,14 @@ export default {
     return {
       drawer,
       direction,
-      cancelClick,
-      confirmClick,
+      beginTime,
+      endTime,
+      defaultTime,
       form,
       options,
+      disabledDate,
+      cancelClick,
+      confirmClick,
     }
   },
 
@@ -124,5 +146,25 @@ export default {
 </script>
 
 <style scoped>
-
+.demo-datetime-picker {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  flex-wrap: wrap;
+}
+.demo-datetime-picker .block {
+  padding: 30px 0;
+  text-align: center;
+  border-right: solid 1px var(--el-border-color);
+  flex: 1;
+}
+.demo-datetime-picker .block:last-child {
+  border-right: none;
+}
+.demo-datetime-picker .demonstration {
+  display: block;
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
 </style>
