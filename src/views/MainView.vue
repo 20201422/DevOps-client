@@ -100,7 +100,6 @@ export default {
         this.ver();
     }
 
-
 }
 </script>
 
@@ -116,7 +115,7 @@ export default {
     transition: all 0.45s;
 }
 
-.menu:hover, .content :hover {
+.menu:hover {
     box-shadow: 1px 1px 10px v-bind(shadow);
     border-radius: 14px;
     transform: scale(1.01);
@@ -145,16 +144,15 @@ export default {
 }
 
 .content {
-    /*background-color: #f5f5f7;*/
     min-height: 740px;
     border-radius: 8px;
     /*margin: 0 4px 0 4px;*/
 }
 
 .class_content {
-    background-color: v-bind(model_color);
+    //background-color: v-bind(model_color);
     min-height: 740px;
-    border-radius: 12px;
+    //border-radius: 12px;
     transition: all 0.45s;
 }
 </style>

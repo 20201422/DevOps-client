@@ -1,7 +1,7 @@
 <template>
     <header>
         <nav class="navbar navbar-light bg-light shadow fixed-top" id="head">
-            <a class="navbar-brand" href="/Main/Project">
+            <a class="navbar-brand" href="/Projects">
                 <img src="../../assets/24(圆形）.png" width="30" height="30" class="d-inline-block align-top" alt="Vue logo">
                 DevOps
             </a>
@@ -39,8 +39,6 @@ export default {
         },
 
         login_out: function() {
-
-
             this.$router.replace('/');//路由跳转至登录页面
         }
     }

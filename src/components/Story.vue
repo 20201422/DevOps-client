@@ -1,25 +1,39 @@
 <template>
-故事地图
+  故事地图
+  <Model :type="question" :id="id"></Model>
+  <Model :type="epic" :id="id"></Model>
 </template>
 
 <script>
+import { ref } from 'vue'
+import Model from "@/components/Model.vue";
+
 export default {
-    name: "Story",
+  name: "Story",
 
-    props: {
-        msg: String,
-        userName: String,
-        userType: String,
-    },
+  props: {
+    msg: String,
+  },
 
-    components:{
-    },
+  setup(props) {
 
-    data(){
-        return{
+  },
 
-        }
+  components:{
+    Model
+  },
+
+  data(){
+    return{
+      question: '问题',
+      epic: '史诗',
+      id: ''
     }
+  },
+
+  methods: {
+
+  },
 }
 </script>
 
