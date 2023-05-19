@@ -6,7 +6,7 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-sm-2 menu">
+                <div class="col-xl-2 menu">
                     <Menu></Menu>
                     <div class="nav flex-column nav-pills menus" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <router-link to="/Main/Project" class="navs">🌏&nbsp;&nbsp;&nbsp;项目概览</router-link>
@@ -25,7 +25,7 @@
 
                 </div>
 
-                <div class="col-sm-10 content">
+                <div class="col-xl-10 content">
                     <div class="tab-content class_content">
                         <router-view></router-view>
                     </div>
