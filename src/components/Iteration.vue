@@ -1,22 +1,23 @@
 <template>
-迭代计划
+    <div>
+        <Manage></Manage>
+        <Detail></Detail>
+    </div>
 </template>
 
 <script>
-export default {
-    name: "Iteration",
+import Detail from '@/components/IterationShowDetail.vue'
+import Manage from '@/components/IterationManage.vue'
+export default{
 
-    props: {
-        msg: String,
-    },
-
-    components:{
-    },
-
-    data(){
+    data:function() {
         return{
 
         }
+    },
+    components:{
+        Detail,
+        Manage
     }
 }
 </script>

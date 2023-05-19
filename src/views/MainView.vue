@@ -150,9 +150,7 @@ export default {
 }
 
 .class_content {
-    //background-color: v-bind(model_color);
     min-height: 740px;
-    //border-radius: 12px;
     transition: all 0.45s;
 }
 </style>
