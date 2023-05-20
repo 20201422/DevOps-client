@@ -5,7 +5,7 @@
       <h4>{{ type }}</h4>
     </template>
     <template #default>
-      <el-form :model="form" label-width="120px">
+      <el-form :model="form" label-width="90px">
         <el-form-item :label="`${type}Id`">
           <el-input v-model="form.modelId" />
         </el-form-item>
@@ -65,6 +65,7 @@ export default {
 
   props: {
     type: String,
+    id: String,
   },
 
   setup(props) {

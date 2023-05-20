@@ -1,5 +1,4 @@
 <template>
-  <el-button @click="clearFilter">清空选择</el-button>
   <el-table :data="tableData" style="width: 100%" max-height="420">
     <el-table-column fixed prop="questionId" label="问题Id" width="120" align="center" />
     <el-table-column prop="questionName" label="问题名称" width="120" align="center" />
@@ -8,8 +7,7 @@
                      :filter-method="filterTagForUser" filter-placement="bottom-end">
       <template #default="item">{{ item.row.userName }}</template>
     </el-table-column>
-    <el-table-column prop="questionState" label="问题状态" width="120" align="center"
-                     :filters="questionType"
+    <el-table-column prop="questionState" label="问题状态" width="120" align="center" :filters="questionType"
                      :filter-method="filterTagForState" filter-placement="bottom-end">
       <template #default="item">
         <el-tag :type="item.row.questionState === '待完成' ? 'warning' : (item.row.questionState === '已完成' ? 'success' : '')"
@@ -20,7 +18,7 @@
     <el-table-column prop="questionEndTime" label="⌛️ 结束时间" width="120" align="center" />
     <el-table-column fixed="right" label="操作" width="120" align="center">
       <template #default="index">
-        <el-button link type="primary" size="small" @click.prevent="deleteRow(index.row.questionId)">
+        <el-button link type="primary" size="small" @click.prevent="openQuestion(index.row.questionId)">
           查看
         </el-button>
       </template>
@@ -35,8 +33,18 @@ import { ref } from 'vue'
 export default {
   name: "Table",
 
+  props: {
+
+  },
+
   setup(props) {
     const now = new Date()
+
+    const questionType = [
+      { text: '待完成', value: '待完成' },
+      { text: '进行中', value: '进行中' },
+      { text: '已完成', value: '已完成' },
+    ]
 
     const users = [
       { text: '慧强', value: '慧强' },
@@ -44,12 +52,6 @@ export default {
       { text: '堃芃', value: '堃芃' },
       { text: '瑞祥', value: '瑞祥' },
     ]
-    const questionType = [
-      { text: '待完成', value: '待完成' },
-      { text: '进行中', value: '进行中' },
-      { text: '已完成', value: '已完成' },
-    ]
-
     const tableData= ref([
       {
         questionId: '2427-1-1',
@@ -125,7 +127,7 @@ export default {
   },
 
   methods: {
-    deleteRow: function(questionId) {
+    openQuestion: function(questionId) {
       console.log(questionId)
     },
   },
