@@ -2,7 +2,7 @@
     <Header></Header>
 
     <div class="contentAll">
-        <!--    <Kp_TitleAdvertisement></Kp_TitleAdvertisement>-->
+            <TitleAdvertisement></TitleAdvertisement>
 
         <div class="container">
             <div class="row">
@@ -19,8 +19,8 @@
                     <br><br>
                     <Advertisement></Advertisement>
                     <br>
-                    <!--          <img src="../assets/国旗4096.png" style="width:100%;">-->
-                    <!--          <br>-->
+                              <img src="@/assets/国旗4096.png" style="width:100%;" alt="">
+                              <br>
                     <br>
 
                 </div>
@@ -40,7 +40,7 @@
 
 <script>
 import Header from '@/components/communion/Header.vue'
-// import TitleAdvertisement from "@/components/TitleAdvertisement"
+import TitleAdvertisement from "@/components/communion/TitleAdvertisement"
 import Menu from '../components/communion/Menu.vue'
 import Advertisement from "@/components/communion/Advertisement.vue"
 import Footer from '../components/communion/Footer.vue'
@@ -51,7 +51,7 @@ export default {
 
     components: {
         Header,
-        // TitleAdvertisement,
+        TitleAdvertisement,
         Menu,
         Advertisement,
         Footer,
