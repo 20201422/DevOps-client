@@ -180,7 +180,7 @@
     }
 
     .item > label {
-      border-bottom: solid 1px #ddd;
+      /* border-bottom: solid 1px #ddd; */
       padding: 5px 5px;
       color: #333;
     }

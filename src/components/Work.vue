@@ -1,7 +1,7 @@
 <template>
     <div class="projects">
         <h5>{{ iteration.name }}</h5>
-        <el-button type="primary" >快速创建+</el-button>
+        <el-button type="primary" @click="showCreate = true">快速创建+</el-button>
         <el-button type="primary" >工作分配</el-button>
         <el-table :data="tableData" style="width: 100% ;margin-top:10px" max-height="420">
             <el-table-column fixed prop="questionId" label="问题Id" width="120" align="center" />
@@ -29,6 +29,26 @@
                 </template>
             </el-table-column>
         </el-table>
+        <div v-show="showCreate" style="" class="row" >
+            <div style="margin: 8px 0px 8px 13px;">
+                <el-tag type="info" size="large">创建中</el-tag>
+            </div>
+            <div style="margin: 8px;">
+                <el-input  v-model="title" placeholder="请输入标题" />
+            </div>
+            <div style="margin: 8px;">
+                <el-input v-model="priority" placeholder="优先级" />
+            </div>
+            <div style="margin: 8px 67px 8px 8px;">
+                <el-input v-model="conductor" placeholder="处理人" />
+            </div>
+            <div style="margin: 8px;">
+                <el-button type="primary" >创建</el-button>
+            </div>
+            <div style="margin: 8px;">
+                <el-button type="primary" @click="showCreate=false">取消</el-button>
+            </div>
+        </div>
     </div>
 </template>
   
@@ -123,7 +143,10 @@ export default {
         const filterTagForState = (value, row) => {
             return row.questionState === value
         }
-
+        const title=''
+        const priority = ''
+        const conductor = ''
+        const showCreate = ref(false)
         return {
             now,
             users,
@@ -132,6 +155,10 @@ export default {
             filterTagForUser,
             filterTagForState,
             iteration,
+            title,
+            priority,
+            conductor,
+            showCreate,
             model_color: global_color.model_color,
         }
     },

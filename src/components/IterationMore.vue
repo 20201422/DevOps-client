@@ -1,5 +1,5 @@
 <template>
-  <el-text type="primary" style="margin-left: 16px" @click="this.drawer = true">更多迭代</el-text>
+  <el-button link type="primary" style="margin-left: 16px" @click="this.drawer = true">更多迭代</el-button>
   <el-drawer v-model="drawer" :direction="direction" :close-on-press-escape="true">
     <template #header>
       <h4>迭代计划</h4>
