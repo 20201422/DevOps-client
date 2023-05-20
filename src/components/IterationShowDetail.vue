@@ -4,6 +4,7 @@
           <label class="title">规划中</label>
           <draggable
             :list="state.modules.group1"
+            item-key = {{ element.id }}
             ghost-class="ghost"
             handle=".move"
             filter=".forbid"
@@ -34,6 +35,7 @@
           <label class="title">实现中</label>
           <draggable
             :list="state.modules.group2"
+            item-key = {{ element.id }}
             ghost-class="ghost"
             handle=".move"
             filter=".forbid"
@@ -64,6 +66,7 @@
           <label class="title">已实现</label>
           <draggable
             :list="state.modules.group3"
+            item-key = {{ element.id }}
             ghost-class="ghost"
             handle=".move"
             filter=".forbid"
