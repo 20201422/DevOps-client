@@ -98,12 +98,15 @@
     </div>
 </template>
 
+
 <script setup>
+    import global_color from "@/app/Global_color.vue"
     import { ref, reactive } from "vue";
     //导入draggable组件
     import draggable from "vuedraggable";
-
+  
     const state = reactive({
+      
       /*工作台的数据结构
         disabledMove:禁止移动
         disabledPark:禁止停靠
@@ -143,6 +146,7 @@
 
       return true;
     };
+    
 </script>
 
 <style scoped>
@@ -197,7 +201,7 @@
     }
     .chosenClass {
       opacity: 1;
-      border: solid 1px #007bff;
+      border: solid 1px item_color;
     }
     .fallbackClass {
       background-color: aquamarine;
