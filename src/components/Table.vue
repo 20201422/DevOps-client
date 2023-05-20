@@ -19,8 +19,8 @@
                   disable-transitions>{{ item.row.questionState }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="questionBeginTime" label="⏳ 开始时间" width="120" align="center" />
-      <el-table-column prop="questionEndTime" label="⌛️ 结束时间" width="120" align="center" />
+      <el-table-column prop="questionBeginTime" label="⏳ 开始时间" width="130" align="center" sortable />
+      <el-table-column prop="questionEndTime" label="⌛️ 结束时间" width="130" align="center" sortable />
       <el-table-column fixed="right" label="操作" width="120" align="center">
         <template #default="index">
           <el-button link type="primary" size="large" @click.prevent="openQuestion(index.row)">
@@ -72,7 +72,7 @@ export default {
         userName: '慧强',
         questionState: '规划中',
         questionBeginTime: '',
-        questionEndTime: '2023-12-24',
+        questionEndTime: '2022-12-24',
       },
       {
         questionId: '2427-1-2',
@@ -82,8 +82,8 @@ export default {
         userId: '20201420',
         userName: '滔滔',
         questionState: '规划中',
-        questionBeginTime: '2023-10-06',
-        questionEndTime: '2023-12-24',
+        questionBeginTime: '2013-10-06',
+        questionEndTime: '2021-12-24',
       },
       {
         questionId: '2427-1-1',
@@ -94,7 +94,7 @@ export default {
         userName: '慧强',
         questionState: '已实现',
         questionBeginTime: '2023-10-06',
-        questionEndTime: '2023-12-24',
+        questionEndTime: '2028-12-24',
       },
       {
         questionId: '2427-1-3',
@@ -104,8 +104,8 @@ export default {
         userId: '20201423',
         userName: '瑞祥',
         questionState: '实现中',
-        questionBeginTime: '2023-10-06',
-        questionEndTime: '2023-12-24',
+        questionBeginTime: '2013-10-06',
+        questionEndTime: '2013-12-24',
       },
       {
         questionId: '2427-1-4',
@@ -126,8 +126,8 @@ export default {
         userId: '20201422',
         userName: '堃芃',
         questionState: '实现中',
-        questionBeginTime: '2023-10-06',
-        questionEndTime: '2023-12-24',
+        questionBeginTime: '2003-10-06',
+        questionEndTime: '2003-12-24',
       },
     ])
 
