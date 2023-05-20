@@ -1,7 +1,7 @@
 <template>
     <div class="itxst">
       <div class="row">
-        <div class="col-sm-4 border bg-light group">
+        <div class="col-sm-4 border bg-light group" >
           <label class="title">规划中</label>
           <draggable
             :list="state.modules.group1"
@@ -149,17 +149,15 @@
     body {
       padding: 0;
       margin: 0;
-      //background-color: #f1f1f1;
+   
     }
     .itxst {
       background-color: #f5f5f7;
       border-radius: 12px;
       padding: 24px 24px 24px 24px;
-      //display: flex;
+
       /* justify-content: space-between;    能够让三列均匀分布 */
-      //align-content: space-around;
-      //margin-top: 10px;
-      //padding-left: 160px;
+
     }
     .title{
       margin-bottom: 10px;
@@ -199,7 +197,7 @@
     }
     .chosenClass {
       opacity: 1;
-      border: solid 1px red;
+      border: solid 1px #007bff;
     }
     .fallbackClass {
       background-color: aquamarine;
