@@ -1,15 +1,15 @@
 <template>
-  <el-dialog v-model="dialogVisible" width="70%" :before-close="close">
+  <el-dialog v-model="dialogVisible" width="70%" :before-close="close" >
     <template #header>
       <h4>{{ type }}</h4>
     </template>
     <template #default>
       <el-form :model="form" class="table">
-        <el-form :inline="true" class="demo-form-inline">
+        <el-form :model="form" :inline="true" class="demo-form-inline">
           <el-form-item :label="`${type}Id`" prop="modelId"
                         :rules="[{ required: true, message: '请输入Id', trigger: 'blur' },
                         { min: 2, max: 20, message: 'Id长度在2-20', trigger: 'blur' },
-                        { pattern: /^[a-zA-Z0-9_]+$/, message: '只能包含数字、字母和下划线', trigger: 'blur' }, ]">
+                        { pattern: /^[a-zA-Z0-9_-]+$/, message: '只能包含数字、字母和下划线', trigger: 'blur' },]" >
             <el-input v-model="form.modelId" :placeholder="`请输入${type}Id`" />
           </el-form-item>
           <el-form-item :label="`${type}名称`" prop="modelName"
@@ -160,11 +160,16 @@ export default {
   data() {
     return {
 
+      rules: [{ required: true, message: '请输入Id', trigger: 'blur' },
+        { min: 2, max: 20, message: 'Id长度在2-20', trigger: 'blur' },
+        { pattern: /^[a-zA-Z0-9_]+$/, message: '只能包含数字、字母和下划线', trigger: 'blur' }, ]
     }
   },
 
   methods: {
+    handleInputChange() {
 
+    }
   },
 }
 </script>

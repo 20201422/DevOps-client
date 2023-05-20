@@ -1,5 +1,5 @@
 <template>
-  <el-button type="primary" style="margin-left: 16px" @click="this.drawer = true">添加{{ type }}</el-button>
+  <el-button type="primary" class="add_button" @click="this.drawer = true">添加{{ type }}</el-button>
   <el-drawer v-model="drawer" :direction="direction" :close-on-press-escape="true">
     <template #header>
       <h4>{{ type }}</h4>
@@ -9,7 +9,7 @@
         <el-form-item :label="`${type}Id`" prop="modelId"
                       :rules="[{ required: true, message: '请输入Id', trigger: 'blur' },
                         { min: 2, max: 20, message: 'Id长度在2-20', trigger: 'blur' },
-                        { pattern: /^[a-zA-Z0-9_]+$/, message: '只能包含数字、字母和下划线', trigger: 'blur' }, ]">
+                        { pattern: /^[a-zA-Z0-9_-]+$/, message: '只能包含数字、字母和下划线', trigger: 'blur' }, ]">
           <el-input v-model="form.modelId" :placeholder="`请输入${type}Id`" />
         </el-form-item>
         <el-form-item :label="`${type}名称`" prop="modelName"
@@ -25,9 +25,7 @@
 
         <el-form-item :label="`${type}优先级`">
           <el-radio-group v-model="form.modelPriority">
-            <el-radio-button label="低" />
-            <el-radio-button label="中" />
-            <el-radio-button label="高" />
+            <el-radio-button label="低" /><el-radio-button label="中" /><el-radio-button label="高" />
           </el-radio-group>
         </el-form-item>
         <el-form-item label="经办人">
@@ -60,7 +58,8 @@
 
 <script>
 import { reactive, ref } from 'vue'
-import { ElMessageBox } from "element-plus";
+import { ElMessageBox } from "element-plus"
+import Global_color from "@/app/Global_color.vue";
 
 export default {
   name: "Question",
@@ -76,7 +75,7 @@ export default {
     const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
 
     const form = reactive({
-      modelId: '',
+      modelId: props.id,
       modelName: '',
       modelDescribe: '',
       modelPriority: '低',
@@ -140,7 +139,9 @@ export default {
 
   data(){
     return{
-
+      button_color1: Global_color.button_color1,
+      button_color2: Global_color.button_color,
+      write: Global_color.white1,
     }
   },
 }
@@ -148,11 +149,15 @@ export default {
 </script>
 
 <style scoped>
-.demo-datetime-picker {
-  display: flex;
-  width: 100%;
-  padding: 0;
-  flex-wrap: wrap;
+.add_button {
+  margin-left: 16px;
+  background-image: linear-gradient(v-bind(button_color1), v-bind(button_color2));
+  border: solid 1px;
+}
+.add_button:hover {
+  color: v-bind(button_color2);
+  background: v-bind(write);
+  border: solid 1px v-bind(button_color2);
 }
 .demo-datetime-picker .block {
   padding: 30px 0;

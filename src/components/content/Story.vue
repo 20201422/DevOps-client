@@ -28,7 +28,7 @@ export default {
     return{
       question: '问题',
       epic: '史诗',
-      id: '',
+      id: '123',
     }
   },
 

@@ -24,7 +24,7 @@
       <el-table-column fixed="right" label="操作" width="120" align="center">
         <template #default="index">
           <el-button link type="primary" size="large" @click.prevent="openQuestion(index.row)">
-            查看
+            <span class="button_look">查看</span>
           </el-button>
         </template>
       </el-table-column>
@@ -170,6 +170,7 @@ export default {
   data(){
     return{
       type: '问题',
+      ok_button: Global_color.button_color
     }
   },
 }
@@ -178,5 +179,8 @@ export default {
 <style scoped>
 .container {
   padding: 0;
+}
+.button_look {
+  color: v-bind(ok_button)
 }
 </style>
