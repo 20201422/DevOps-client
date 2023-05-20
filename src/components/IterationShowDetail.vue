@@ -1,6 +1,7 @@
 <template>
     <div class="itxst">
-        <div class="group">
+      <div class="row">
+        <div class="col-sm-4 border bg-light group">
           <label class="title">规划中</label>
           <draggable
             :list="state.modules.group1"
@@ -31,7 +32,7 @@
             </template>
           </draggable>
         </div>
-        <div class="group">
+        <div class="col-sm-4 border bg-light group">
           <label class="title">实现中</label>
           <draggable
             :list="state.modules.group2"
@@ -62,7 +63,7 @@
             </template>
           </draggable>
         </div>
-        <div class="group">
+        <div class="col-sm-4 border bg-light group">
           <label class="title">已实现</label>
           <draggable
             :list="state.modules.group3"
@@ -94,13 +95,14 @@
           </draggable>
         </div>
       </div>
+    </div>
 </template>
-    
+
 <script setup>
     import { ref, reactive } from "vue";
     //导入draggable组件
     import draggable from "vuedraggable";
-    
+
     const state = reactive({
       /*工作台的数据结构
         disabledMove:禁止移动
@@ -124,68 +126,61 @@
         ],
       },
     });
-    
+
     //拖拽开始的事件
     const onStart = () => {
       console.log("开始拖拽");
     };
-    
+
     //拖拽结束的事件
     const onEnd = () => {
       console.log("结束拖拽");
     };
-    
+
     const onMove = (e, originalEvent) => {
       //不允许停靠
       // if (e.relatedContext.element.disabledPark == true) return false;
-    
+
       return true;
     };
 </script>
-    
+
 <style scoped>
     body {
-      padding: 0px;
-      margin: 0px;
-      background-color: #f1f1f1;
+      padding: 0;
+      margin: 0;
+      //background-color: #f1f1f1;
     }
     .itxst {
-      background-color: #f1f1f1;
-      display: flex;
+      background-color: #f5f5f7;
+      border-radius: 12px;
+      padding: 24px 24px 24px 24px;
+      //display: flex;
       /* justify-content: space-between;    能够让三列均匀分布 */
-      align-content: space-around;
-      margin-top: 10px;
-      padding-left: 160px;
+      //align-content: space-around;
+      //margin-top: 10px;
+      //padding-left: 160px;
     }
     .title{
       margin-bottom: 10px;
     }
     .group {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-content: center;
-      width: 200%;
       padding-top: 10px;
-      padding-left: 10px;
-      padding-right: 10px;
-      margin-right: 15px;
-      background-color: #f5f5f7;
-      border-radius: 10px;
+      text-align: center;
     }
     .item {
       border: solid 1px #ddd;
-      padding: 0px;
+      padding: 0;
       text-align: left;
       background-color: rgb(255,255,255);
       margin-bottom: 10px;
       display: flex;
-      flex-direction: column; 
+      flex-direction: column;
       min-height: 90px;
       user-select: none;
       border-radius: 8px;
     }
-    
+
     .item > label {
       border-bottom: solid 1px #ddd;
       padding: 5px 5px;
@@ -210,4 +205,3 @@
       background-color: aquamarine;
     }
 </style>
-    

@@ -10,6 +10,7 @@ import Work from "@/components/Work.vue";
 import Story from "@/components/Story.vue";
 
 import Model from "@/components/Model.vue";
+import Table from "@/components/Table.vue"
 
 const routes = [
   {
@@ -46,8 +47,12 @@ const routes = [
     path: '/Model',
     name: 'Model',
     component: Model,
-  }
-
+  },
+  {
+    path: '/Table',
+    name: 'Table',
+    component: Table,
+  },
 ]
 
 const router = createRouter({
