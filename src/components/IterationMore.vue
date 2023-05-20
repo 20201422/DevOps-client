@@ -23,13 +23,13 @@
     </template>
     <template #footer>
       <div style="flex: auto">
-        <el-button @click="cancelClick">取消</el-button>
-        <el-button type="primary" @click="confirmClick">保存</el-button>
+        <el-button class="btn_1" @click="cancelClick">取消</el-button>
+        <el-button class="btn" type="primary" @click="confirmClick">保存</el-button>
       </div>
     </template>
   </el-drawer>
 </template>
-
+  
 <script>
 import { reactive, ref } from 'vue'
 import { ElMessageBox } from "element-plus";
@@ -120,17 +120,39 @@ export default {
 }
 
 </script>
-
+  
 <style scoped>
 .box-card {
   width: 400px;
 }
 
 .button_text {
+
   color: v-bind(button_color2);
+
+}
+
+.btn {
+  background-image: linear-gradient(v-bind(button_color1), v-bind(button_color2));
+  border: solid 1px;
+}
+.btn:hover {
+  color: v-bind(button_color2);
+  background: v-bind(write);
+  border: solid 1px v-bind(button_color2);
+}
+.btn_1 {
+  background-image: linear-gradient(v-bind(button_color2), v-bind(button_color1));
+  border: solid 1px;
+}
+.btn_1:hover {
+  color: v-bind(button_color2);
+  background: v-bind(write);
+  border: solid 1px v-bind(button_color2);
 }
 
 .button_text:hover {
   cursor: pointer;
 }
 </style>
+  
