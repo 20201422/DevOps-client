@@ -27,10 +27,8 @@
         <br>
         <el-form :inline="true" class="demo-form-inline">
           <el-form-item :label="`${type}优先级`">
-            <el-radio-group v-model="form.modelPriority">
-              <el-radio-button label="低" />
-              <el-radio-button label="中" />
-              <el-radio-button label="高" />
+            <el-radio-group v-model="form.modelPriority" :fill="button_color">
+              <el-radio-button label="低" /><el-radio-button label="中" /><el-radio-button label="高" />
             </el-radio-group>
           </el-form-item>
           <el-form-item label="经办人">
@@ -68,6 +66,7 @@
 <script>
 import {reactive, ref} from 'vue'
 import { ElMessageBox } from "element-plus"
+import Global_color from "@/app/Global_color.vue";
 
 export default {
   name: "UpdateTable",
@@ -159,17 +158,12 @@ export default {
 
   data() {
     return {
-
-      rules: [{ required: true, message: '请输入Id', trigger: 'blur' },
-        { min: 2, max: 20, message: 'Id长度在2-20', trigger: 'blur' },
-        { pattern: /^[a-zA-Z0-9_]+$/, message: '只能包含数字、字母和下划线', trigger: 'blur' }, ]
+      button_color: Global_color.button_color,
     }
   },
 
   methods: {
-    handleInputChange() {
 
-    }
   },
 }
 </script>

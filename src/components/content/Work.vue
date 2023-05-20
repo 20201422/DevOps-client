@@ -1,8 +1,8 @@
 <template>
     <div class="projects">
         <h5>{{ iteration.name }}</h5>
-        <el-button type="primary" @click="showCreate = true">快速创建+</el-button>
-        <el-button type="primary" >工作分配</el-button>
+        <el-button class="add_button" type="primary" @click="showCreate = true">快速创建+</el-button>
+        <el-button class="add_button" type="primary" >工作分配</el-button>
         <el-table :data="tableData" style="width: 100% ;margin-top:10px" max-height="420">
             <el-table-column fixed prop="questionId" label="问题Id" width="120" align="center" />
             <el-table-column prop="questionName" label="问题名称" width="120" align="center" />
@@ -54,14 +54,13 @@
   
 <script>
 import { ref } from 'vue'
-import global_color from "@/app/Global_color.vue"
+import Global_color from "@/app/Global_color.vue"
 export default {
-    name: "Table",
+    name: "Work",
 
     props: {
 
     },
-
     setup(props) {
         const now = new Date()
         const iteration ={
@@ -159,10 +158,16 @@ export default {
             priority,
             conductor,
             showCreate,
-            model_color: global_color.model_color,
+            model_color: Global_color.model_color,
         }
     },
-
+    data(){
+        return {
+            button_color1: Global_color.button_color1,
+            button_color2: Global_color.button_color,
+            write: Global_color.white1,
+        }
+    },
     methods: {
         openQuestion: function (questionId) {
             console.log(questionId)
@@ -178,6 +183,16 @@ export default {
   padding: 12px 24px 12px 24px;
   margin-bottom: 24px;
   min-height: 650px;
+}
+.add_button {
+  margin-left: 16px;
+  background-image: linear-gradient(v-bind(button_color1), v-bind(button_color2));
+  border: solid 1px;
+}
+.add_button:hover {
+  color: v-bind(button_color2);
+  background: v-bind(write);
+  border: solid 1px v-bind(button_color2);
 }
 </style>
   

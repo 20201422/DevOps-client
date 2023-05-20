@@ -100,13 +100,15 @@
 
 
 <script setup>
-    import global_color from "@/app/Global_color.vue"
+    import Global_color from "@/app/Global_color.vue"
     import { ref, reactive } from "vue";
     //导入draggable组件
     import draggable from "vuedraggable";
-  
+
+    const border_color = Global_color.button_color
+
     const state = reactive({
-      
+
       /*工作台的数据结构
         disabledMove:禁止移动
         disabledPark:禁止停靠
@@ -146,7 +148,7 @@
 
       return true;
     };
-    
+
 </script>
 
 <style scoped>
@@ -175,7 +177,7 @@
       padding: 0;
       text-align: left;
       background-color: rgb(255,255,255);
-      margin-bottom: 10px;
+      margin: 8px 5px 8px 5px;
       display: flex;
       flex-direction: column;
       min-height: 90px;
@@ -197,11 +199,11 @@
       color: #666;
     }
     .ghost {
-      border: solid 1px rgb(19, 41, 239) !important;
+      border: solid 1px v-bind(border_color) !important;
     }
     .chosenClass {
       opacity: 1;
-      border: solid 1px item_color;
+      //border: solid 1px item_color;
     }
     .fallbackClass {
       background-color: aquamarine;

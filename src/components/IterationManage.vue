@@ -1,12 +1,15 @@
 <template>
-    <div class="row" style="padding: 15px;">
-        <div class="">
+    <div class="row" style="margin-bottom: 10px;width: 1020px;">
+        <div class="col-sm-1">
         <Add></Add>
         </div>
-        <div style="margin-left: 10px;">
+        <div class="col-sm-8">
+
+        </div>
+        <div class="col-sm-1">
             <el-tag size="large">{{ IterationState }}</el-tag>
         </div>
-        <div class="">
+        <div class="col-sm-2">
         <More></More>
         </div>
     </div>
