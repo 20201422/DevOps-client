@@ -11,7 +11,7 @@ import Story from "@/components/Story.vue";
 
 import Model from "@/components/Model.vue";
 import Table from "@/components/Table.vue"
-import Update from "@/components/UpdateModel.vue";
+import UpdateModel from "@/components/UpdateModel.vue";
 
 const routes = [
   {
@@ -50,9 +50,9 @@ const routes = [
     component: Model,
   },
   {
-    path: '/Update',
-    name: 'Update',
-    component: Update,
+    path: '/UpdateModel',
+    name: 'UpdateModel',
+    component: UpdateModel,
   },
   {
     path: '/Table',

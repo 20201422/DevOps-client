@@ -5,15 +5,22 @@
       <h4>{{ type }}</h4>
     </template>
     <template #default>
-      <el-form :model="form" label-width="90px">
-        <el-form-item :label="`${type}Id`">
-          <el-input v-model="form.modelId" />
+      <el-form :model="form" label-width="94px">
+        <el-form-item :label="`${type}Id`" prop="modelId"
+                      :rules="[{ required: true, message: '请输入Id', trigger: 'blur' },
+                        { min: 2, max: 20, message: 'Id长度在2-20', trigger: 'blur' },
+                        { pattern: /^[a-zA-Z0-9_]+$/, message: '只能包含数字、字母和下划线', trigger: 'blur' }, ]">
+          <el-input v-model="form.modelId" :placeholder="`请输入${type}Id`" />
         </el-form-item>
-        <el-form-item :label="`${type}名称`">
-          <el-input v-model="form.modelName" />
+        <el-form-item :label="`${type}名称`" prop="modelName"
+                      :rules="[{ required: true, message: '请输入名称', trigger: 'blur' },
+                        { min: 2, max: 20, message: '名称长度在2-20', trigger: 'blur' },]">
+          <el-input v-model="form.modelName" :placeholder="`请输入${type}名称`" />
         </el-form-item>
-        <el-form-item :label="`${type}描述`">
-          <el-input v-model="form.modelDescribe" type="textarea" />
+        <el-form-item :label="`${type}描述`" prop="modelDescribe"
+                      :rules="[{ required: false, message: '请输入描述', trigger: 'blur' },
+                        { min: 0, max: 100, message: '长度不超过100', trigger: 'blur' },]">
+          <el-input v-model="form.modelDescribe" type="textarea" :placeholder="`请输入${type}描述`" />
         </el-form-item>
 
         <el-form-item :label="`${type}优先级`">
@@ -26,22 +33,17 @@
         <el-form-item label="经办人">
           <el-select v-model="form.userId" placeholder="Select">
             <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-                :disabled="item.disabled"
-            />
+                v-for="item in options" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled"/>
           </el-select>
         </el-form-item>
         <el-form-item label="开始时间">
           <div class="block">
-            <el-date-picker v-model="beginTime" type="datetime" placeholder="选择开始时间" :default-time="defaultTime"/>
+            <el-date-picker v-model="form.beginTime" type="datetime" placeholder="选择开始时间" :default-time="defaultTime"/>
           </div>
         </el-form-item>
         <el-form-item label="结束时间">
           <div class="block">
-            <el-date-picker v-model="endTime" type="datetime" placeholder="选择结束时间"
+            <el-date-picker v-model="form.endTime" type="datetime" placeholder="选择结束时间"
                             :default-time="defaultTime" :disabled-date="disabledDate"/>
           </div>
         </el-form-item>
@@ -71,22 +73,23 @@ export default {
   setup(props) {
     const drawer = ref(false)
     const direction = ref('rtl')
-    const beginTime = ref('')
-    const endTime = ref('')
     const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
 
     const form = reactive({
       modelId: '',
       modelName: '',
       modelDescribe: '',
-      modelPriority: '',
+      modelPriority: '低',
       userId: ref(''),
       type: [],
-      resource: '',
-      desc: '',
-      radio: ref('低'),
+      beginTime: '',
+      endTime: '',
     })
     const options = [
+      {
+        value: '',
+        label: '无选择',
+      },
       {
         value: '20201419',
         label: '慧强',
@@ -98,7 +101,6 @@ export default {
       {
         value: '20201422',
         label: '堃芃',
-        disabled: true,
       },
       {
         value: '20201423',
@@ -107,13 +109,14 @@ export default {
     ]
 
     const disabledDate = (time) => {  // 开始时间之前的不能选
-      return time.getTime() < beginTime.value
+      return time.getTime() < form.beginTime
     }
 
     const cancelClick = () => {
       drawer.value = false
     }
     const confirmClick = () => {
+      console.log(form.beginTime)
       ElMessageBox.confirm(`确认要保存问题吗?`)
           .then(() => {
             drawer.value = false
@@ -126,8 +129,6 @@ export default {
     return {
       drawer,
       direction,
-      beginTime,
-      endTime,
       defaultTime,
       form,
       options,

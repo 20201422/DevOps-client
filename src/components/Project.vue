@@ -16,10 +16,10 @@
   </div>
   <div class="projects">
     <h5>所有问题：</h5>
-    <Table></Table>
+    <Table @openQuestion="openQuestionHandler"></Table>
   </div>
-  <div class="projects">
-    <Update :type="question" :id="id"></Update>
+  <div v-if="dialogVisible">
+    <UpdateModel :question="selectedQuestion" :type="selectedType" @closeDialog="closeQuestionHandler"></UpdateModel>
   </div>
 </template>
 
@@ -27,17 +27,18 @@
 import global_color from "@/app/Global_color.vue"
 import {user} from "@/store/mutations";
 import Table from "@/components/Table.vue";
-import Update from "@/components/UpdateModel.vue";
+import UpdateModel from "@/components/UpdateModel.vue";
+import { ref } from 'vue'
+
 export default {
   name: "Project",
-  methods: {user},
 
   props: {
     msg: String,
   },
 
   components:{
-    Update,
+    UpdateModel,
     Table
   },
 
@@ -69,15 +70,27 @@ export default {
       projectState: '进行中',
 
       model_color: global_color.model_color,
+      shadow: global_color.shadow_color,
 
       question: '问题',
       epic: '史诗',
-      id: '',
+
+      dialogVisible: false,
+      selectedQuestion: Object,
+      selectedType: '',
     }
   },
 
-
-
+  methods: {
+    openQuestionHandler(question, type) {
+      this.selectedQuestion = question;
+      this.selectedType = type;
+      this.dialogVisible = true;
+    },
+    closeQuestionHandler() {
+      this.dialogVisible = false;
+    }
+  },
 }
 </script>
 
@@ -87,7 +100,15 @@ export default {
   border-radius: 12px;
   padding: 12px 24px 12px 24px;
   margin-bottom: 24px;
+  transition: all 0.45s;
 }
+
+.projects:hover {
+  box-shadow: 1px 1px 10px v-bind(shadow);
+  border-radius: 14px;
+  transform: scale(1.01);
+}
+
 .dialog-footer button:first-child {
   margin-right: 10px;
 }
