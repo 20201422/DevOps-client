@@ -11,7 +11,7 @@
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item label="开始时间">
                         <div class="block">
-                            <el-date-picker v-model="form.stratTime" type="datetime" placeholder="选择开始时间" />
+                            <el-date-picker v-model="form.startTime" type="datetime" placeholder="选择开始时间" />
                         </div>
                     </el-form-item>
                     <el-form-item label="结束时间">
@@ -27,7 +27,8 @@
 
             </el-form>
 
-            <el-transfer filterable v-model="value" :data="questions" :titles="['已有问题', '该迭代问题']" :props="{key:'questionId',label:'questionName'}"
+            <el-transfer filterable v-model="value" :data=qeustions :titles="['已有问题', '该迭代问题']"
+                :props="{ key: 'questionId', label: 'questionName' }"
                 style="text-align: left; display: inline-block;margin-left: 22%;" />
 
             <div style="margin-left: 43%;margin-top: 10px;">
@@ -128,18 +129,9 @@ export default {
         const questions = reactive([])
         const openDialog = () => {
             dialogVisible.value = true
-            axios.get("/question/questions").then(response => {
-                let data = response.data
-                console.log(data)
-                Object.assign(questions, data)
-                console.log(questions)
-               
-            }).catch(error => {})
+
         }
-        const change=()=>{
-            this.questions = reactive([{questionId:1}])
-        }
-        
+
         return {
             dialogVisible,
             openDialog,
@@ -149,6 +141,15 @@ export default {
             value,
             questions,
         }
+    },
+    created() {
+        axios.get("/question/questions").then(response => {
+            let data = response.data
+            console.log(data)
+            this.qeustions = data
+            console.log(this.questions)
+
+        }).catch(error => { })
     },
     data() {
         return {
