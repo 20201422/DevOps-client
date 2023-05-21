@@ -32,9 +32,13 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="经办人">
-            <el-select v-model="form.userId" placeholder="Select">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled"/>
+            <el-select v-model="form.userId" placeholder="未选择">
+                <el-option v-for="item in userOptions" :key="item.value" :clearable="true" :no-data-text="没有数据"
+                         :label="`${item.userId} - ${item.userName}`" :value="item.userId" :disabled="item.disabled"/>
             </el-select>
+          </el-form-item>
+          <el-form-item label="所属史诗" v-if="form.epicId != null">
+            <el-tag class="ml-2" type="success" effect="dark" round>{{form.epicId}}</el-tag>
           </el-form-item>
         </el-form>
         <br>
@@ -96,31 +100,10 @@ export default {
       modelPriority: props.model.questionPriority,
       userId: props.model.userId,
       userName: props.model.userName,
+      epicId: props.model.epicId,
       beginTime: props.model.questionBeginTime,
       endTime: props.model.questionEndTime,
     })
-    const options = [
-      {
-        value: '',
-        label: '无选择',
-      },
-      {
-        value: '20201419',
-        label: '慧强',
-      },
-      {
-        value: '20201420',
-        label: '滔滔',
-      },
-      {
-        value: '20201422',
-        label: '堃芃',
-      },
-      {
-        value: '20201423',
-        label: '瑞祥',
-      },
-    ]
 
     const deleteQuestion = () => {
       context.emit("closeDialog");  // 关闭对话框并通知父组件
@@ -149,7 +132,6 @@ export default {
       defaultTime,
       disabledDate,
       form,
-      options,
       deleteModel: deleteQuestion,
       close,
       submitUpdate,
@@ -159,11 +141,22 @@ export default {
   data() {
     return {
       button_color: Global_color.button_color,
+
+      userOptions: [],
     }
   },
 
   methods: {
+    showOption: function() {
+      this.$axios.get('user/users/idAndName').then((resp) => {
+        this.userOptions = resp.data.data
+        console.log(this.userOptions)
+      })
+    },
+  },
 
+  created() {
+    this.showOption();
   },
 }
 </script>
@@ -174,6 +167,10 @@ export default {
 }
 
 .left-button {
-  margin-right: 72%;
+  margin-right: 61%;
+}
+.demo-form-inline {
+  display: flex;
+  align-items: baseline;
 }
 </style>

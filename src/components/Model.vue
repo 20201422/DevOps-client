@@ -30,14 +30,14 @@
         </el-form-item>
         <el-form-item label="经办人">
           <el-select v-model="form.userId" placeholder="未选择">
-            <el-option
-                v-for="item in options" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled"/>
+            <el-option v-for="item in userOptions" :key="item.value"
+                       :label="`${item.userId} - ${item.userName}`" :value="item.userId" :disabled="item.disabled"/>
           </el-select>
         </el-form-item>
         <el-form-item v-if="type === '问题'" label="史诗">
           <el-select v-model="form.epicId" placeholder="未选择">
-            <el-option
-                v-for="item in spics" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled"/>
+            <el-option v-for="item in epics" :key="item.value"
+                       :label="item.epicName" :value="item.epicId" :disabled="item.disabled"/>
           </el-select>
         </el-form-item>
         <el-form-item label="开始时间">
@@ -56,7 +56,7 @@
     <template #footer>
       <div style="flex: auto">
         <el-button @click="cancelClick">取消</el-button>
-        <el-button type="primary" @click="confirmClick">保存</el-button>
+        <el-button type="primary" @click="confirmClick">添加</el-button>
       </div>
     </template>
   </el-drawer>
@@ -90,50 +90,8 @@ export default {
       beginTime: '',
       endTime: '',
     })
-    const options = [
-      {
-        value: '',
-        label: '无选择',
-      },
-      {
-        value: '20201419',
-        label: '慧强',
-      },
-      {
-        value: '20201420',
-        label: '滔滔',
-      },
-      {
-        value: '20201422',
-        label: '堃芃',
-      },
-      {
-        value: '20201423',
-        label: '瑞祥',
-      },
-    ]
-    const spics = [
-      {
-        value: '',
-        label: '无选择',
-      },
-      {
-        value: '2427-1',
-        label: '史诗1',
-      },
-      {
-        value: '2427-2',
-        label: '史诗2',
-      },
-      {
-        value: '2427-3',
-        label: '史诗3',
-      },
-      {
-        value: '2427-4',
-        label: '史诗4',
-      },
-    ]
+    const userOptions = []
+    const epics = []
 
     const disabledDate = (time) => {  // 开始时间之前的不能选
       return time.getTime() < form.beginTime
@@ -143,9 +101,12 @@ export default {
       drawer.value = false
     }
     const confirmClick = () => {
-      console.log(form.beginTime)
-      ElMessageBox.confirm(`确认要保存问题吗?`)
+      ElMessageBox.confirm(`确认要添加问题吗?`, ``, {confirmButtonText: '确定', cancelButtonText: '取消',})
           .then(() => {
+            this.$axios.post('/question/add').then((resp) => {
+              let data = resp.data
+              console.log(data)
+            })
             drawer.value = false
           })
           .catch(() => {
@@ -158,8 +119,8 @@ export default {
       direction,
       defaultTime,
       form,
-      options,
-      spics,
+      userOptions,
+      epics,
       disabledDate,
       cancelClick,
       confirmClick,
@@ -172,6 +133,21 @@ export default {
       button_color2: Global_color.button_color,
       write: Global_color.white1,
     }
+  },
+
+  methods: {
+    showOption: function() {
+      this.$axios.get('user/users/idAndName').then((resp) => {
+        this.userOptions = resp.data.data
+      })
+      this.$axios.get('epic/epics/idAndName').then((resp) => {
+        this.epics = resp.data.data
+      })
+    },
+  },
+
+  created() {
+    this.showOption();
   },
 }
 

@@ -7,7 +7,7 @@
         <template #item="{ element, index }">
           <div class="scrollbar-flex-content">
             <div :key="index" class="scrollbar-demo-item map">
-              <div class="move epic" @click="openModel(element.epic, '史诗')">
+              <div class="move epic" @click="click(element.epic, '史诗')">
                 <div :class="element.epic.disabledMove ? 'forbid item_for_epic' : 'item_for_epic'">
                   <label>{{ element.epic.name }}</label>
                   <p>内容....</p>
@@ -18,7 +18,7 @@
                          :fallback-class="true" :fallback-on-body="true" :touch-start-threshold="50"
                          :fallback-tolerance="50" :move="onMove" @start="onStart" @end="onEnd">
                 <template #item="{ element }">
-                  <div class="move">
+                  <div class="move" @click="click(element, '问题')">
                     <div :class="element.disabledMove? 'forbid item' : 'item'">
                       <label>{{ element.name }}</label>
                       <p>内容....</p>
@@ -36,9 +36,8 @@
 
 <script setup>
 import draggable from "vuedraggable";
-import {reactive} from "vue";
+import {reactive, defineEmits, } from "vue";
 import Global_color from "@/app/Global_color.vue";
-import {events as context} from "vuedraggable/src/core/sortableEvents";
 
 const storyMap = reactive({
   epicLists: [
@@ -59,45 +58,12 @@ const storyMap = reactive({
       ],
       index: 2
     },
-    {
-      epic: { name: "需求1", id: 1, disabledMove: false, disabledPark: true  },
-      questions: [
-        { name: "缺陷1", id: 5, disabledMove: false, disabledPark: false },
-        { name: "缺陷2", id: 6, disabledMove: false, disabledPark: false },
-        { name: "缺陷3", id: 7, disabledMove: false, disabledPark: false },
-      ],
-      index: 1
-    },
-    {
-      epic: { name: "需求2", id: 2, disabledMove: false, disabledPark: false },
-      questions: [
-        { name: "测试1", id: 8, disabledMove: false, disabledPark: false },
-        { name: "测试2", id: 9, disabledMove: false, disabledPark: false },
-      ],
-      index: 2
-    },
-    {
-      epic: { name: "需求1", id: 1, disabledMove: false, disabledPark: true  },
-      questions: [
-        { name: "缺陷1", id: 5, disabledMove: false, disabledPark: false },
-        { name: "缺陷2", id: 6, disabledMove: false, disabledPark: false },
-        { name: "缺陷3", id: 7, disabledMove: false, disabledPark: false },
-      ],
-      index: 1
-    },
-    {
-      epic: { name: "需求2", id: 2, disabledMove: false, disabledPark: false },
-      questions: [
-        { name: "测试1", id: 8, disabledMove: false, disabledPark: false },
-        { name: "测试2", id: 9, disabledMove: false, disabledPark: false },
-      ],
-      index: 2
-    },
   ],
 })
 
-const openModel = (model, type) => {
-  context.emit("openModel", model, type); // 将 model 和 type 作为参数传递
+const emit = defineEmits(['openModel'])
+const click = (model, type) => {
+  emit('openModel', model, type)
 }
 
 const onStart = () => { // 拖拽开始的事件
@@ -126,7 +92,7 @@ const border_right_color = Global_color.shadow_color
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 .map {
   display: flex;

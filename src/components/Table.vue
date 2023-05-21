@@ -71,6 +71,7 @@ export default {
         userId: '20201419',
         userName: '慧强',
         questionState: '规划中',
+        epicId: '史诗1',
         questionBeginTime: '',
         questionEndTime: '2022-12-24',
       },
@@ -82,6 +83,7 @@ export default {
         userId: '20201420',
         userName: '滔滔',
         questionState: '规划中',
+        epicId: '史诗1',
         questionBeginTime: '2013-10-06',
         questionEndTime: '2021-12-24',
       },
@@ -93,6 +95,7 @@ export default {
         userId: '20201419',
         userName: '慧强',
         questionState: '已实现',
+        epicId: '史诗1',
         questionBeginTime: '2023-10-06',
         questionEndTime: '2028-12-24',
       },
@@ -104,6 +107,7 @@ export default {
         userId: '20201423',
         userName: '瑞祥',
         questionState: '实现中',
+        epicId: '史诗1',
         questionBeginTime: '2013-10-06',
         questionEndTime: '2013-12-24',
       },
@@ -115,6 +119,7 @@ export default {
         userId: '20201419',
         userName: '慧强',
         questionState: '已实现',
+        epicId: '史诗1',
         questionBeginTime: '2023-10-06',
         questionEndTime: '2023-12-24',
       },
@@ -126,6 +131,7 @@ export default {
         userId: '20201422',
         userName: '堃芃',
         questionState: '实现中',
+        epicId: '史诗1',
         questionBeginTime: '2003-10-06',
         questionEndTime: '2003-12-24',
       },
@@ -169,7 +175,6 @@ export default {
 
   data(){
     return{
-      type: '问题',
       ok_button: Global_color.button_color
     }
   },

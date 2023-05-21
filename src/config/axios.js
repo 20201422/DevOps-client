@@ -18,9 +18,9 @@ request.interceptors.request.use(
     },
     error => {
         // 请求发生错误时的处理逻辑
-        console.error("请求发生错误:", error);
+        console.error("⚠️ 请求发生错误:", error);
         // 可以使用 Element Plus 的 Message 组件显示错误提示
-        ElMessage.error("请求发生错误，请稍后重试");
+        ElMessage.error("⚠️ 请求发生错误，请稍后重试 ⚠️");
         // 返回一个 Promise.reject()，将错误继续传递下去
         return Promise.reject(error);
     }
@@ -39,7 +39,7 @@ request.interceptors.response.use(
                 return Promise.reject(data.message)
             }
 
-            ElMessage.error(!data.message ? "系统异常，请联系管理员" : data.message)
+            ElMessage.error(!data.message ? "⚠️ 系统异常，请联系管理员" : data.message)
 
             return Promise.reject(data.message)
         }
@@ -53,21 +53,21 @@ request.interceptors.response.use(
 
             if (status === 500) {
                 // 服务器内部错误
-                ElMessage.error('服务器发生内部错误，请稍后重试')
+                ElMessage.error('⚠️ 服务器发生内部错误，请稍后重试 ⚠️')
             } else if (status === 404) {
                 // 请求的资源不存在
-                ElMessage.error('请求的资源不存在')
+                ElMessage.error('⚠️ 请求的资源不存在 ⚠️')
             } else {
                 // 其他错误状态码的处理逻辑
                 // ...
-                ElMessage.error('未知错误')
+                ElMessage.error('⚠️ 未知错误 ⚠️')
             }
         } else if (error.request) {
             // 无法连接到服务器的处理逻辑
-            ElMessage.error('无法连接到服务器，请检查网络连接')
+            ElMessage.error('⚠️ 无法连接到服务器，请检查网络连接 ⚠️')
         } else {
             // 发生了其他类型的错误
-            ElMessage.error('发生了错误，请稍后重试')
+            ElMessage.error('⚠️ 发生了错误，请稍后重试 ⚠️')
         }
 
         return Promise.reject(error)

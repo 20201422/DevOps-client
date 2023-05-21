@@ -25,7 +25,6 @@
 
 <script>
 import Global_color from "@/app/Global_color.vue"
-import {user} from "@/store/mutations";
 import Table from "@/components/Table.vue";
 import UpdateModel from "@/components/UpdateModel.vue";
 import { ref } from 'vue'
