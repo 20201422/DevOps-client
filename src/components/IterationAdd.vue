@@ -3,7 +3,7 @@
         <el-button class="add_button" type="primary" @click="dialogVisible = true">创建迭代</el-button>
         <el-dialog title="创建迭代" v-model="dialogVisible" width="70%">
             <el-form :v-model="form">
-                <label>冲刺名称</label>
+                <label>迭代名称</label>
                 <el-form-item>
                     <el-input v-model="form.IterationName"></el-input>
                 </el-form-item>
@@ -20,13 +20,22 @@
                         </div>
                     </el-form-item>
                 </el-form>
-                <label>冲刺目标</label>
+                <label>迭代目标</label>
                 <el-form-item>
                     <el-input type="textarea" v-model="form.IterationGoal"></el-input>
                 </el-form-item>
 
             </el-form>
-            <div style="flex: auto">
+
+            <el-transfer 
+            filterable 
+            v-model="value" 
+            :data="data" 
+            :titles="['已有问题', '该迭代问题']"
+            style="text-align: left; display: inline-block;margin-left: 22%;"
+            />
+
+            <div style="margin-left: 43%;margin-top: 10px;">
                 <el-button @click="cancelClick">取消</el-button>
                 <el-button type="primary" @click="confirmClick">保存</el-button>
             </div>
@@ -42,7 +51,7 @@ export default {
 
     name: 'Add',
     props: {
-        
+
     },
     setup(props) {
         const dialogVisible = ref(false)
@@ -66,12 +75,64 @@ export default {
                     // catch error
                 })
         }
+
+        /*穿梭框*/
+        const value = ref([])  /*选中的数据 */
+        const data = [
+            {
+                key: 1,
+                label: '需求1',    /*一定要是label，其他的读取不到 */
+                conductor: '瑞祥',
+            },
+            {
+                key: 2,
+                label: '需求2',
+                conductor: '瑞祥',
+            },
+            {
+                key: 3,
+                label: '需求3',
+                conductor: '滔滔',
+            },
+            {
+                key: 4,
+                label: '需求4',
+                conductor: '瑞祥',
+            },
+            {
+                key: 5,
+                label: '需求5',
+                conductor: '瑞祥',
+            },
+            {
+                key: 6,
+                label: '需求6',
+                conductor: '瑞祥',
+            },
+            {
+                key: 7,
+                label: '需求7',
+                conductor: '瑞祥',
+            },
+            {
+                key: 8,
+                label: '需求8',
+                conductor: '瑞祥',
+            },
+            {
+                key: 9,
+                label: '需求9',
+                conductor: '瑞祥',
+            },
+        ]/*备选数据 */
+
         return {
             dialogVisible,
             form,
             cancelClick,
             confirmClick,
-
+            value,
+            data,
         }
     },
     data() {
