@@ -29,9 +29,15 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="经办人">
-          <el-select v-model="form.userId" placeholder="Select">
+          <el-select v-model="form.userId" placeholder="未选择">
             <el-option
                 v-for="item in options" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="type === '问题'" label="史诗">
+          <el-select v-model="form.epicId" placeholder="未选择">
+            <el-option
+                v-for="item in spics" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled"/>
           </el-select>
         </el-form-item>
         <el-form-item label="开始时间">
@@ -66,7 +72,7 @@ export default {
 
   props: {
     type: String,
-    id: String,
+    epicId: String,
   },
 
   setup(props) {
@@ -75,12 +81,12 @@ export default {
     const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
 
     const form = reactive({
-      modelId: props.id,
+      modelId: props.epicId,
       modelName: '',
       modelDescribe: '',
       modelPriority: '低',
       userId: ref(''),
-      type: [],
+      epicId: '',
       beginTime: '',
       endTime: '',
     })
@@ -104,6 +110,28 @@ export default {
       {
         value: '20201423',
         label: '瑞祥',
+      },
+    ]
+    const spics = [
+      {
+        value: '',
+        label: '无选择',
+      },
+      {
+        value: '2427-1',
+        label: '史诗1',
+      },
+      {
+        value: '2427-2',
+        label: '史诗2',
+      },
+      {
+        value: '2427-3',
+        label: '史诗3',
+      },
+      {
+        value: '2427-4',
+        label: '史诗4',
       },
     ]
 
@@ -131,6 +159,7 @@ export default {
       defaultTime,
       form,
       options,
+      spics,
       disabledDate,
       cancelClick,
       confirmClick,

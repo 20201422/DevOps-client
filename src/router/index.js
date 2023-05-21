@@ -1,17 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Login from "@/views/LoginView.vue";
-import Projects from "@/views/ProjectsView.vue";
-import Main from "@/views/MainView.vue";
+import Login from "@/views/LoginView.vue"
+import Projects from "@/views/ProjectsView.vue"
+import Main from "@/views/MainView.vue"
 
-import Project from "@/components/content/Project.vue";
-import Iteration from "@/components/content/Iteration.vue";
-import Work from "@/components/content/Work.vue";
-import Story from "@/components/content/Story.vue";
+import Project from "@/components/content/Project.vue"
+import Iteration from "@/components/content/Iteration.vue"
+import Work from "@/components/content/Work.vue"
+import Story from "@/components/content/Story.vue"
 
-import Model from "@/components/Model.vue";
+import Model from "@/components/Model.vue"
 import Table from "@/components/Table.vue"
-import UpdateModel from "@/components/UpdateModel.vue";
+import UpdateModel from "@/components/UpdateModel.vue"
+import StoryMap from "@/components/StoryMap.vue";
 
 const routes = [
   {
@@ -58,6 +59,11 @@ const routes = [
     path: '/Table',
     name: 'Table',
     component: Table,
+  },
+  {
+    path: '/StoryMap',
+    name: 'StoryMap',
+    component: StoryMap,
   },
 ]
 

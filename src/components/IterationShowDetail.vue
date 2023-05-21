@@ -155,7 +155,6 @@
     body {
       padding: 0;
       margin: 0;
-
     }
     .itxst {
       background-color: #f5f5f7;

@@ -58,10 +58,10 @@
     </div>
 
     <div v-if="dialogVisible">
-        <UpdateModel :question="selectedQuestion" :type="selectedType" @closeDialog="closeQuestionHandler"></UpdateModel>
+        <UpdateModel :model="selectedQuestion" :type="selectedType" @closeDialog="closeQuestionHandler"></UpdateModel>
     </div>
 </template>
-  
+
 <script>
 import { ref } from 'vue'
 import Global_color from "@/app/Global_color.vue"
@@ -195,7 +195,7 @@ export default {
             filterTagForState,
             openQuestion,
             getPriorityStyle,
-            
+
             iteration,
             title,
             priority,
@@ -230,7 +230,7 @@ export default {
 
 }
 </script>
-  
+
 <style scoped>
 .projects {
     background-color: v-bind(model_color);
@@ -259,4 +259,3 @@ export default {
     color: v-bind(ok_button)
 }
 </style>
-  
