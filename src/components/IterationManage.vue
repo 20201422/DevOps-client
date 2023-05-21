@@ -28,6 +28,7 @@ export default {
 .btn {
   display: flex;
   justify-content: space-between;
+  text-align: left;
 }
 
 </style>
