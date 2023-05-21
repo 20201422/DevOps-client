@@ -41,11 +41,8 @@
 
 <script>
 import { reactive, ref } from 'vue'
-
-import { shallowReactive } from 'vue';
 import { ElMessageBox } from "element-plus";
 import Global_color from "@/app/Global_color.vue"
-import axios from 'axios'
 export default {
 
     name: 'Add',
@@ -92,12 +89,11 @@ export default {
     methods: {
         openDialog() {
             this.dialogVisible = true
-            axios.get("/question/questions").then(response => {
-                let data = response.data
-                console.log(data)
-                Object.assign(this.questions, data.data)
-                console.log(this.questions)
-
+            this.$axios.get("/question/questions").then(response => {
+                let data = response.data.data
+          
+                this.questions= data
+                
             }).catch(error => { })
         },
     },
