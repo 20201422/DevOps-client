@@ -24,7 +24,7 @@
         </el-form-item>
 
         <el-form-item :label="`${type}优先级`">
-          <el-radio-group v-model="form.modelPriority">
+          <el-radio-group v-model="form.modelPriority" :fill="button_color2">
             <el-radio-button label="低" /><el-radio-button label="中" /><el-radio-button label="高" />
           </el-radio-group>
         </el-form-item>
