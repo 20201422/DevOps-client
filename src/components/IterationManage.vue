@@ -1,17 +1,10 @@
 <template>
-    <div class="row" style="margin-bottom: 10px;width: 1020px;">
-        <div class="col-sm-1">
-        <Add></Add>
-        </div>
-        <div class="col-sm-8">
-
-        </div>
-        <div class="col-sm-1">
-            <el-tag size="large">{{ IterationState }}</el-tag>
-        </div>
-        <div class="col-sm-2">
+    <div class="btn">
+      <Add></Add>
+      <div>
+        <el-tag size="large">{{ IterationState }}</el-tag>&nbsp;&nbsp;&nbsp;&nbsp;
         <More></More>
-        </div>
+      </div>
     </div>
 </template>
 
@@ -31,4 +24,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.btn {
+  display: flex;
+  justify-content: space-between;
+}
+
+</style>

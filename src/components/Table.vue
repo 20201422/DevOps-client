@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <el-table :data="tableData" style="width: 100%" max-height="420" @row-click="openQuestion">
+    <el-table :data="tableData" @row-click="openQuestion">
       <el-table-column fixed prop="questionId" label="问题Id" width="120" align="center" />
       <el-table-column prop="questionName" label="问题名称" width="120" align="center" />
       <el-table-column prop="questionPriority" label="问题优先级" width="120" align="center" >
@@ -179,6 +179,8 @@ export default {
 <style scoped>
 .container {
   padding: 0;
+  width: 100%;
+  max-height: 420px;
 }
 .button_look {
   color: v-bind(ok_button)

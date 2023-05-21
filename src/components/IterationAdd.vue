@@ -126,23 +126,14 @@ export default {
         //     },
         // ]/*备选数据 */
         const questions = reactive([])
-        const openDialog = () => {
-            dialogVisible.value = true
-            axios.get("/question/questions").then(response => {
-                let data = response.data
-                console.log(data)
-                Object.assign(questions, data)
-                console.log(questions)
-               
-            }).catch(error => {})
-        }
+        // const
         const change=()=>{
             this.questions = reactive([{questionId:1}])
         }
-        
+
         return {
             dialogVisible,
-            openDialog,
+            // openDialog,
             form,
             cancelClick,
             confirmClick,
@@ -156,7 +147,20 @@ export default {
             button_color2: Global_color.button_color,
             write: Global_color.white1,
         }
+    },
+
+  methods: {
+    openDialog: function() {
+      axios.get("/question/questions").then(response => {
+        let data = response.data
+        console.log(data)
+        Object.assign(this.questions, data)
+        console.log(this.questions)
+        setTimeout(() => this.dialogVisible = true, 2000)
+        // this.dialogVisible = true
+      }).catch(error => {})
     }
+  },
 };
 </script>
 

@@ -19,12 +19,12 @@
     <Table @openQuestion="openQuestionHandler"></Table>
   </div>
   <div v-if="dialogVisible">
-    <UpdateModel :question="selectedQuestion" :type="selectedType" @closeDialog="closeQuestionHandler"></UpdateModel>
+    <UpdateModel :model="selectedQuestion" :type="selectedType" @closeDialog="closeQuestionHandler"></UpdateModel>
   </div>
 </template>
 
 <script>
-import global_color from "@/app/Global_color.vue"
+import Global_color from "@/app/Global_color.vue"
 import {user} from "@/store/mutations";
 import Table from "@/components/Table.vue";
 import UpdateModel from "@/components/UpdateModel.vue";
@@ -69,8 +69,8 @@ export default {
       ],
       projectState: '进行中',
 
-      model_color: global_color.model_color,
-      shadow: global_color.shadow_color,
+      model_color: Global_color.model_color,
+      shadow: Global_color.shadow_color,
 
       question: '问题',
       epic: '史诗',

@@ -55,7 +55,7 @@
     </template>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="deleteQuestion" type="danger" class="left-button">删除</el-button>
+        <el-button @click="deleteModel" type="danger" class="left-button">删除</el-button>
         <el-button @click="close">取消</el-button>&nbsp;&nbsp;&nbsp;&nbsp;
         <el-button @click="submitUpdate" type="primary">确认</el-button>
       </span>
@@ -72,12 +72,12 @@ export default {
   name: "UpdateTable",
 
   props: {
-    question: Object,
+    model: Object,
     type: String,
   },
 
   mounted() {
-    console.log(this.question)
+    console.log(this.model)
     console.log(this.type)
   },
 
@@ -90,14 +90,14 @@ export default {
     }
 
     const form = reactive({
-      modelId: props.question.questionId,
-      modelName: props.question.questionName,
-      modelDescribe: props.question.questionDescribe,
-      modelPriority: props.question.questionPriority,
-      userId: props.question.userId,
-      userName: props.question.userName,
-      beginTime: props.question.questionBeginTime,
-      endTime: props.question.questionEndTime,
+      modelId: props.model.questionId,
+      modelName: props.model.questionName,
+      modelDescribe: props.model.questionDescribe,
+      modelPriority: props.model.questionPriority,
+      userId: props.model.userId,
+      userName: props.model.userName,
+      beginTime: props.model.questionBeginTime,
+      endTime: props.model.questionEndTime,
     })
     const options = [
       {
@@ -150,7 +150,7 @@ export default {
       disabledDate,
       form,
       options,
-      deleteQuestion,
+      deleteModel: deleteQuestion,
       close,
       submitUpdate,
     }
