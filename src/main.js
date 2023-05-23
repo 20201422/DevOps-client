@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import "bootstrap-icons/font/bootstrap-icons.css"
 
+
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
@@ -17,5 +18,26 @@ import axios from '@/config/axios'
 
 const app = createApp(App)
 app.config.globalProperties.$axios = axios
+
+//element-plus 报错 ResizeObserver loop limit exceeded 解决
+const debounce = (fn, delay) => {
+    let timer = null;
+    return function () {
+        let context = this;
+        let args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            fn.apply(context, args);
+        }, delay);
+    }
+}
+
+const _ResizeObserver = window.ResizeObserver;
+window.ResizeObserver = class ResizeObserver extends _ResizeObserver {
+    constructor(callback) {
+        callback = debounce(callback, 16);
+        super(callback);
+    }
+}
 
 app.use(router).use(ElementPlus).use(store).mount('#app')

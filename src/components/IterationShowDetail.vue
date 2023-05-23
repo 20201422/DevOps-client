@@ -93,15 +93,12 @@ export default {
       this.iteration = response.data.data
       //得到对应迭代三个状态下的问题
       this.$axios.get("/iteration/findQuestionsByState/" + this.iteration.iterationId + "/规划中").then((response) => {
-        console.log(response.data.data)
         this.state.modules.group1 = response.data.data
       }).catch((error) => { console.error(error) })
       this.$axios.get("/iteration/findQuestionsByState/" + this.iteration.iterationId + "/实现中").then((response) => {
-        console.log(response.data.data)
         this.state.modules.group2 = response.data.data
       }).catch((error) => { console.error(error) })
       this.$axios.get("/iteration/findQuestionsByState/" + this.iteration.iterationId + "/已实现").then((response) => {
-        console.log(response.data.data)
         this.state.modules.group3 = response.data.data
       }).catch((error) => { console.error(error) })
     }).catch((error) => { console.error(error) })

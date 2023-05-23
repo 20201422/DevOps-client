@@ -1,40 +1,20 @@
 <template>
     <div class="projects">
-        <h5>{{ iteration.name }}</h5>
-        <el-button class="add_button" type="primary" @click="showCreate = true">快速创建+</el-button>
-        <el-button class="add_button" type="primary">工作分配</el-button>
-        <div class="container" style="margin-top: 10px;">
-            <el-table :data="tableData" style="width: 100%" max-height="420" @row-click="openQuestionHandler">
-                <el-table-column fixed prop="questionId" label="问题Id" width="120" align="center" />
-                <el-table-column prop="questionName" label="问题名称" width="120" align="center" />
-                <el-table-column prop="questionPriority" label="问题优先级" width="120" align="center">
-                    <template #default="{ row }">
-                        <span :style="getPriorityStyle(row.questionPriority)">{{ row.questionPriority }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="userName" label="🧐 经办人" width="120" align="center" :filters="users"
-                    :filter-method="filterTagForUser" filter-placement="bottom-end">
-                    <template #default="item">{{ item.row.userName }}</template>
-                </el-table-column>
-                <el-table-column prop="questionState" label="问题状态" width="120" align="center" :filters="questionType"
-                    :filter-method="filterTagForState" filter-placement="bottom-end">
-                    <template #default="item">
-                        <el-tag
-                            :type="item.row.questionState === '规划中' ? 'warning' : (item.row.questionState === '已实现' ? 'success' : '')"
-                            disable-transitions>{{ item.row.questionState }}</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="questionBeginTime" label="⏳ 开始时间" width="130" align="center" sortable />
-                <el-table-column prop="questionEndTime" label="⌛️ 结束时间" width="130" align="center" sortable />
-                <el-table-column fixed="right" label="操作" width="120" align="center">
-                    <template #default="index">
-                        <el-button link type="primary" size="large" @click.prevent="openQuestionHandler(index.row)">
-                            <span class="button_look">查看</span>
-                        </el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
+        <h5>{{ iteration.iterationName }}</h5>
+        <div class="row">
+            <div style="margin-left: 12px;">
+                <el-button class="add_button" type="primary" @click="showCreate = true">快速创建+</el-button>
+                <el-button class="add_button" type="primary">工作分配</el-button>
+            </div>
+            <div style="margin-right: 12px;">
+                <el-tag type='warning'>{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
+            </div>
         </div>
+        <div class="container" style="margin-top: 10px;">
+
+            <WorkTable @openQuestion="openQuestionHandler"></WorkTable>
+        </div>
+
         <div v-show="showCreate" style="" class="row">
             <div style="margin: 8px 0px 8px 13px;">
                 <el-tag type="info" size="large">创建中</el-tag>
@@ -66,6 +46,7 @@
 import { ref } from 'vue'
 import Global_color from "@/app/Global_color.vue"
 import UpdateModel from "@/components/UpdateModel.vue";
+import WorkTable from "@/components/WorkTable.vue";
 export default {
     name: "Work",
 
@@ -74,13 +55,11 @@ export default {
     },
     components: {
         UpdateModel,
+        WorkTable
     },
     setup(props, context) {
         const now = new Date()
-        const iteration = {
-            id: '1',
-            name: '迭代1'
-        }
+
         const questionType = [
             { text: '待完成', value: '待完成' },
             { text: '进行中', value: '进行中' },
@@ -186,6 +165,7 @@ export default {
         const priority = ''
         const conductor = ''
         const showCreate = ref(false)
+    
         return {
             now,
             users,
@@ -196,7 +176,6 @@ export default {
             openQuestion,
             getPriorityStyle,
 
-            iteration,
             title,
             priority,
             conductor,
@@ -214,9 +193,24 @@ export default {
             dialogVisible: false,
             selectedQuestion: Object,
             selectedType: '',
+
+            iteration: {
+                iterationId: '',
+                iterationName: '',
+                iterationState: '',
+                startTime: '',
+                endTime: '',
+                iterationDescribe: '',
+                projectId: '',
+            }
         }
     },
-    /*用于打开和关闭弹窗 */
+    beforeMount() {
+        //得到已开启的迭代
+        this.$axios.get("/iteration/getOpenedIteration").then((response) => {
+            this.iteration = response.data.data
+        })
+    },
     methods: {
         openQuestionHandler(question) {
             this.selectedQuestion = question;
@@ -257,5 +251,9 @@ export default {
 
 .button_look {
     color: v-bind(ok_button)
+}
+
+.row {
+    justify-content: space-between;
 }
 </style>

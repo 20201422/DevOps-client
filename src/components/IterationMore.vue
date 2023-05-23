@@ -9,22 +9,24 @@
       <div style="margin-bottom: 10px;" v-for="iteration in iterations" :key="iteration.iterationId">
         <el-card class="box-card" shadow="hover">
           <template #header>
-            <div class="">
-              <span>{{ iteration.iterationName }}</span>
+            <div class="row">
+              <div>
+                &nbsp;&nbsp;
+                <span>{{ iteration.iterationName }}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                <el-tag size="default">{{ iteration.iterationState }}</el-tag>
+              </div>
               <el-button class="button" text>详情</el-button>
             </div>
           </template>
-          <span>
-            {{ iteration.startTime }}~{{ iteration.endTime }}
-          </span>
+          <el-tag type='warning'>{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
         </el-card>
       </div>
 
     </template>
     <template #footer>
       <div style="flex: auto">
-        <el-button class="btn_1" @click="cancelClick">取消</el-button>
-        <el-button class="btn" type="primary" @click="confirmClick">保存</el-button>
+        <!-- <el-button class="btn_1" @click="cancelClick">取消</el-button>
+        <el-button class="btn" type="primary" @click="confirmClick">保存</el-button> -->
       </div>
     </template>
   </el-drawer>
@@ -150,6 +152,10 @@ export default {
 
 .button_text:hover {
   cursor: pointer;
+}
+
+.row {
+  justify-content: space-between;
 }
 </style>
   
