@@ -1,10 +1,9 @@
 <template>
     <div class="btn">
       <Add></Add>
-      <div>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <More></More>
-      </div>
+
+      <More></More>
+
     </div>
 </template>
 
@@ -18,7 +17,7 @@ export default {
     },
     data(){
         return{
-           
+
         }
     }
 };

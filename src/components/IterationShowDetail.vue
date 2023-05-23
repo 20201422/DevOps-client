@@ -1,10 +1,11 @@
 <template>
   <div class="itxst">
     <div class="row">
-      <span style=" padding-bottom: 5px;">{{ iteration.iterationName }}</span>
-      <el-tag size="default" style="margin-left: 10px;">{{ iteration.iterationState }}</el-tag>
-      <el-tag type='warning' style="margin-left:72%;">{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
-    
+      <div>
+        <span>{{ iteration.iterationName }}</span> &nbsp;&nbsp;&nbsp;&nbsp;
+        <el-tag size="default">{{ iteration.iterationState }}</el-tag>
+      </div>
+      <el-tag type='warning'>{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
     </div>
 
     <div class="row">
@@ -15,11 +16,11 @@
           group="group1" :fallback-class="true" :fallback-on-body="true" :touch-start-threshold="50"
           :fallback-tolerance="50" :move="onMove">
           <template #item="{ element }">
-            <div class="move">
+            <div class="move" @click="click(element, '问题')">
               <div :class="false ? 'forbid item' : 'item'">
                 <label>{{ element.questionName }}</label>
                 <p>{{ element.questionDescribe }}</p>
-                <p>处理人：{{ element.userId}}</p>
+                <p>处理人：{{ element.userName}}</p>
               </div>
             </div>
           </template>
@@ -32,11 +33,11 @@
           group="group1" :fallback-class="true" :fallback-on-body="true" :touch-start-threshold="50"
           :fallback-tolerance="50" :move="onMove">
           <template #item="{ element }">
-            <div class="move">
+            <div class="move" @click="click(element, '问题')">
               <div :class="false ? 'forbid item' : 'item'">
                 <label>{{ element.questionName }}</label>
                 <p>{{ element.questionDescribe }}</p>
-                <p>处理人：{{ element.userId}}</p>
+                <p>处理人：{{ element.userName}}</p>
               </div>
             </div>
           </template>
@@ -49,11 +50,11 @@
           group="group1" :fallback-class="true" :fallback-on-body="true" :touch-start-threshold="50"
           :fallback-tolerance="50" :move="onMove">
           <template #item="{ element }">
-            <div class="move">
+            <div class="move" @click="click(element, '问题')">
               <div :class="false ? 'forbid item' : 'item'">
                 <label>{{ element.questionName }}</label>
                 <p>{{ element.questionDescribe }}</p>
-                <p>处理人：{{ element.userId}}</p>
+                <p>处理人：{{ element.userName}}</p>
               </div>
             </div>
           </template>
@@ -80,7 +81,9 @@ export default {
 
   },
   methods: {
-    
+    click: function (model, type) {
+      this.$emit('openModel', model, type)
+    },
 
   },
   //在页面渲染之前获取迭代数据
@@ -178,7 +181,7 @@ body {
 .itxst {
   background-color: #f5f5f7;
   border-radius: 12px;
-  padding: 24px 24px 24px 24px;
+  padding: 12px 24px 12px 24px;
   margin-top: 12px;
   /* justify-content: space-between;    能够让三列均匀分布 */
 
@@ -233,5 +236,9 @@ body {
 
 .fallbackClass {
   background-color: aquamarine;
+}
+.row {
+  justify-content: space-between;
+  margin-bottom:12px;
 }
 </style>
