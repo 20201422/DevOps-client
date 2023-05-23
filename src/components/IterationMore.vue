@@ -63,7 +63,6 @@ export default {
       this.drawer = true
       this.$axios.get("/iteration/iterations").then(response => {
         let data = response.data.data
-        console.log(data)
         this.iterations = data
 
       }).catch(error => { })

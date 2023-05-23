@@ -5,7 +5,7 @@
             <el-form :v-model="form">
                 <label>迭代名称</label>
                 <el-form-item>
-                    <el-input v-model="form.IterationName"></el-input>
+                    <el-input v-model="form.iterationName"></el-input>
                 </el-form-item>
 
                 <el-form :inline="true" class="demo-form-inline">
@@ -22,7 +22,7 @@
                 </el-form>
                 <label>迭代目标</label>
                 <el-form-item>
-                    <el-input type="textarea" v-model="form.IterationGoal"></el-input>
+                    <el-input type="textarea" v-model="form.iterationDescribe"></el-input>
                 </el-form-item>
 
             </el-form>
@@ -49,40 +49,25 @@ export default {
     props: {
 
     },
-
     setup(props, context) {
         const dialogVisible = ref(false)
 
         const form = reactive({
-            IterationName: "",
-            IterationGoal: "",
+            iterationName: "",
+            iterationDescribe: "",
             startTime: "",
             endTime: "",
+            iterationState: "未开启",
+            projectId: "1",
         })
         const cancelClick = () => {
             dialogVisible.value = false
         }
-        const confirmClick = () => {
-
-            ElMessageBox.confirm(`确认要创建迭代吗?`)
-                .then(() => {
-                    dialogVisible.value = false
-                })
-                .catch(() => {
-                    // catch error
-                })
-        }
-
-        /*穿梭框*/
-        const value = ref([])  /*选中的数据 */
-
 
         return {
             dialogVisible,
             form,
             cancelClick,
-            confirmClick,
-            value,
 
         }
     },
@@ -91,11 +76,47 @@ export default {
             this.dialogVisible = true
             this.$axios.get("/question/questions").then(response => {
                 let data = response.data.data
-          
-                this.questions= data
-                
+
+                this.questions = data
+
             }).catch(error => { })
         },
+        confirmClick() {
+            ElMessageBox.confirm(`确认要创建迭代吗?`)
+                .then(() => {
+                    this.$axios.post("/iteration/add", this.form).then(response => {  //添加迭代
+                        console.log(response.data)
+                        //通过迭代名称找到迭代id
+                        this.$axios.get("/iteration/find/" + this.form.iterationName).then(response => {
+                            this.iterationId = response.data.data
+                            //将一个或多个问题添加进对应迭代
+                            for (let index = 0; index < this.value.length; index++) {
+                                console.log(this.value[index])
+                                this.$axios.get("/iteration/addToIteration",
+                                    {
+                                        params: {
+                                            questionId: this.value[index],
+                                            iterationId: this.iterationId
+                                        }
+                                    })
+                                    .then(response => {
+                                        console.log(response)
+                                    }).catch(error => { console.log(error) })
+                            }
+                        }).catch((error) => { console.log(error) })
+                    }).catch((error) => {
+                        console.log(error)
+                    })
+
+
+
+                    this.dialogVisible = false
+                })
+                .catch(() => {
+                    // catch error
+                    this.dialogVisible = false
+                })
+        }
     },
 
     data() {
@@ -103,7 +124,9 @@ export default {
             button_color1: Global_color.button_color1,
             button_color2: Global_color.button_color,
             write: Global_color.white1,
-            questions: []
+            questions: [],  //已有问题
+            value: [],     //选择的问题
+            iterationId: 1 //迭代Id
         }
     }
 };
