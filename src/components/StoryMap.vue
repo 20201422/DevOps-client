@@ -42,7 +42,6 @@
 
 <script>
 import draggable from "vuedraggable";
-import { defineEmits } from "vue";
 import Global_color from "@/app/Global_color.vue";
 
 export default {
@@ -61,6 +60,7 @@ export default {
   setup(props, context) {
 
     const onStart = () => { // 拖拽开始的事件
+
       console.log("开始拖拽");
     };
 
@@ -96,7 +96,7 @@ export default {
     showStoryMap: function() {
       this.$axios.get('story/').then((resp) => {
         this.storyMap.epicLists = resp.data.data.epics
-        console.log(this.storyMap.epicLists)
+        // console.log(this.storyMap.epicLists)
       })
     },
 

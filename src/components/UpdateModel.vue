@@ -32,12 +32,12 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="经办人">
-            <el-select v-model="form.userId" placeholder="未选择">
+            <el-select v-model="form.userId" placeholder="未选择" clearable>
                 <el-option v-for="item in userOptions" :key="item.value" :clearable="true"
                          :label="`${item.userId} - ${item.userName}`" :value="item.userId" :disabled="item.disabled"/>
             </el-select>
           </el-form-item>
-          <el-form-item label="所属史诗" v-if="form.epicId != null && type !== '史诗'">
+          <el-form-item label="所属史诗" v-if="form.epicId != null && type !== '史诗'" clearable>
             <el-tag class="ml-2" type="success" effect="dark" round>{{form.epicId}}</el-tag>
           </el-form-item>
         </el-form>

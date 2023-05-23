@@ -29,13 +29,13 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="经办人" v-if="type !== '史诗'">
-          <el-select v-model="form.userId" placeholder="未选择">
+          <el-select v-model="form.userId" placeholder="未选择" clearable>
             <el-option v-for="item in userOptions" :key="item.value"
                        :label="`${item.userId} - ${item.userName}`" :value="item.userId" :disabled="item.disabled"/>
           </el-select>
         </el-form-item>
         <el-form-item v-if="type === '问题'" label="史诗">
-          <el-select v-model="form.epicId" placeholder="未选择">
+          <el-select v-model="form.epicId" placeholder="未选择" clearable>
             <el-option v-for="item in epics" :key="item.value"
                        :label="item.epicName" :value="item.epicId" :disabled="item.disabled"/>
           </el-select>
@@ -64,7 +64,7 @@
 
 <script>
 import { reactive, ref } from 'vue'
-import { ElMessageBox } from "element-plus"
+import {ElMessage, ElMessageBox, ElNotification} from "element-plus"
 import Global_color from "@/app/Global_color.vue";
 
 export default {
@@ -99,19 +99,6 @@ export default {
     const cancelClick = () => {
       drawer.value = false
     }
-    const confirmClick = () => {
-      ElMessageBox.confirm(`确认要添加问题吗?`, ``, {confirmButtonText: '确定', cancelButtonText: '取消',})
-          .then(() => {
-            this.$axios.post('/question/add').then((resp) => {
-              let data = resp.data
-              console.log(data)
-            })
-            drawer.value = false
-          })
-          .catch(() => {
-            // catch error
-          })
-    }
 
     return {
       drawer,
@@ -122,7 +109,6 @@ export default {
       epics,
       disabledDate,
       cancelClick,
-      confirmClick,
     }
   },
 
@@ -131,11 +117,32 @@ export default {
       button_color1: Global_color.button_color1,
       button_color2: Global_color.button_color,
       write: Global_color.white1,
+
+      questionForm: {
+        questionId: this.form.modelId,
+        questionName: this.form.modelName,
+        questionDescribe: this.form.modelDescribe,
+        questionPriority: this.form.modelPriority,
+        userId: this.form.userId,
+        epicId: this.form.epicId,
+        beginTime: this.form.beginTime,
+        endTime: this.form.endTime,
+      },
+
+      epicForm: {
+        epicId: this.form.modelId,
+        epicName: this.form.modelName,
+        epicDescribe: this.form.modelDescribe,
+        epicPriority: this.form.modelPriority,
+      },
+
+      idPattern: /^[a-zA-Z0-9_-]+$/,
+
     }
   },
 
   methods: {
-    showOption: function() {
+    showOption: function () {
       this.$axios.get('user/users/idAndName').then((resp) => {
         this.userOptions = resp.data.data
       })
@@ -143,6 +150,87 @@ export default {
         this.epics = resp.data.data
       })
     },
+
+    confirmClick: function () {
+
+      if (this.form.modelId === '' || this.form.modelName === '') {
+        ElMessage.error('检查必填项！')
+      } else {
+        if (this.form.modelId.length>= 2 && this.form.modelId.length<= 20 && this.idPattern.test(this.form.modelId)
+            && this.form.modelName.length >= 2 && this.form.modelName.length <= 20 && this.form.modelDescribe.length <= 100) {
+          ElMessageBox.confirm(`确认要添加` + this.type +`吗?`, ``, {confirmButtonText: '确定', cancelButtonText: '取消',})
+              .then(() => {
+                // if (this.type === '问题') {
+                //   this.addQuestion();
+                // } else if (this.type === '史诗') {
+                //   this.addEpic();
+                // }
+                this.drawer = false
+                return Promise.resolve()
+              })
+              .then(() => {
+                ElNotification({
+                  title: '添加' + this.type + '成功',
+                  message: 'Hello, ' + data.data.userName,
+                  type: 'success',
+                })
+                this.$router.push('/Main/Story')
+              })
+              .catch(() => {
+                // catch error
+              })
+        }
+      }
+    },
+
+    addQuestion: function () {
+
+      this.questionForm.questionId = this.form.modelId
+      this.questionForm.questionName = this.form.modelName
+      this.questionForm.questionDescribe = this.form.modelDescribe
+      this.questionForm.questionPriority = this.form.modelPriority
+      this.questionForm. userId = this.form.userId
+      this.questionForm.epicId = this.form.epicId
+      this.questionForm.beginTime = this.form.beginTime
+      this.questionForm.endTime = this.form.endTime
+
+      this.$axios.get('/question/' + this.questionForm.questionId).then(resp => {
+        if (resp.data.data === null) { // 没有重复的id才可以加入
+          this.$axios.post('/question/add', this.questionForm).then((resp) => {
+            console.log(this.questionForm)
+          }).catch((error) => {
+            console.log(error)
+          })
+        } else {
+          ElMessage.error('问题Id出现重复，请检查！')
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
+
+    addEpic: function () {
+
+      this.epicForm.epicId = this.form.modelId
+      this.epicForm.epicName = this.form.modelName
+      this.epicForm.epicDescribe = this.form.modelDescribe
+      this.epicForm.epicPriority = this.form.modelPriority
+
+      this.$axios.get('/epic/' + this.epicForm.epicId).then(resp => {
+        if (resp.data.data === null) { // 没有重复的id才可以加入
+          this.$axios.post('/epic/add', this.epicForm).then((resp) => {
+
+          }).catch((error) => {
+            console.log(error)
+          })
+        } else {
+          ElMessage.error('史诗Id出现重复，请检查！')
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
+
   },
 
   created() {
