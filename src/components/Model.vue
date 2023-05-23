@@ -28,7 +28,7 @@
             <el-radio-button label="低" /><el-radio-button label="中" /><el-radio-button label="高" />
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="经办人">
+        <el-form-item label="经办人" v-if="type !== '史诗'">
           <el-select v-model="form.userId" placeholder="未选择">
             <el-option v-for="item in userOptions" :key="item.value"
                        :label="`${item.userId} - ${item.userName}`" :value="item.userId" :disabled="item.disabled"/>
@@ -40,12 +40,12 @@
                        :label="item.epicName" :value="item.epicId" :disabled="item.disabled"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="开始时间">
+        <el-form-item label="开始时间" v-if="type !== '史诗'">
           <div class="block">
             <el-date-picker v-model="form.beginTime" type="datetime" placeholder="选择开始时间" :default-time="defaultTime"/>
           </div>
         </el-form-item>
-        <el-form-item label="结束时间">
+        <el-form-item label="结束时间" v-if="type !== '史诗'">
           <div class="block">
             <el-date-picker v-model="form.endTime" type="datetime" placeholder="选择结束时间"
                             :default-time="defaultTime" :disabled-date="disabledDate"/>
@@ -72,7 +72,6 @@ export default {
 
   props: {
     type: String,
-    epicId: String,
   },
 
   setup(props) {
@@ -81,7 +80,7 @@ export default {
     const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
 
     const form = reactive({
-      modelId: props.epicId,
+      modelId: '',
       modelName: '',
       modelDescribe: '',
       modelPriority: '低',

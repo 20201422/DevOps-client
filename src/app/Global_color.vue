@@ -18,15 +18,15 @@ const white1 ='white' // 白色
 // 颜色运用-主题色、标题广告及footer背景色
 // ⚠️注意⚠️：调整主题颜色时这四个都要改！！！！！！
 // 喜迎二十大主题中国色
-const main_color = red  // 关联footer背景色以及标题广告上背景色，主题色
-const main_color1 = red1  // 标题广告下背景色，主题色
-const font_color = yellow // 标题广告字体颜色
-const font_color1 = yellow1 // 标题广告链接颜色
+// const main_color = red  // 关联footer背景色以及标题广告上背景色，主题色
+// const main_color1 = red1  // 标题广告下背景色，主题色
+// const font_color = yellow // 标题广告字体颜色
+// const font_color1 = yellow1 // 标题广告链接颜色
 // 标准主题色
-// const main_color = blue  // 关联footer背景色以及标题广告上背景色，主题色
-// const main_color1 = blue1  // 标题广告下背景色，主题色
-// const font_color = white1  // 标题广告字体颜色
-// const font_color1 = white1 // 标题广告链接颜色
+const main_color = blue  // 关联footer背景色以及标题广告上背景色，主题色
+const main_color1 = blue1  // 标题广告下背景色，主题色
+const font_color = white1  // 标题广告字体颜色
+const font_color1 = white1 // 标题广告链接颜色
 
 // 颜色运用-按钮
 const button_color = main_color // 添加按钮背景色（主）

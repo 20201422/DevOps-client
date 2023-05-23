@@ -126,17 +126,16 @@ const onMove = (e, originalEvent) => {
 </script>
 
 <style scoped>
-body {
-  padding: 0;
-  margin: 0;
-}
-
-.itxst {
-  background-color: #f5f5f7;
-  border-radius: 12px;
-  padding: 24px 24px 24px 24px;
-
-  /* justify-content: space-between;    能够让三列均匀分布 */
+    body {
+      padding: 0;
+      margin: 0;
+    }
+    .itxst {
+      background-color: #f5f5f7;
+      border-radius: 12px;
+      padding: 24px 24px 24px 24px;
+      margin-top: 12px;
+      /* justify-content: space-between;    能够让三列均匀分布 */
 
 }
 

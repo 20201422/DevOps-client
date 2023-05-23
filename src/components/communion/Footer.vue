@@ -43,7 +43,7 @@ export default {
     margin: 0 0 0 0;
     padding: 10px 80px 20px 80px;
     background-color: v-bind(background_color);
-    background-image: url("@/assets/人民大会堂.png");
+    //background-image: url("@/assets/人民大会堂.png");
     color: #F2F2F2;
     text-align: left;
     font-size: 10px;

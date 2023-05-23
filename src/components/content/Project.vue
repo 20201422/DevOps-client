@@ -27,7 +27,6 @@
 import Global_color from "@/app/Global_color.vue"
 import Table from "@/components/Table.vue";
 import UpdateModel from "@/components/UpdateModel.vue";
-import { ref } from 'vue'
 
 export default {
   name: "Project",
@@ -48,24 +47,7 @@ export default {
 
       projectId: '2427',
       projectName: 'LFouse租房平台',
-      projectUser: [
-        {
-          userId: '20201419',
-          userName: '慧强',
-        },
-        {
-          userId: '20201420',
-          userName: '滔滔',
-        },
-        {
-          userId: '20201422',
-          userName: '堃芃',
-        },
-        {
-          userId: '20201423',
-          userName: '瑞祥',
-        },
-      ],
+      projectUser: [],
       projectState: '进行中',
 
       model_color: Global_color.model_color,
@@ -77,6 +59,7 @@ export default {
       dialogVisible: false,
       selectedQuestion: Object,
       selectedType: '',
+
     }
   },
 
@@ -86,10 +69,22 @@ export default {
       this.selectedType = type;
       this.dialogVisible = true;
     },
+
     closeQuestionHandler() {
       this.dialogVisible = false;
-    }
+    },
+
+    showOption: function() {
+      this.$axios.get('user/users/idAndName').then((resp) => {
+        this.projectUser = resp.data.data
+        // console.log(this.projectUser)
+      })
+    },
   },
+
+  created() {
+    this.showOption();
+  }
 }
 </script>
 
