@@ -160,11 +160,11 @@ export default {
             && this.form.modelName.length >= 2 && this.form.modelName.length <= 20 && this.form.modelDescribe.length <= 100) {
           ElMessageBox.confirm(`确认要添加` + this.type +`吗?`, ``, {confirmButtonText: '确定', cancelButtonText: '取消',})
               .then(() => {
-                // if (this.type === '问题') {
-                //   this.addQuestion();
-                // } else if (this.type === '史诗') {
-                //   this.addEpic();
-                // }
+                if (this.type === '问题') {
+                  this.addQuestion();
+                } else if (this.type === '史诗') {
+                  this.addEpic();
+                }
                 this.drawer = false
                 return Promise.resolve()
               })
@@ -182,7 +182,6 @@ export default {
         }
       }
     },
-
     addQuestion: function () {
 
       this.questionForm.questionId = this.form.modelId
@@ -208,7 +207,6 @@ export default {
         console.log(error)
       })
     },
-
     addEpic: function () {
 
       this.epicForm.epicId = this.form.modelId

@@ -9,7 +9,9 @@
             <div :key="element.index" class="scrollbar-demo-item map">
               <div class="move epic" @click="click(element.epic, '史诗')">
                 <div :class="element.epic.disabledMove ? 'forbid item_for_epic' : 'item_for_epic'">
-                  <label>{{ element.epic.epicName }}</label>
+                  <label class="epic_question_context">{{ element.epic.epicName }}
+                    <span :style="getPriorityStyle(element.epic.epicPriority)">{{ element.epic.epicPriority }}&nbsp;</span>
+                  </label>
                   <p class="epic_question_context">{{ element.epic.epicId }}
                     <el-tag :type="element.epic.epicState === '规划中' ? 'warning' : (element.epic.epicState === '已实现' ? 'success' : '')"
                             disable-transitions>{{ element.epic.epicState }}</el-tag>
@@ -23,7 +25,9 @@
                 <template #item="{ element }">
                   <div class="move" @click="click(element, '问题')">
                     <div :class="element.disabledMove? 'forbid item' : 'item'">
-                      <label>{{ element.questionName }}</label>
+                      <label class="epic_question_context">{{ element.questionName }}
+                        <span :style="getPriorityStyle(element.questionPriority)">{{ element.questionPriority }}&nbsp;</span>
+                      </label>
                       <p class="epic_question_context">{{ element.questionId }}
                         <el-tag :type="element.questionState === '规划中' ? 'warning' : (element.questionState === '已实现' ? 'success' : '')"
                                 disable-transitions>{{ element.questionState }}</el-tag>
@@ -75,10 +79,24 @@ export default {
       return true;
     }
 
+    const getPriorityStyle = (priority) => {
+      switch (priority) {
+        case '高':
+          return 'color: ' + Global_color.red +';font-size:8px;';
+        case '中':
+          return 'color: ' + Global_color.yellow1 +';font-size:8px;';
+        case '低':
+          return 'color: ' + Global_color.blue +';font-size:8px;';
+        default:
+          return '';
+      }
+    }
+
     return {
       onStart,
       onEnd,
       onMove,
+      getPriorityStyle,
     }
   },
 
