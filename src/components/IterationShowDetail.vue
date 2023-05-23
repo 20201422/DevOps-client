@@ -1,23 +1,25 @@
 <template>
   <div class="itxst">
     <div class="row">
-      <span style="font-size: large;">{{ iteration.iterationName }}</span>
-      <el-tag type='warning' style="margin-left:78%;">{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
+      <span style=" padding-bottom: 5px;">{{ iteration.iterationName }}</span>
+      <el-tag size="default" style="margin-left: 10px;">{{ iteration.iterationState }}</el-tag>
+      <el-tag type='warning' style="margin-left:72%;">{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
+    
     </div>
 
     <div class="row">
       <div class="col-sm-4 border bg-light group">
         <label class="title">规划中</label>
-        <draggable :list="state.modules.group1" item-key={{ element.id }} ghost-class="ghost" handle=".move"
+        <draggable :list="state.modules.group1" item-key={{ element.questionId }} ghost-class="ghost" handle=".move"
           filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300" @start="onStart" @end="onEnd"
           group="group1" :fallback-class="true" :fallback-on-body="true" :touch-start-threshold="50"
           :fallback-tolerance="50" :move="onMove">
           <template #item="{ element }">
             <div class="move">
-              <div :class="element.disabledMove ? 'forbid item' : 'item'">
-                <label>{{ element.name }}</label>
-                <p>内容....</p>
-                <p>处理人：{{ }}</p>
+              <div :class="false ? 'forbid item' : 'item'">
+                <label>{{ element.questionName }}</label>
+                <p>{{ element.questionDescribe }}</p>
+                <p>处理人：{{ element.userId}}</p>
               </div>
             </div>
           </template>
@@ -25,16 +27,16 @@
       </div>
       <div class="col-sm-4 border bg-light group">
         <label class="title">实现中</label>
-        <draggable :list="state.modules.group2" item-key={{ element.id }} ghost-class="ghost" handle=".move"
+        <draggable :list="state.modules.group2" item-key={{ element.questionId }} ghost-class="ghost" handle=".move"
           filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300" @start="onStart" @end="onEnd"
           group="group1" :fallback-class="true" :fallback-on-body="true" :touch-start-threshold="50"
           :fallback-tolerance="50" :move="onMove">
           <template #item="{ element }">
             <div class="move">
-              <div :class="element.disabledMove ? 'forbid item' : 'item'">
-                <label>{{ element.name }}</label>
-                <p>内容....</p>
-                <p>处理人：{{ }}</p>
+              <div :class="false ? 'forbid item' : 'item'">
+                <label>{{ element.questionName }}</label>
+                <p>{{ element.questionDescribe }}</p>
+                <p>处理人：{{ element.userId}}</p>
               </div>
             </div>
           </template>
@@ -42,16 +44,16 @@
       </div>
       <div class="col-sm-4 border bg-light group">
         <label class="title">已实现</label>
-        <draggable :list="state.modules.group3" item-key={{ element.id }} ghost-class="ghost" handle=".move"
+        <draggable :list="state.modules.group3" item-key={{ element.questionId }} ghost-class="ghost" handle=".move"
           filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300" @start="onStart" @end="onEnd"
           group="group1" :fallback-class="true" :fallback-on-body="true" :touch-start-threshold="50"
           :fallback-tolerance="50" :move="onMove">
           <template #item="{ element }">
             <div class="move">
-              <div :class="element.disabledMove ? 'forbid item' : 'item'">
-                <label>{{ element.name }}</label>
-                <p>内容....</p>
-                <p>处理人：{{ }}</p>
+              <div :class="false ? 'forbid item' : 'item'">
+                <label>{{ element.questionName }}</label>
+                <p>{{ element.questionDescribe }}</p>
+                <p>处理人：{{ element.userId}}</p>
               </div>
             </div>
           </template>
@@ -62,80 +64,123 @@
 </template>
 
 
-<script setup>
+<script >
 import Global_color from "@/app/Global_color.vue"
-import { onBeforeMount } from "vue";
 import { ref, reactive } from "vue";
 //导入draggable组件
 import draggable from "vuedraggable";
 
-const border_color = Global_color.button_color
-const iteration = reactive({
-  iterationName: '迭代1',
-  startTime: '2023-05-23',
-  endTime: '2023-05-30',
-})
+export default {
 
-//在渲染页面之前执行
-onBeforeMount(() => {
-  axios.get("/iteration/getOpenedIteration")
-})
-
-const state = reactive({
-
-  /*工作台的数据结构
-    disabledMove:禁止移动
-    disabledPark:禁止停靠
-  */
-  modules: {
-    group1: [
-      { name: "需求1", id: 1, disabledMove: false, disabledPark: true },
-      { name: "需求2", id: 2, disabledMove: false, disabledPark: false },
-      { name: "需求3", id: 3, disabledMove: false, disabledPark: false },
-      { name: "需求4", id: 4, disabledMove: false, disabledPark: false },
-    ],
-    group2: [
-      { name: "缺陷1", id: 5, disabledMove: false, disabledPark: false },
-      { name: "缺陷2", id: 6, disabledMove: false, disabledPark: false },
-      { name: "缺陷3", id: 7, disabledMove: false, disabledPark: false },
-    ],
-    group3: [
-      { name: "测试1", id: 8, disabledMove: false, disabledPark: false },
-      { name: "测试2", id: 9, disabledMove: false, disabledPark: false },
-    ],
+  components: {
+    draggable,
   },
-});
 
-//拖拽开始的事件
-const onStart = () => {
-  console.log("开始拖拽");
-};
+  props: {
 
-//拖拽结束的事件
-const onEnd = () => {
-  console.log("结束拖拽");
-};
+  },
+  methods: {
+    
 
-const onMove = (e, originalEvent) => {
-  //不允许停靠
-  // if (e.relatedContext.element.disabledPark == true) return false;
+  },
+  //在页面渲染之前获取迭代数据
+  beforeMount() {
+    //得到已开启的迭代
+    this.$axios.get("/iteration/getOpenedIteration").then((response) => {
+      this.iteration = response.data.data
+      //得到对应迭代三个状态下的问题
+      this.$axios.get("/iteration/findQuestionsByState/" + this.iteration.iterationId + "/规划中").then((response) => {
+        console.log(response.data.data)
+        this.state.modules.group1 = response.data.data
+      }).catch((error) => { console.error(error) })
+      this.$axios.get("/iteration/findQuestionsByState/" + this.iteration.iterationId + "/实现中").then((response) => {
+        console.log(response.data.data)
+        this.state.modules.group2 = response.data.data
+      }).catch((error) => { console.error(error) })
+      this.$axios.get("/iteration/findQuestionsByState/" + this.iteration.iterationId + "/已实现").then((response) => {
+        console.log(response.data.data)
+        this.state.modules.group3 = response.data.data
+      }).catch((error) => { console.error(error) })
+    }).catch((error) => { console.error(error) })
+  },
+  data() {
+    return {
+      iteration: {
+        iterationId: '',
+        iterationName: '',
+        iterationState: '',
+        startTime: '',
+        endTime: '',
+        iterationDescribe: '',
+        projectId: '',
+      }
+    }
+  },
+  setup() {
+    const border_color = Global_color.button_color
 
-  return true;
-};
+    const state = reactive({
+
+      /*工作台的数据结构
+        disabledMove:禁止移动
+        disabledPark:禁止停靠
+      */
+      modules: {
+        group1: [
+          // { name: "需求1", id: 1, disabledMove: false, disabledPark: true },
+          // { name: "需求2", id: 2, disabledMove: false, disabledPark: false },
+          // { name: "需求3", id: 3, disabledMove: false, disabledPark: false },
+          // { name: "需求4", id: 4, disabledMove: false, disabledPark: false },
+        ],
+        group2: [
+          // { name: "缺陷1", id: 5, disabledMove: false, disabledPark: false },
+          // { name: "缺陷2", id: 6, disabledMove: false, disabledPark: false },
+          // { name: "缺陷3", id: 7, disabledMove: false, disabledPark: false },
+        ],
+        group3: [
+          // { name: "测试1", id: 8, disabledMove: false, disabledPark: false },
+          // { name: "测试2", id: 9, disabledMove: false, disabledPark: false },
+        ],
+      },
+    });
+    //拖拽开始的事件
+    const onStart = () => {
+      console.log("开始拖拽");
+    };
+    //拖拽结束的事件
+    const onEnd = () => {
+      console.log("结束拖拽");
+    };
+    const onMove = (e, originalEvent) => {
+      //不允许停靠
+      // if (e.relatedContext.element.disabledPark == true) return false;
+      return true;
+    };
+
+    return {
+      onStart,
+      onEnd,
+      onMove,
+      state,
+      border_color,
+    }
+  }
+}
 
 </script>
 
 <style scoped>
-    body {
-      padding: 0;
-      margin: 0;
-    }
-    .itxst {
-      background-color: #f5f5f7;
-      border-radius: 12px;
-      padding: 24px 24px 24px 24px;
-      margin-top: 12px;
-      /* justify-content: space-between;    能够让三列均匀分布 */
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.itxst {
+  background-color: #f5f5f7;
+  border-radius: 12px;
+  padding: 24px 24px 24px 24px;
+  margin-top: 12px;
+  /* justify-content: space-between;    能够让三列均匀分布 */
 
 }
 
@@ -183,7 +228,7 @@ const onMove = (e, originalEvent) => {
 
 .chosenClass {
   opacity: 1;
-  //border: solid 1px item_color;
+  /* border: solid 1px item_color; */
 }
 
 .fallbackClass {

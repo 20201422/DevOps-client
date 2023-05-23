@@ -11,12 +11,12 @@
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item label="开始时间">
                         <div class="block">
-                            <el-date-picker v-model="form.startTime" type="datetime" placeholder="选择开始时间" />
+                            <el-date-picker v-model="form.startTime" type="datetime" placeholder="选择开始时间" value-format="YYYY-MM-DD" />
                         </div>
                     </el-form-item>
                     <el-form-item label="结束时间">
                         <div class="block">
-                            <el-date-picker v-model="form.endTime" type="datetime" placeholder="选择结束时间" />
+                            <el-date-picker v-model="form.endTime" type="datetime" placeholder="选择结束时间" value-format="YYYY-MM-DD"/>
                         </div>
                     </el-form-item>
                 </el-form>
@@ -85,13 +85,11 @@ export default {
             ElMessageBox.confirm(`确认要创建迭代吗?`)
                 .then(() => {
                     this.$axios.post("/iteration/add", this.form).then(response => {  //添加迭代
-                        console.log(response.data)
                         //通过迭代名称找到迭代id
                         this.$axios.get("/iteration/find/" + this.form.iterationName).then(response => {
                             this.iterationId = response.data.data
                             //将一个或多个问题添加进对应迭代
                             for (let index = 0; index < this.value.length; index++) {
-                                console.log(this.value[index])
                                 this.$axios.get("/iteration/addToIteration",
                                     {
                                         params: {

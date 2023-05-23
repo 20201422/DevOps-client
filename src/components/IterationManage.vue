@@ -2,7 +2,7 @@
     <div class="btn">
       <Add></Add>
       <div>
-        <el-tag size="large">{{ IterationState }}</el-tag>&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;
         <More></More>
       </div>
     </div>
@@ -18,7 +18,7 @@ export default {
     },
     data(){
         return{
-            IterationState:'已开启'
+           
         }
     }
 };
