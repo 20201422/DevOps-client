@@ -33,16 +33,16 @@
           </el-form-item>
           <el-form-item label="经办人">
             <el-select v-model="form.userId" placeholder="未选择">
-                <el-option v-for="item in userOptions" :key="item.value" :clearable="true" :no-data-text="没有数据"
+                <el-option v-for="item in userOptions" :key="item.value" :clearable="true"
                          :label="`${item.userId} - ${item.userName}`" :value="item.userId" :disabled="item.disabled"/>
             </el-select>
           </el-form-item>
-          <el-form-item label="所属史诗" v-if="form.epicId != null">
+          <el-form-item label="所属史诗" v-if="form.epicId != null && type !== '史诗'">
             <el-tag class="ml-2" type="success" effect="dark" round>{{form.epicId}}</el-tag>
           </el-form-item>
         </el-form>
         <br>
-        <el-form :inline="true" class="demo-form-inline">
+        <el-form :inline="true" class="demo-form-inline" v-if="type !== '史诗'">
           <el-form-item label="开始时间">
             <div class="block">
               <el-date-picker v-model="form.beginTime" type="datetime" placeholder="选择开始时间" :default-time="defaultTime"/>
@@ -81,8 +81,8 @@ export default {
   },
 
   mounted() {
-    console.log(this.model)
-    console.log(this.type)
+    // console.log(this.model)
+    // console.log(this.type)
   },
 
   setup(props, context) {
@@ -94,18 +94,18 @@ export default {
     }
 
     const form = reactive({
-      modelId: props.model.questionId,
-      modelName: props.model.questionName,
-      modelDescribe: props.model.questionDescribe,
-      modelPriority: props.model.questionPriority,
-      userId: props.model.userId,
-      userName: props.model.userName,
-      epicId: props.model.epicId,
-      beginTime: props.model.questionBeginTime,
-      endTime: props.model.questionEndTime,
+      modelId: props.model.questionId || props.model.epicId,
+      modelName: props.model.questionName || props.model.epicName,
+      modelDescribe: props.model.questionDescribe || props.model.epicDescribe,
+      modelPriority: props.model.questionPriority || props.model.epicPriority,
+      userId: props.model.userId || '',
+      userName: props.model.userName || '',
+      epicId: props.model.epicId || '',
+      beginTime: props.model.questionBeginTime || '',
+      endTime: props.model.questionEndTime || '',
     })
 
-    const deleteQuestion = () => {
+    const deleteModel = () => {
       context.emit("closeDialog");  // 关闭对话框并通知父组件
     }
 
@@ -114,7 +114,7 @@ export default {
     }
 
     const submitUpdate = (done) => {
-      console.log(form)
+      // console.log(form)
       ElMessageBox.confirm('确定要提交修改吗?', '提示', {
         confirmButtonText: '确认提交', // 修改确认按钮文本
         cancelButtonText: '取消', // 修改取消按钮文本
@@ -132,7 +132,7 @@ export default {
       defaultTime,
       disabledDate,
       form,
-      deleteModel: deleteQuestion,
+      deleteModel,
       close,
       submitUpdate,
     }
@@ -150,7 +150,7 @@ export default {
     showOption: function() {
       this.$axios.get('user/users/idAndName').then((resp) => {
         this.userOptions = resp.data.data
-        console.log(this.userOptions)
+        // console.log(this.userOptions)
       })
     },
   },

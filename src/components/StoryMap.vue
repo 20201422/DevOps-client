@@ -1,16 +1,19 @@
 <template>
   <el-scrollbar>
-    <div class="">
-      <draggable :list="storyMap.epicLists" item-key="epic.id" ghost-class="ghost" handle=".move"
+    <div style="max-height:680px">
+      <draggable :list="storyMap.epicLists" item-key="epic.epicId" ghost-class="ghost" handle=".move"
                  chosen-class="chosenClass" animation="300" @start="onStart" class="maps"
-                 @end="onEnd" group="epicList" :move="onMove">
-        <template #item="{ element, index }">
+                 @end="onEnd" group="epicLists" :move="onMove">
+        <template #item="{ element }">
           <div class="scrollbar-flex-content">
-            <div :key="index" class="scrollbar-demo-item map">
+            <div :key="element.index" class="scrollbar-demo-item map">
               <div class="move epic" @click="click(element.epic, '史诗')">
                 <div :class="element.epic.disabledMove ? 'forbid item_for_epic' : 'item_for_epic'">
-                  <label>{{ element.epic.name }}</label>
-                  <p>内容....</p>
+                  <label>{{ element.epic.epicName }}</label>
+                  <p class="epic_question_context">{{ element.epic.epicId }}
+                    <el-tag :type="element.epic.epicState === '规划中' ? 'warning' : (element.epic.epicState === '已实现' ? 'success' : '')"
+                            disable-transitions>{{ element.epic.epicState }}</el-tag>
+                  </p>
                 </div>
               </div>
               <draggable :list="element.questions" item-key="id" ghost-class="ghost" handle=".move" group="element.index"
@@ -20,8 +23,11 @@
                 <template #item="{ element }">
                   <div class="move" @click="click(element, '问题')">
                     <div :class="element.disabledMove? 'forbid item' : 'item'">
-                      <label>{{ element.name }}</label>
-                      <p>内容....</p>
+                      <label>{{ element.questionName }}</label>
+                      <p class="epic_question_context">{{ element.questionId }}
+                        <el-tag :type="element.questionState === '规划中' ? 'warning' : (element.questionState === '已实现' ? 'success' : '')"
+                                disable-transitions>{{ element.questionState }}</el-tag>
+                      </p>
                     </div>
                   </div>
                 </template>
@@ -34,56 +40,76 @@
   </el-scrollbar>
 </template>
 
-<script setup>
+<script>
 import draggable from "vuedraggable";
-import {reactive, defineEmits, } from "vue";
+import { defineEmits } from "vue";
 import Global_color from "@/app/Global_color.vue";
 
-const storyMap = reactive({
-  epicLists: [
-    {
-      epic: { name: "需求1", id: 1, disabledMove: false, disabledPark: true  },
-      questions: [
-        { name: "缺陷1", id: 5, disabledMove: false, disabledPark: false },
-        { name: "缺陷2", id: 6, disabledMove: false, disabledPark: false },
-        { name: "缺陷3", id: 7, disabledMove: false, disabledPark: false },
-      ],
-      index: 1
-    },
-    {
-      epic: { name: "需求2", id: 2, disabledMove: false, disabledPark: false },
-      questions: [
-        { name: "测试1", id: 8, disabledMove: false, disabledPark: false },
-        { name: "测试2", id: 9, disabledMove: false, disabledPark: false },
-      ],
-      index: 2
-    },
-  ],
-})
+export default {
 
-const emit = defineEmits(['openModel'])
-const click = (model, type) => {
-  emit('openModel', model, type)
+  name: "StoryMap",
+  emits: ['openModel'],
+
+  components: {
+    draggable,
+  },
+
+  props: {
+
+  },
+
+  setup(props, context) {
+
+    const onStart = () => { // 拖拽开始的事件
+      console.log("开始拖拽");
+    };
+
+    const onEnd = () => { // 拖拽结束的事件
+      console.log("结束拖拽");
+    };
+
+    const onMove = (e, originalEvent) => {
+      //不允许停靠
+      // if (e.relatedContext.element.disabledPark == true) return false;
+
+      return true;
+    }
+
+    return {
+      onStart,
+      onEnd,
+      onMove,
+    }
+  },
+
+  data() {
+    return {
+      border_color: Global_color.button_color,
+      background_color: Global_color.model_color,
+      border_right_color: Global_color.shadow_color,
+
+      storyMap: {epicLists: []},
+    }
+  },
+
+  methods: {
+    showStoryMap: function() {
+      this.$axios.get('story/').then((resp) => {
+        this.storyMap.epicLists = resp.data.data.epics
+        console.log(this.storyMap.epicLists)
+      })
+    },
+
+    click: function (model, type) {
+      this.$emit('openModel', model, type)
+    },
+  },
+
+  created() {
+    this.showStoryMap()
+  },
 }
 
-const onStart = () => { // 拖拽开始的事件
-  console.log("开始拖拽");
-};
-
-const onEnd = () => { // 拖拽结束的事件
-  console.log("结束拖拽");
-};
-
-const onMove = (e, originalEvent) => {
-  //不允许停靠
-  // if (e.relatedContext.element.disabledPark == true) return false;
-
-  return true;
-}
-
-const border_color = Global_color.button_color
-const background_color = Global_color.model_color
-const border_right_color = Global_color.shadow_color
 </script>
 
 <style scoped>
@@ -170,5 +196,10 @@ const border_right_color = Global_color.shadow_color
 }
 .fallbackClass {
   background-color: aquamarine;
+}
+
+.epic_question_context {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

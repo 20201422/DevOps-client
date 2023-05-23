@@ -1,9 +1,7 @@
 <template>
     <div>
-        
         <Manage></Manage>
         <Detail></Detail>
-
     </div>
 </template>
 

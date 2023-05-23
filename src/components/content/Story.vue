@@ -1,7 +1,7 @@
 <template>
   <div class="btn">
-    <Model :type="question" :id="id"></Model>
-    <Model :type="epic" :id="id"></Model>
+    <Model :type="question"></Model>
+    <Model :type="epic"></Model>
   </div>
   <div class="map">
     <StoryMap @openModel="openModelHandler"></StoryMap>
@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import { ref } from 'vue'
 import Global_color from "@/app/Global_color.vue"
 
 import Model from "@/components/Model.vue";
@@ -33,14 +32,13 @@ export default {
   components:{
     UpdateModel,
     StoryMap,
-    Model
+    Model,
   },
 
   data(){
     return{
       question: '问题',
       epic: '史诗',
-      id: '123',
 
       model_color: Global_color.model_color,
       shadow: Global_color.shadow_color,

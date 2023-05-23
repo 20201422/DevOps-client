@@ -1,16 +1,16 @@
 <template>
   <div class="container">
-    <el-table :data="tableData" @row-click="openQuestion">
+    <el-table :data="tableData" @row-click="openQuestion" max-height="520">
       <el-table-column fixed prop="questionId" label="问题Id" width="120" align="center" />
-      <el-table-column prop="questionName" label="问题名称" width="120" align="center" />
+      <el-table-column prop="questionName" label="问题名称" width="140" align="center" />
       <el-table-column prop="questionPriority" label="问题优先级" width="120" align="center" >
         <template #default="{ row }">
           <span :style="getPriorityStyle(row.questionPriority)">{{ row.questionPriority }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="userName" label="🧐 经办人" width="120" align="center" :filters="users"
+      <el-table-column prop="userId" label="🧐 经办人" width="160" align="center" :filters="users"
                        :filter-method="filterTagForUser" filter-placement="bottom-end">
-        <template #default="item">{{ item.row.userName }}</template>
+        <template #default="item">{{ item.row.userId }} - {{item.row.userName}}</template>
       </el-table-column>
       <el-table-column prop="questionState" label="问题状态" width="120" align="center" :filters="questionType"
                        :filter-method="filterTagForState" filter-placement="bottom-end">
@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import { ref } from 'vue'
 import UpdateModel from "@/components/UpdateModel.vue";
 import Global_color from "@/app/Global_color.vue";
 
@@ -55,87 +54,6 @@ export default {
       { text: '实现中', value: '实现中' },
       { text: '已实现', value: '已实现' },
     ]
-    const users = [
-      { text: '慧强', value: '慧强' },
-      { text: '滔滔', value: '滔滔' },
-      { text: '堃芃', value: '堃芃' },
-      { text: '瑞祥', value: '瑞祥' },
-    ]
-
-    const tableData = ref([
-      {
-        questionId: '2427-1-1',
-        questionName: '需求分析',
-        questionDescribe: '123',
-        questionPriority: '高',
-        userId: '20201419',
-        userName: '慧强',
-        questionState: '规划中',
-        epicId: '史诗1',
-        questionBeginTime: '',
-        questionEndTime: '2022-12-24',
-      },
-      {
-        questionId: '2427-1-2',
-        questionName: '需求分析',
-        questionDescribe: '456',
-        questionPriority: '中',
-        userId: '20201420',
-        userName: '滔滔',
-        questionState: '规划中',
-        epicId: '史诗1',
-        questionBeginTime: '2013-10-06',
-        questionEndTime: '2021-12-24',
-      },
-      {
-        questionId: '2427-1-1',
-        questionName: '需求分析',
-        questionDescribe: '456',
-        questionPriority: '低',
-        userId: '20201419',
-        userName: '慧强',
-        questionState: '已实现',
-        epicId: '史诗1',
-        questionBeginTime: '2023-10-06',
-        questionEndTime: '2028-12-24',
-      },
-      {
-        questionId: '2427-1-3',
-        questionName: '需求分析',
-        questionDescribe: '456',
-        questionPriority: '中',
-        userId: '20201423',
-        userName: '瑞祥',
-        questionState: '实现中',
-        epicId: '史诗1',
-        questionBeginTime: '2013-10-06',
-        questionEndTime: '2013-12-24',
-      },
-      {
-        questionId: '2427-1-4',
-        questionName: '需求分析',
-        questionDescribe: '24',
-        questionPriority: '低',
-        userId: '20201419',
-        userName: '慧强',
-        questionState: '已实现',
-        epicId: '史诗1',
-        questionBeginTime: '2023-10-06',
-        questionEndTime: '2023-12-24',
-      },
-      {
-        questionId: '2427-1-5',
-        questionName: '需求分析',
-        questionDescribe: '456',
-        questionPriority: '高',
-        userId: '20201422',
-        userName: '堃芃',
-        questionState: '实现中',
-        epicId: '史诗1',
-        questionBeginTime: '2003-10-06',
-        questionEndTime: '2003-12-24',
-      },
-    ])
 
     const getPriorityStyle = (priority) => {
       switch (priority) {
@@ -155,7 +73,7 @@ export default {
     }
 
     const filterTagForUser = (value, row) => {
-      return row.userName === value
+      return row.userId === value
     }
     const filterTagForState = (value, row) => {
       return row.questionState === value
@@ -163,9 +81,7 @@ export default {
 
     return {
       now,
-      users,
       questionType,
-      tableData,
       getPriorityStyle,
       openQuestion,
       filterTagForUser,
@@ -175,9 +91,34 @@ export default {
 
   data(){
     return{
-      ok_button: Global_color.button_color
+      ok_button: Global_color.button_color,
+
+      tableData: [],
+      users: [],
     }
   },
+
+  methods: {
+    showQuestion: function() {
+      this.$axios.get('question/questions').then((resp) => {
+        this.tableData = resp.data.data
+        // console.log(this.tableData)
+      })
+    },
+
+    showOption: function() {
+      this.$axios.get('user/users/idAndName').then((resp) => {
+        this.users = resp.data.data.map(user =>({text: user.userName, value: user.userId}))
+        // console.log(this.users)
+      })
+    },
+  },
+
+  created() {
+    this.showQuestion()
+    this.showOption()
+  }
+
 }
 </script>
 
@@ -185,7 +126,6 @@ export default {
 .container {
   padding: 0;
   width: 100%;
-  max-height: 420px;
 }
 .button_look {
   color: v-bind(ok_button)
