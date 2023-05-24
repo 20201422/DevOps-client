@@ -103,7 +103,7 @@ export default {
       beginTime: props.model.beginTime || '',
       endTime: props.model.endTime || '',
       projectId: props.model.projectId || '',
-      iterationId: props.model.iterationId || '',
+      iterationId: props.model.iterationId,
     })
 
     const close = () => {
@@ -152,7 +152,7 @@ export default {
 
   methods: {
     showOption: function() {
-      this.$axios.get('user/users/idAndName').then((resp) => {
+      this.$axios.get('user/users/idAndName/' + this.$store.state.projectId).then((resp) => {
         this.userOptions = resp.data.data
         // console.log(this.userOptions)
       })

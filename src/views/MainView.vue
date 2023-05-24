@@ -94,12 +94,35 @@ export default {
         this.$router.push("/")
       }
     },
+
+    isProject() {
+      if (sessionStorage.getItem("project") != null && sessionStorage.getItem("projectToken")) {
+        // 存在登录信息就从sessionStorage中提取状态再传值给vuex中
+        this.$store.commit("project", sessionStorage.getItem("project"));
+      } else {
+        // 登录不成功就将vuex中的state清空
+        this.$store.commit("project", null);
+      }
+      // 返回
+      return this.$store.getters.isProject; // 直接返回isProject getter
+    },
+    verProject() {
+      if (this.$store.state.isProject) {
+        // console.log("已登录")
+      } else {
+        //如果没有登录就返回登录界面
+        this.$router.push("/Projects")
+      }
+    },
+
   },
+
   created() {
     this.isLogin();
     this.ver();
+    this.isProject()
+    this.verProject()
   }
-
 }
 </script>
 
@@ -112,8 +135,7 @@ export default {
   min-height: 740px;
 }
 
-.menu,
-.menus {
+.menu, .menus {
   background-color: v-bind(model_color);
   border-radius: 12px;
   transition: all 0.45s;

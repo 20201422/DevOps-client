@@ -92,7 +92,7 @@ export default {
         this.loading = true
         this.$axios.post('/login', this.login_form).then((resp) => {
           let data = resp.data
-          console.log(data)
+          // console.log(data)
 
           if (data.message === "登录成功") {
             // ElMessage({message: '登录成功', type: 'success',})
