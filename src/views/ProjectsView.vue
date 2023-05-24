@@ -115,7 +115,7 @@ export default {
     showProjects: function () {
       this.$axios.get('/project/projects/' + this.$store.state.userId).then((resp) => {
         this.projects = resp.data.data
-        console.log(this.projects)
+        // console.log(this.projects)
       })
     }
   },

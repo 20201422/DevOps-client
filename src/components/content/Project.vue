@@ -116,7 +116,7 @@ export default {
             }
           }
           if (this.tableData[i].questionState === '实现中') {  // 统计实现中问题数
-            this.underway++
+            this.underwaySum++
             if (this.tableData[i].userId === this.userId) { // 我的实现中
               this.myUnderwaySum++
             }
