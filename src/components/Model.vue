@@ -127,6 +127,7 @@ export default {
         epicId: this.form.epicId,
         beginTime: this.form.beginTime,
         endTime: this.form.endTime,
+        projectId: this.$store.state.projectId,
       },
 
       epicForm: {
@@ -134,6 +135,7 @@ export default {
         epicName: this.form.modelName,
         epicDescribe: this.form.modelDescribe,
         epicPriority: this.form.modelPriority,
+        projectId: this.$store.state.projectId,
       },
 
       idPattern: /^[a-zA-Z0-9_-]+$/,
@@ -143,10 +145,10 @@ export default {
 
   methods: {
     showOption: function () {
-      this.$axios.get('user/users/idAndName').then((resp) => {
+      this.$axios.get('user/users/idAndName/' + this.$store.state.projectId).then((resp) => {
         this.userOptions = resp.data.data
       })
-      this.$axios.get('epic/epics/idAndName').then((resp) => {
+      this.$axios.get('epic/epics/idAndName/' + this.$store.state.projectId).then((resp) => {
         this.epics = resp.data.data
       })
     },
@@ -188,10 +190,11 @@ export default {
       this.questionForm.questionName = this.form.modelName
       this.questionForm.questionDescribe = this.form.modelDescribe
       this.questionForm.questionPriority = this.form.modelPriority
-      this.questionForm. userId = this.form.userId
+      this.questionForm.userId = this.form.userId
       this.questionForm.epicId = this.form.epicId
       this.questionForm.beginTime = this.form.beginTime
       this.questionForm.endTime = this.form.endTime
+      this.questionForm.projectId = this.$store.state.projectId
 
       this.$axios.get('/question/' + this.questionForm.questionId).then(resp => {
         if (resp.data.data === null) { // 没有重复的id才可以加入
@@ -213,6 +216,7 @@ export default {
       this.epicForm.epicName = this.form.modelName
       this.epicForm.epicDescribe = this.form.modelDescribe
       this.epicForm.epicPriority = this.form.modelPriority
+      this.epicForm.projectId = this.$store.state.projectId
 
       this.$axios.get('/epic/' + this.epicForm.epicId).then(resp => {
         if (resp.data.data === null) { // 没有重复的id才可以加入

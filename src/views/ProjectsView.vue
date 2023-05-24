@@ -8,15 +8,16 @@
           <div class="projects">
             <h4>您的项目：</h4>
             <el-scrollbar class="scrollbar">
-              <div class="scrollbar-flex-content" @click="goMainView">
-                <p v-for="item in 4" :key="item">
+              <div class="scrollbar-flex-content">
+                <p v-for="item in this.projects" :key="item" @click="goMainView(item)">
                   <el-card class="box-card">
                     <template #header>
                       <div class="card-header">
-                        <span>LFouse</span>
+                        <span>{{ item.projectName }}</span>
                       </div>
                     </template>
-                    <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
+                    <div>项目id： {{item.projectId}}</div><br>
+                    <div>项目描述： {{item.projectDescribe}}</div>
                   </el-card>
                 </p>
               </div>
@@ -55,6 +56,8 @@ export default {
     return{
       userId: this.$store.state.userId,
       model_color: global_color.model_color,
+
+      projects: [],
     }
   },
 
@@ -67,9 +70,17 @@ export default {
   },
 
   methods: {
-    goMainView() {
+    goMainView(project) {
+      // 将项目Id存储为字符串
+      sessionStorage.setItem("project", JSON.stringify(project));
+      sessionStorage.setItem("projectToken", project.projectId);
+      // 将用户名放入vuex中
+      this.$store.dispatch("setProject", JSON.stringify(project));
+      this.$store.dispatch("setProjectToken", project.projectId);
+      // 跳转到MainView
       this.$router.push('/Main');
     },
+
     // 判断是否已经登录状态
     isLogin() {
       // 判断sessionStorage中是否有登录信息
@@ -93,11 +104,26 @@ export default {
         this.$router.push("/")
       }
     },
+
+    showProjects: function () {
+      this.$axios.get('/project/projects/' + this.$store.state.userId).then((resp) => {
+        this.projects = resp.data.data
+        console.log(this.projects)
+      })
+    }
+  },
+
+  beforeRouteEnter: (to, from, next) => {
+    next(vm => {
+      // vm 就是当前组件的实例相当于上面的 this，所以在 next 方法里你就可以把 vm 当 this 来用了。
+      vm.$store.dispatch("setProject", null);
+    });
   },
 
   created() {
     this.isLogin();
     this.ver();
+    this.showProjects();
   }
 }
 </script>
@@ -113,6 +139,7 @@ export default {
 }
 .scrollbar-flex-content {
   display: flex;
+  align-items: center;
 }
 .card-header {
   display: flex;

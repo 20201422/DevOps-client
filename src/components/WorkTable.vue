@@ -32,7 +32,7 @@
         </el-table>
     </div>
 </template>
-  
+
 <script>
 import UpdateModel from "@/components/UpdateModel.vue";
 import Global_color from "@/app/Global_color.vue";
@@ -107,7 +107,7 @@ export default {
         },
 
         showOption: function () {
-            this.$axios.get('user/users/idAndName').then((resp) => {
+            this.$axios.get('user/users/idAndName/' + this.$store.state.projectId).then((resp) => {
                 this.users = resp.data.data.map(user => ({ text: user.userName, value: user.userId }))
                 // console.log(this.users)
             })
@@ -121,7 +121,7 @@ export default {
 
 }
 </script>
-  
+
 <style scoped>
 .container {
     padding: 0;
@@ -132,4 +132,3 @@ export default {
     color: v-bind(ok_button)
 }
 </style>
-  

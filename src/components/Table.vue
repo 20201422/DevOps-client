@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-table :data="tableData" @row-click="openQuestion" max-height="520">
-      <el-table-column fixed prop="questionId" label="问题Id" width="120" align="center" />
+      <el-table-column fixed prop="questionId" label="问题Id" width="120" align="center" sortable />
       <el-table-column prop="questionName" label="问题名称" width="140" align="center" />
       <el-table-column prop="questionPriority" label="问题优先级" width="120" align="center" >
         <template #default="{ row }">
@@ -100,14 +100,14 @@ export default {
 
   methods: {
     showQuestion: function() {
-      this.$axios.get('question/questions').then((resp) => {
+      this.$axios.get('question/questions/' + this.$store.state.projectId).then((resp) => {
         this.tableData = resp.data.data
         // console.log(this.tableData)
       })
     },
 
     showOption: function() {
-      this.$axios.get('user/users/idAndName').then((resp) => {
+      this.$axios.get('user/users/idAndName/' + this.$store.state.projectId).then((resp) => {
         this.users = resp.data.data.map(user =>({text: user.userName, value: user.userId}))
         // console.log(this.users)
       })

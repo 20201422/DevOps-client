@@ -1,13 +1,13 @@
 <template>
   <div class="projects">
-    <el-descriptions :title="`${projectName} - ${ projectId }`">
+    <el-descriptions :title="`${ projectId } - ${ projectName }`">
       <el-descriptions-item label="&nbsp;&nbsp;项目Id：">{{ projectId }}</el-descriptions-item>
-      <el-descriptions-item label="项目名称：">{{ projectName }}</el-descriptions-item>
+      <el-descriptions-item label="&nbsp;&nbsp;&nbsp;&nbsp;项目名称：">{{ projectName }}</el-descriptions-item>
       <el-descriptions-item label="项目组长">{{userName}} - {{userId}}</el-descriptions-item>
       <el-descriptions-item label="&nbsp;&nbsp;项目状态：">
-        <el-tag size="small">{{ projectState }}</el-tag>
+        <el-tag size="small" :type="projectState === '进行中' ? '' : 'success' ">{{ projectState }}</el-tag>
       </el-descriptions-item>
-      <el-descriptions-item label="项目成员：">
+      <el-descriptions-item label="&nbsp;&nbsp;&nbsp;&nbsp;项目成员：">
         <span v-for="user in projectUser" :key="user.userId">
           {{ user.userName }} - {{ user.userId }}&nbsp;&nbsp;
         </span>
@@ -45,10 +45,10 @@ export default {
       userId: this.$store.state.userId,
       userName: this.$store.state.userName,
 
-      projectId: '2427',
-      projectName: 'LFouse租房平台',
+      projectId: this.$store.state.projectId,
+      projectName: this.$store.state.projectName,
       projectUser: [],
-      projectState: '进行中',
+      projectState: this.$store.state.projectState,
 
       model_color: Global_color.model_color,
       shadow: Global_color.shadow_color,
@@ -75,7 +75,7 @@ export default {
     },
 
     showOption: function() {
-      this.$axios.get('user/users/idAndName').then((resp) => {
+      this.$axios.get('user/users/idAndName/' + this.$store.state.projectId).then((resp) => {
         this.projectUser = resp.data.data
         // console.log(this.projectUser)
       })
