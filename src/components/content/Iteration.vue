@@ -1,7 +1,7 @@
 <template>
   <div>
     <Manage></Manage>
-    <Detail @openModel="openModelHandler"></Detail>
+    <Detail @openModel="openModelHandler" ></Detail>
     <div v-if="dialogVisible">
       <UpdateModel :model="selectedModel" :type="selectedType" @closeDialog="closeModelHandler"></UpdateModel>
     </div>
