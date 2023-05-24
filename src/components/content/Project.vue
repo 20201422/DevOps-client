@@ -15,8 +15,14 @@
     </el-descriptions>
   </div>
   <div class="projects">
+    <Statistic :allQuestionSum="this.allQuestionSum" :toBeCompletedQuestionSum="this.toBeCompletedQuestionSum"
+               :underwaySum="this.underwaySum" :completedQuestionSum="this.completedQuestionSum"
+               :myAllQuestionSum="this.myAllQuestionSum" :myToBeCompletedQuestionSum="this.myToBeCompletedQuestionSum"
+               :myUnderwaySum="this.myUnderwaySum" :myCompletedQuestionSum="this.myCompletedQuestionSum"></Statistic>
+  </div>
+  <div class="projects">
     <h5>所有问题：</h5>
-    <Table @openQuestion="openQuestionHandler"></Table>
+    <Table :tableData="tableData" @openQuestion="openQuestionHandler"></Table>
   </div>
   <div v-if="dialogVisible">
     <UpdateModel :model="selectedQuestion" :type="selectedType" @closeDialog="closeQuestionHandler"></UpdateModel>
@@ -27,6 +33,7 @@
 import Global_color from "@/app/Global_color.vue"
 import Table from "@/components/Table.vue";
 import UpdateModel from "@/components/UpdateModel.vue";
+import Statistic from "@/components/Statistic.vue";
 
 export default {
   name: "Project",
@@ -37,7 +44,8 @@ export default {
 
   components:{
     UpdateModel,
-    Table
+    Table,
+    Statistic,
   },
 
   data(){
@@ -60,6 +68,16 @@ export default {
       selectedQuestion: Object,
       selectedType: '',
 
+      tableData: [],
+
+      allQuestionSum: 0,
+      toBeCompletedQuestionSum: 0,
+      underwaySum: 0,
+      completedQuestionSum: 0,
+      myAllQuestionSum: 0,
+      myToBeCompletedQuestionSum: 0,
+      myUnderwaySum: 0,
+      myCompletedQuestionSum: 0,
     }
   },
 
@@ -80,10 +98,44 @@ export default {
         // console.log(this.projectUser)
       })
     },
+    showQuestion: function() {
+      this.$axios.get('question/questions/' + this.$store.state.projectId).then((resp) => {
+        this.tableData = resp.data.data
+
+        this.allQuestionSum = this.tableData.length // 问题总数
+        for (let i = 0; i < this.tableData.length; i++) {
+
+          if (this.tableData[i].userId === this.userId) { // 统计我的问题个数
+            this.myAllQuestionSum++
+          }
+
+          if (this.tableData[i].questionState === '规划中') {  // 统计规划中问题数
+            this.toBeCompletedQuestionSum++
+            if (this.tableData[i].userId === this.userId) { // 我的规划中
+              this.myToBeCompletedQuestionSum++
+            }
+          }
+          if (this.tableData[i].questionState === '实现中') {  // 统计实现中问题数
+            this.underway++
+            if (this.tableData[i].userId === this.userId) { // 我的实现中
+              this.myUnderwaySum++
+            }
+          }
+          if (this.tableData[i].questionState === '已实现') {  // 统计已实现问题数
+            this.completedQuestionSum++
+            if (this.tableData[i].userId === this.userId) { // 我的已实现
+              this.myCompletedQuestionSum++
+            }
+          }
+        }
+        // console.log(this.tableData)
+      })
+    },
   },
 
   created() {
-    this.showOption();
+    this.showOption()
+    this.showQuestion()
   }
 }
 </script>

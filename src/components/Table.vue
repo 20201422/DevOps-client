@@ -43,7 +43,10 @@ export default {
   },
 
   props: {
-
+    tableData: {
+      type: Array,
+      default: () => []
+    }
   },
 
   setup(props, context) {
@@ -93,19 +96,11 @@ export default {
     return{
       ok_button: Global_color.button_color,
 
-      tableData: [],
       users: [],
     }
   },
 
   methods: {
-    showQuestion: function() {
-      this.$axios.get('question/questions/' + this.$store.state.projectId).then((resp) => {
-        this.tableData = resp.data.data
-        // console.log(this.tableData)
-      })
-    },
-
     showOption: function() {
       this.$axios.get('user/users/idAndName/' + this.$store.state.projectId).then((resp) => {
         this.users = resp.data.data.map(user =>({text: user.userName, value: user.userId}))
@@ -128,7 +123,6 @@ export default {
   },
 
   created() {
-    this.showQuestion()
     this.showOption()
   }
 
