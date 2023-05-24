@@ -3,12 +3,12 @@
     <div style="max-height:680px">
       <draggable :list="storyMap.epicLists" item-key="epic.epicId" ghost-class="ghost" handle=".move"
                  chosen-class="chosenClass" animation="300" @start="onStart" class="maps"
-                 @end="onEnd" group="epicLists" :move="onMove">
+                 @end="onEndEpic" group="epicLists" :move="onMoveEpic" :disabled="false">
         <template #item="{ element }">
           <div class="scrollbar-flex-content">
             <div :key="element.index" class="scrollbar-demo-item map">
               <div class="move epic" @click="click(element.epic, '史诗')">
-                <div :class="element.epic.disabledMove ? 'forbid item_for_epic' : 'item_for_epic'">
+                <div :class="element.questions.length === 0 ? 'forbid item_for_epic' : 'item_for_epic'">
                   <label class="epic_question_context">{{ element.epic.epicName }}
                     <span :style="getPriorityStyle(element.epic.epicPriority)">{{ element.epic.epicPriority }}&nbsp;</span>
                   </label>
@@ -21,10 +21,10 @@
               <draggable :list="element.questions" item-key="id" ghost-class="ghost" handle=".move" group="element.index"
                          filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300"
                          :fallback-class="true" :fallback-on-body="true" :touch-start-threshold="50"
-                         :fallback-tolerance="50" :move="onMove" @start="onStart" @end="onEnd">
+                         :fallback-tolerance="50" :move="onMoveQuestion" @start="onStart" @end="onEndQuestion">
                 <template #item="{ element }">
                   <div class="move" @click="click(element, '问题')">
-                    <div :class="element.disabledMove? 'forbid item' : 'item'">
+                    <div :class="element.questionName === null ? 'item forbid' : 'item'">
                       <label class="epic_question_context">{{ element.questionName }}
                         <span :style="getPriorityStyle(element.questionPriority)">{{ element.questionPriority }}&nbsp;</span>
                       </label>
@@ -47,6 +47,7 @@
 <script>
 import draggable from "vuedraggable";
 import Global_color from "@/app/Global_color.vue";
+import { ElMessage } from 'element-plus'
 
 export default {
 
@@ -64,20 +65,12 @@ export default {
   setup(props, context) {
 
     const onStart = () => { // 拖拽开始的事件
-
       console.log("开始拖拽");
     };
 
-    const onEnd = () => { // 拖拽结束的事件
-      console.log("结束拖拽");
-    };
-
-    const onMove = (e, originalEvent) => {
-      //不允许停靠
-      // if (e.relatedContext.element.disabledPark == true) return false;
-
-      return true;
-    }
+    // const onEnd = () => { // 拖拽结束的事件
+    //   console.log("拖拽结束");
+    // };
 
     const getPriorityStyle = (priority) => {
       switch (priority) {
@@ -94,8 +87,7 @@ export default {
 
     return {
       onStart,
-      onEnd,
-      onMove,
+      // onEnd,
       getPriorityStyle,
     }
   },
@@ -107,6 +99,9 @@ export default {
       border_right_color: Global_color.shadow_color,
 
       storyMap: {epicLists: []},
+
+      questionForm: {},
+      epicForm: {},
     }
   },
 
@@ -120,6 +115,53 @@ export default {
 
     click: function (model, type) {
       this.$emit('openModel', model, type)
+    },
+
+    isQuestionEmpty: function (epicLists) {
+      for (let epic of epicLists) {
+        if (epic.questions && epic.questions.length > 0) {
+          return false;
+        }
+      }
+      return true;
+    },
+
+    onMoveQuestion: function (e) {
+      this.questionForm = e.draggedContext.element //  获取问题表单
+      if (e.relatedContext.element) { //  如果这个史诗下存在问题
+        this.questionForm.epicId = e.relatedContext.element.epicId // 获得新史诗id
+        this.questionForm.questionIndex = e.relatedContext.element.questionIndex // 获得新下标
+      } else {
+        console.log(e.relatedContext.component)
+        ElMessage({
+          showClose: true,
+          message: '没有问题的史诗不会被更改',
+          type: 'error',
+        })
+      }
+      // console.log(this.questionForm)
+    },
+    onEndQuestion: function () {
+      console.log("拖拽问题结束");
+
+      // console.log(this.questionForm)
+      // this.$axios.post('question/update/sequence', this.questionForm).then((resp) => {
+      //
+      // })
+    },
+
+    onMoveEpic: function (e) {
+      this.epicForm = e.draggedContext.element.epic
+      this.epicForm.epicIndex = e.relatedContext.element.epic.epicIndex
+      // console.log(this.epicForm)
+    },
+    onEndEpic: function () {
+      console.log("拖拽史诗结束");
+
+      console.log(this.epicForm)
+      this.$axios.post('epic/update/sequence', this.epicForm).then((resp) => {
+
+      })
     },
   },
 

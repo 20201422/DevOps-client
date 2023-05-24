@@ -158,7 +158,7 @@ export default {
       if (this.form.modelId === '' || this.form.modelName === '') {
         ElMessage.error('检查必填项！')
       } else {
-        if (this.form.modelId.length>= 2 && this.form.modelId.length<= 20 && this.idPattern.test(this.form.modelId)
+        if (this.form.modelId.length >= 2 && this.form.modelId.length <= 20 && this.idPattern.test(this.form.modelId)
             && this.form.modelName.length >= 2 && this.form.modelName.length <= 20 && this.form.modelDescribe.length <= 100) {
           ElMessageBox.confirm(`确认要添加` + this.type +`吗?`, ``, {confirmButtonText: '确定', cancelButtonText: '取消',})
               .then(() => {
@@ -196,7 +196,7 @@ export default {
       this.questionForm.endTime = this.form.endTime
       this.questionForm.projectId = this.$store.state.projectId
 
-      this.$axios.get('/question/' + this.questionForm.questionId).then(resp => {
+      this.$axios.get('/question/' + this.questionForm.questionId + '/' + this.$store.state.projectId).then(resp => {
         if (resp.data.data === null) { // 没有重复的id才可以加入
           this.$axios.post('/question/add', this.questionForm).then((resp) => {
             console.log(this.questionForm)
@@ -218,7 +218,7 @@ export default {
       this.epicForm.epicPriority = this.form.modelPriority
       this.epicForm.projectId = this.$store.state.projectId
 
-      this.$axios.get('/epic/' + this.epicForm.epicId).then(resp => {
+      this.$axios.get('/epic/' + this.epicForm.epicId + '/' + this.$store.state.projectId).then(resp => {
         if (resp.data.data === null) { // 没有重复的id才可以加入
           this.$axios.post('/epic/add', this.epicForm).then((resp) => {
 
@@ -226,7 +226,7 @@ export default {
             console.log(error)
           })
         } else {
-          ElMessage.error('史诗Id出现重复，请检查！')
+          ElMessage.error('史诗Id出现重复，请检查')
         }
       }).catch((error) => {
         console.log(error)
