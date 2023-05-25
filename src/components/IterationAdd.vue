@@ -74,7 +74,7 @@ export default {
     methods: {
         openDialog() {
             this.dialogVisible = true
-            this.$axios.get("/question/questions").then(response => {
+            this.$axios.get("/question/questions/2427").then(response => {
                 let data = response.data.data
 
                 this.questions = data

@@ -7,15 +7,40 @@
     <template #default>
 
       <div style="margin-bottom: 10px;" v-for="iteration in iterations" :key="iteration.iterationId">
-        <el-card class="box-card" shadow="hover">
+        <el-card  class="box-card" shadow="hover">
           <template #header>
             <div class="row">
               <div>
                 &nbsp;&nbsp;
                 <span>{{ iteration.iterationName }}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                <el-tag size="default">{{ iteration.iterationState }}</el-tag>
+                <el-popconfirm v-if="iteration.iterationState=='已开启'"
+                  confirm-button-text="确认"
+                  cancel-button-text="取消"
+                  :icon="InfoFilled"
+                  icon-color="#626AEF"
+                  title="确认关闭迭代"
+                  @confirm="confirmChangeIterationState(iteration)"
+                  @cancel="cancelChangeIterationState">
+                  <template #reference>
+                    <el-tag :style="warning" style="cursor: pointer;">{{ iteration.iterationState}}</el-tag>
+                  </template>
+                  
+                </el-popconfirm>
+                <el-popconfirm v-if="iteration.iterationState=='未开启'"
+                  confirm-button-text="确认"
+                  cancel-button-text="取消"
+                  :icon="InfoFilled"
+                  icon-color="#626AEF"
+                  title="确认开启迭代"
+                  @confirm="confirmChangeIterationState(iteration)"
+                  @cancel="cancelChangeIterationState">
+                  <template #reference>
+                    <el-tag :style="warning" style="cursor: pointer;">{{ iteration.iterationState}}</el-tag>
+                  </template>
+                  
+                </el-popconfirm>
               </div>
-              <el-button class="button" text>详情</el-button>
+              <el-button @click="showIteration" class="button" text>详情</el-button>
             </div>
           </template>
           <el-tag type='warning'>{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
@@ -68,7 +93,38 @@ export default {
         this.iterations = data
 
       }).catch(error => { })
-    }
+    },
+    showIteration(){
+      this.drawer = false
+      console.log("重新加载页面")
+    },
+    //确认修改状态
+    confirmChangeIterationState(iteration) {
+      if (iteration.iterationState == '未开启') {
+        
+        this.openIteration(iteration)
+      } else {
+
+        this.closeIteration(iteration)
+      }
+    },
+    cancelChangeIterationState() {
+
+    },
+    //将迭代的状态变为开启
+    openIteration(iteration) {
+      this.$axios.get("/iteration/open/"+iteration.iterationId).then((response)=>{
+        console.log(response)
+
+      }).catch((error)=>{console.log(error)})
+    },
+    //将迭代的状态变为关闭
+    closeIteration(iteration) {
+      this.$axios.get("/iteration/close/"+iteration.iterationId).then((response)=>{
+        console.log(response)
+
+      }).catch((error)=>{console.log(error)})
+    },
   },
 
   setup(props) {
