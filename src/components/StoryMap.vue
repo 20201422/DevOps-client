@@ -102,6 +102,7 @@ export default {
 
       questionForm: {},
       epicForm: {},
+      flag: 0,
     }
   },
 
@@ -132,22 +133,43 @@ export default {
         this.questionForm.epicId = e.relatedContext.element.epicId // 获得新史诗id
         this.questionForm.questionIndex = e.relatedContext.element.questionIndex // 获得新下标
       } else {
-        console.log(e.relatedContext.component)
-        ElMessage({
-          showClose: true,
-          message: '没有问题的史诗不会被更改',
-          type: 'error',
-        })
+        this.flag = 1
       }
-      // console.log(this.questionForm)
     },
     onEndQuestion: function () {
       console.log("拖拽问题结束");
 
+      if (this.flag === 1) {  // 解决史诗下没有问题而造成无法获取史诗id和问题下标的bug(代码虽乱，但是千万不要动，否则后果自负!!!）
+        for (let i = 0; i < this.storyMap.epicLists.length; i++) {
+          for (let j = 0; j < this.storyMap.epicLists[i].questions.length; j++) {
+            if (this.questionForm.questionId === this.storyMap.epicLists[i].questions[j].questionId) {
+              this.questionForm.epicId = this.storyMap.epicLists[i].epic.epicId // 获得新史诗id
+              if (i === 1 && this.storyMap.epicLists[i - 1].questions.length === 0) {
+
+              } else {
+                if (this.storyMap.epicLists[i].questions.length !== 1 && j === this.storyMap.epicLists[i].questions.length - 1) {
+                  this.questionForm.questionIndex = this.storyMap.epicLists[i]
+                      .questions[this.storyMap.epicLists[i].questions.length - 2].questionIndex + 1 // 获得新下标
+                }
+                if (i === 0) {
+                  if (this.storyMap.epicLists[i].questions.length !== 0 && j !== 0) {
+                    this.questionForm.questionIndex = this.storyMap.epicLists[0]
+                        .questions[this.storyMap.epicLists[0].questions.length - 1].questionIndex // 获得新下标
+                  }
+                } else {
+                  this.questionForm.questionIndex = this.storyMap.epicLists[i - 1]
+                      .questions[this.storyMap.epicLists[i - 1].questions.length - 1].questionIndex // 获得新下标
+                }
+              }
+            }
+          }
+        }
+      }
+
       // console.log(this.questionForm)
-      // this.$axios.post('question/update/sequence', this.questionForm).then((resp) => {
-      //
-      // })
+      this.$axios.post('question/update/sequence', this.questionForm).then((resp) => {
+
+      })
     },
 
     onMoveEpic: function (e) {
@@ -158,7 +180,7 @@ export default {
     onEndEpic: function () {
       console.log("拖拽史诗结束");
 
-      console.log(this.epicForm)
+      // console.log(this.epicForm)
       this.$axios.post('epic/update/sequence', this.epicForm).then((resp) => {
 
       })
