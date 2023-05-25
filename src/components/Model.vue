@@ -42,13 +42,14 @@
         </el-form-item>
         <el-form-item label="开始时间" v-if="type !== '史诗'">
           <div class="block">
-            <el-date-picker v-model="form.beginTime" type="datetime" placeholder="选择开始时间" :default-time="defaultTime"/>
+            <el-date-picker v-model="form.beginTime" type="datetime" placeholder="选择开始时间"
+                            :default-time="defaultTime" :disabled-date="disabledBeginDate"/>
           </div>
         </el-form-item>
         <el-form-item label="结束时间" v-if="type !== '史诗'">
           <div class="block">
             <el-date-picker v-model="form.endTime" type="datetime" placeholder="选择结束时间"
-                            :default-time="defaultTime" :disabled-date="disabledDate"/>
+                            :default-time="defaultTime" :disabled-date="disabledEndDate"/>
           </div>
         </el-form-item>
       </el-form>
@@ -92,9 +93,17 @@ export default {
     const userOptions = []
     const epics = []
 
-    const disabledDate = (time) => {  // 开始时间之前的不能选
+    const disabledBeginDate = (time) => {  // 结束时间之后的不能选
+      if (form.endTime) {
+        return time.getTime() > form.endTime
+      }
+    }
+
+    const disabledEndDate = (time) => {  // 开始时间之前的不能选
       return time.getTime() < form.beginTime
     }
+
+    // const
 
     const cancelClick = () => {
       drawer.value = false
@@ -107,7 +116,8 @@ export default {
       form,
       userOptions,
       epics,
-      disabledDate,
+      disabledBeginDate,
+      disabledEndDate,
       cancelClick,
     }
   },
@@ -171,12 +181,7 @@ export default {
                 return Promise.resolve()
               })
               .then(() => {
-                ElNotification({
-                  title: '添加' + this.type + '成功',
-                  message: 'Hello, ' + data.data.userName,
-                  type: 'success',
-                })
-                this.$router.push('/Main/Story')
+
               })
               .catch(() => {
                 // catch error
@@ -199,7 +204,8 @@ export default {
       this.$axios.get('/question/' + this.questionForm.questionId + '/' + this.$store.state.projectId).then(resp => {
         if (resp.data.data === null) { // 没有重复的id才可以加入
           this.$axios.post('/question/add', this.questionForm).then((resp) => {
-            console.log(this.questionForm)
+            // console.log(this.questionForm)
+            location.reload()
           }).catch((error) => {
             console.log(error)
           })
@@ -221,7 +227,7 @@ export default {
       this.$axios.get('/epic/' + this.epicForm.epicId + '/' + this.$store.state.projectId).then(resp => {
         if (resp.data.data === null) { // 没有重复的id才可以加入
           this.$axios.post('/epic/add', this.epicForm).then((resp) => {
-
+            location.reload()
           }).catch((error) => {
             console.log(error)
           })

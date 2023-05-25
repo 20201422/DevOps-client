@@ -7,6 +7,9 @@
         <div class="col-sm-12 container_projects">
           <div class="projects">
             <h4>您的项目：</h4>
+            <div v-if="this.projects.length === 0">
+              <el-empty description="您暂无项目，休息啦 🎉" />
+            </div>
             <el-scrollbar class="scrollbar">
               <div class="scrollbar-flex-content">
                 <p v-for="item in this.projects" :key="item" @click="goMainView(item)" class="project">

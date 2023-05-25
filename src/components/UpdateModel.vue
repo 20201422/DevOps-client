@@ -44,13 +44,14 @@
         <el-form :inline="true" class="demo-form-inline" v-if="type !== '史诗'">
           <el-form-item label="开始时间">
             <div class="block">
-              <el-date-picker v-model="form.beginTime" type="datetime" placeholder="选择开始时间" :default-time="defaultTime"/>
+              <el-date-picker v-model="form.beginTime" type="datetime" placeholder="选择开始时间"
+                              :default-time="defaultTime" :disabled-date="disabledEndDate"/>
             </div>
           </el-form-item>
           <el-form-item label="结束时间">
             <div class="block">
               <el-date-picker v-model="form.endTime" type="datetime" placeholder="选择结束时间"
-                              :default-time="defaultTime" :disabled-date="disabledDate"/>
+                              :default-time="defaultTime" :disabled-date="disabledEndDate"/>
             </div>
           </el-form-item>
         </el-form>
@@ -92,7 +93,13 @@ export default {
     const dialogVisible = ref(true)
     const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
 
-    const disabledDate = (time) => {  // 开始时间之前的不能选
+    const disabledBeginDate = (time) => {  // 结束时间之后的不能选
+      if (form.endTime) {
+        return time.getTime() > form.endTime
+      }
+    }
+
+    const disabledEndDate = (time) => {  // 开始时间之前的不能选
       return time.getTime() < form.beginTime
     }
 
@@ -119,7 +126,8 @@ export default {
     return {
       dialogVisible,
       defaultTime,
-      disabledDate,
+      disabledBeginDate,
+      disabledEndDate,
       form,
       close,
     }
@@ -179,11 +187,6 @@ export default {
           this.deleteEpic();
         }
         this.$emit("closeDialog");  // 关闭对话框并通知父组件
-        ElNotification({
-          title: '删除' + this.type + '成功',
-          message: '为什么要扔掉我呀😭 ',
-          type: 'success',
-        })
       })
           .catch(() => {
             // catch error
@@ -191,12 +194,12 @@ export default {
     },
     deleteQuestion: function () {
       this.$axios.delete('question/delete/' + this.form.modelId + '/' + this.$store.state.projectId).then((resp) => {
-
+        location.reload()
       })
     },
     deleteEpic: function () {
       this.$axios.delete('epic/delete/' + this.form.modelId + '/' + this.$store.state.projectId).then((resp) => {
-
+        location.reload()
       })
     },
 
@@ -217,11 +220,6 @@ export default {
               this.updateEpic();
             }
             this.$emit("closeDialog");  // 关闭对话框并通知父组件
-            ElNotification({
-              title: '更新' + this.type + '成功',
-              message: '嘿, 我变了诶',
-              type: 'success',
-            })
           })
               .catch(() => {
                 // catch error
@@ -243,7 +241,7 @@ export default {
         this.$axios.get('/question/' + this.questionForm.questionId + '/' + this.$store.state.projectId).then(resp => {
           if (resp.data.data === null) { // 没有重复的id才可以加入
             this.$axios.put('question/update/' ,this.questionForm).then((resp) => {
-
+              location.reload()
             })
           } else {
             ElMessage.error('问题Id出现重复，请检查！')
@@ -252,7 +250,7 @@ export default {
 
       } else {
         this.$axios.put('question/update/' ,this.questionForm).then((resp) => {
-
+          location.reload()
         })
       }
     },
@@ -267,7 +265,7 @@ export default {
         this.$axios.get('/epic/' + this.epicForm.epicId + '/' + this.$store.state.projectId).then(resp => {
           if (resp.data.data === null) { // 没有重复的id才可以加入
             this.$axios.put('epic/update/' ,this.epicForm).then((resp) => {
-
+              location.reload()
             })
           } else {
             ElMessage.error('史诗Id出现重复，请检查')
@@ -275,7 +273,7 @@ export default {
         })
       } else {
         this.$axios.put('epic/update/' ,this.epicForm).then((resp) => {
-
+          location.reload()
         })
       }
     },

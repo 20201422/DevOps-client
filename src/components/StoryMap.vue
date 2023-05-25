@@ -1,6 +1,9 @@
 <template>
   <el-scrollbar>
-    <div style="max-height:680px">
+    <div style="max-height:680px; min-height:240px;">
+      <div v-if="isQuestionEmpty(storyMap.epicLists)">
+        <el-empty description="暂无数据" />
+      </div>
       <draggable :list="storyMap.epicLists" item-key="epic.epicId" ghost-class="ghost" handle=".move"
                  chosen-class="chosenClass" animation="300" @start="onStart" class="maps"
                  @end="onEndEpic" group="epicLists" :move="onMoveEpic" :disabled="false">
@@ -47,7 +50,6 @@
 <script>
 import draggable from "vuedraggable";
 import Global_color from "@/app/Global_color.vue";
-import { ElMessage } from 'element-plus'
 
 export default {
 
@@ -65,12 +67,8 @@ export default {
   setup(props, context) {
 
     const onStart = () => { // 拖拽开始的事件
-      console.log("开始拖拽");
+      // console.log("开始拖拽");
     };
-
-    // const onEnd = () => { // 拖拽结束的事件
-    //   console.log("拖拽结束");
-    // };
 
     const getPriorityStyle = (priority) => {
       switch (priority) {
@@ -87,7 +85,6 @@ export default {
 
     return {
       onStart,
-      // onEnd,
       getPriorityStyle,
     }
   },
@@ -135,37 +132,40 @@ export default {
       } else {
         this.flag = 1
       }
+      // console.log(e.relatedContext.component.tag)
     },
     onEndQuestion: function () {
-      console.log("拖拽问题结束");
+      // console.log("拖拽问题结束");
+      try {
+        if (this.flag === 1) {  // 解决史诗下没有问题而造成无法获取史诗id和问题下标的bug(代码虽乱，但是千万不要动，否则后果自负!!!）
+          for (let i = 0; i < this.storyMap.epicLists.length; i++) {
+            for (let j = 0; j < this.storyMap.epicLists[i].questions.length; j++) {
+              if (this.questionForm.questionId === this.storyMap.epicLists[i].questions[j].questionId) {
+                this.questionForm.epicId = this.storyMap.epicLists[i].epic.epicId // 获得新史诗id
+                if (i === 1 && this.storyMap.epicLists[i - 1].questions.length === 0) {
 
-      if (this.flag === 1) {  // 解决史诗下没有问题而造成无法获取史诗id和问题下标的bug(代码虽乱，但是千万不要动，否则后果自负!!!）
-        for (let i = 0; i < this.storyMap.epicLists.length; i++) {
-          for (let j = 0; j < this.storyMap.epicLists[i].questions.length; j++) {
-            if (this.questionForm.questionId === this.storyMap.epicLists[i].questions[j].questionId) {
-              this.questionForm.epicId = this.storyMap.epicLists[i].epic.epicId // 获得新史诗id
-              if (i === 1 && this.storyMap.epicLists[i - 1].questions.length === 0) {
-
-              } else {
-                if (this.storyMap.epicLists[i].questions.length !== 1 && j === this.storyMap.epicLists[i].questions.length - 1) {
-                  this.questionForm.questionIndex = this.storyMap.epicLists[i]
-                      .questions[this.storyMap.epicLists[i].questions.length - 2].questionIndex + 1 // 获得新下标
-                }
-                if (i === 0) {
-                  if (this.storyMap.epicLists[i].questions.length !== 0 && j !== 0) {
-                    this.questionForm.questionIndex = this.storyMap.epicLists[0]
-                        .questions[this.storyMap.epicLists[0].questions.length - 1].questionIndex // 获得新下标
-                  }
                 } else {
-                  this.questionForm.questionIndex = this.storyMap.epicLists[i - 1]
-                      .questions[this.storyMap.epicLists[i - 1].questions.length - 1].questionIndex // 获得新下标
+                  if (this.storyMap.epicLists[i].questions.length !== 1 && j === this.storyMap.epicLists[i].questions.length - 1) {
+                    this.questionForm.questionIndex = this.storyMap.epicLists[i]
+                        .questions[this.storyMap.epicLists[i].questions.length - 2].questionIndex + 1 // 获得新下标
+                  }
+                  if (i === 0) {
+                    if (this.storyMap.epicLists[i].questions.length !== 0 && j !== 0) {
+                      this.questionForm.questionIndex = this.storyMap.epicLists[0]
+                          .questions[this.storyMap.epicLists[0].questions.length - 1].questionIndex // 获得新下标
+                    }
+                  } else {
+                    this.questionForm.questionIndex = this.storyMap.epicLists[i - 1]
+                        .questions[this.storyMap.epicLists[i - 1].questions.length - 1].questionIndex // 获得新下标
+                  }
                 }
               }
             }
           }
         }
+      } catch (error) { // 捕获异常，不在浏览器显示
+        // console.error(error)
       }
-
       // console.log(this.questionForm)
       this.$axios.post('question/update/sequence', this.questionForm).then((resp) => {
 
@@ -178,7 +178,7 @@ export default {
       // console.log(this.epicForm)
     },
     onEndEpic: function () {
-      console.log("拖拽史诗结束");
+      // console.log("拖拽史诗结束");
 
       // console.log(this.epicForm)
       this.$axios.post('epic/update/sequence', this.epicForm).then((resp) => {
