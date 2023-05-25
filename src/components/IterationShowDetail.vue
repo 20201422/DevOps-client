@@ -1,11 +1,24 @@
 <template>
-  <div class="itxst">
+  <div v-if="iteration!=null" class="itxst">
     <div class="row">
       <div>
         <span>{{ iteration.iterationName }}</span> &nbsp;&nbsp;&nbsp;&nbsp;
-        <el-tag size="default">{{ iteration.iterationState }}</el-tag>
+        <el-popconfirm
+          confirm-button-text="确认"
+          cancel-button-text="取消"
+          :icon="InfoFilled"
+          icon-color="#626AEF"
+          :title="comfirmTitle"
+          @confirm="confirmChangeIterationState"
+          @cancel="cancelChangeIterationState"
+        >
+          <template #reference>
+            <el-tag :style="warning" style="cursor: pointer;">{{ iteration.iterationState}}</el-tag>
+          </template>
+        </el-popconfirm>
+        
       </div>
-      <el-tag type='warning'>{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
+      <el-tag type='success'>{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
     </div>
 
     <div class="row">
@@ -20,7 +33,7 @@
               <div :class="false ? 'forbid item' : 'item'">
                 <label>{{ element.questionName }}</label>
                 <p>{{ element.questionDescribe }}</p>
-                <p>处理人：{{ element.userName}}</p>
+                <p>处理人：{{ element.userName }}</p>
               </div>
             </div>
           </template>
@@ -37,7 +50,7 @@
               <div :class="false ? 'forbid item' : 'item'">
                 <label>{{ element.questionName }}</label>
                 <p>{{ element.questionDescribe }}</p>
-                <p>处理人：{{ element.userName}}</p>
+                <p>处理人：{{ element.userName }}</p>
               </div>
             </div>
           </template>
@@ -54,7 +67,7 @@
               <div :class="false ? 'forbid item' : 'item'">
                 <label>{{ element.questionName }}</label>
                 <p>{{ element.questionDescribe }}</p>
-                <p>处理人：{{ element.userName}}</p>
+                <p>处理人：{{ element.userName }}</p>
               </div>
             </div>
           </template>
@@ -62,6 +75,7 @@
       </div>
     </div>
   </div>
+  <div v-if="iteration==null" style="text-align: center;font-size: large;"><span>当前没有迭代已开启！查看更多迭代可开启迭代</span></div>
 </template>
 
 
@@ -84,13 +98,47 @@ export default {
     click: function (model, type) {
       this.$emit('openModel', model, type)
     },
+    //确认修改状态
+    confirmChangeIterationState() {
+      if (this.iteration.iterationState == '未开启') {
+        
+        this.openIteration()
+      } else {
 
+        this.closeIteration()
+      }
+    },
+    cancelChangeIterationState() {
+
+    },
+    //将迭代的状态变为开启
+    openIteration() {
+      this.$axios.get("/iteration/open/"+this.iteration.iterationId).then((response)=>{
+        console.log(response)
+        console.log("开启迭代")
+      }).catch((error)=>{console.log(error)})
+    },
+    //将迭代的状态变为关闭
+    closeIteration() {
+      this.$axios.get("/iteration/close/"+this.iteration.iterationId).then((response)=>{
+        console.log(response)
+        console.log("关闭迭代")
+      }).catch((error)=>{console.log(error)})
+    },
   },
   //在页面渲染之前获取迭代数据
   beforeMount() {
     //得到已开启的迭代
     this.$axios.get("/iteration/getOpenedIteration").then((response) => {
       this.iteration = response.data.data
+      if(this.iteration == null){  //目前没有迭代开启
+        return;
+      }
+      if(this.iteration.iterationState=='已开启'){
+        this.comfirmTitle='确认关闭迭代?'
+      }else{
+        this.comfirmTitle='确认开启迭代?'
+      }
       //得到对应迭代三个状态下的问题
       this.$axios.get("/iteration/findQuestionsByState/" + this.iteration.iterationId + "/规划中").then((response) => {
         this.state.modules.group1 = response.data.data
@@ -113,7 +161,8 @@ export default {
         endTime: '',
         iterationDescribe: '',
         projectId: '',
-      }
+      },
+      comfirmTitle: '',
     }
   },
   setup() {
@@ -126,21 +175,9 @@ export default {
         disabledPark:禁止停靠
       */
       modules: {
-        group1: [
-          // { name: "需求1", id: 1, disabledMove: false, disabledPark: true },
-          // { name: "需求2", id: 2, disabledMove: false, disabledPark: false },
-          // { name: "需求3", id: 3, disabledMove: false, disabledPark: false },
-          // { name: "需求4", id: 4, disabledMove: false, disabledPark: false },
-        ],
-        group2: [
-          // { name: "缺陷1", id: 5, disabledMove: false, disabledPark: false },
-          // { name: "缺陷2", id: 6, disabledMove: false, disabledPark: false },
-          // { name: "缺陷3", id: 7, disabledMove: false, disabledPark: false },
-        ],
-        group3: [
-          // { name: "测试1", id: 8, disabledMove: false, disabledPark: false },
-          // { name: "测试2", id: 9, disabledMove: false, disabledPark: false },
-        ],
+        group1: [],
+        group2: [],
+        group3: [],
       },
     });
     //拖拽开始的事件
@@ -234,8 +271,8 @@ body {
 .fallbackClass {
   background-color: aquamarine;
 }
+
 .row {
   justify-content: space-between;
-  margin-bottom:12px;
-}
-</style>
+  margin-bottom: 12px;
+}</style>
