@@ -6,8 +6,10 @@
     <template #default>
       <el-form :model="form" class="table">
         <el-form :model="form" :inline="true" class="demo-form-inline">
-          <el-form-item :label="`${type}Id`" prop="modelId">
-            <el-input v-model="form.modelId" :placeholder="`请输入${type}Id`" disabled />
+          <el-form-item :label="`${type}Id`" prop="modelId" :rules="[{ required: true, message: '请输入Id', trigger: 'blur' },
+                        { min: 2, max: 20, message: 'Id长度在2-20', trigger: 'blur' },
+                        { pattern: /^[a-zA-Z0-9_-]+$/, message: '只能包含数字、字母和下划线', trigger: 'blur' }, ]">
+            <el-input v-model="form.modelId" :placeholder="`请输入${type}Id`" />
           </el-form-item>
           <el-form-item :label="`${type}名称`" prop="modelName"
                         :rules="[{ required: true, message: '请输入名称', trigger: 'blur' },
@@ -52,6 +54,7 @@
             </div>
           </el-form-item>
         </el-form>
+<!--        <UploadFile></UploadFile>-->
         <el-alert v-if="type === '史诗'" title="如果要删除史诗，那么该史诗下的问题不会被删除！" type="info" show-icon />
       </el-form>
     </template>
@@ -69,9 +72,11 @@
 import {reactive, ref} from 'vue'
 import {ElMessage, ElMessageBox, ElNotification} from "element-plus"
 import Global_color from "@/app/Global_color.vue";
+// import UploadFile from "@/components/UploadFile.vue"
 
 export default {
   name: "UpdateTable",
+  // components: {UploadFile},
 
   props: {
     model: Object,
@@ -92,6 +97,7 @@ export default {
     }
 
     const form = reactive({
+      modelIndex: props.model.questionIndex || props.model.epicIndex,
       modelId: props.model.questionId || props.model.epicId,
       modelName: props.model.questionName || props.model.epicName,
       modelDescribe: props.model.questionDescribe || props.model.epicDescribe,
@@ -126,6 +132,7 @@ export default {
       userOptions: [],
 
       questionForm: {
+        questionIndex: this.form.modelIndex,
         questionId: this.form.modelId,
         questionName: this.form.modelName,
         questionDescribe: this.form.modelDescribe,
@@ -140,6 +147,7 @@ export default {
       },
 
       epicForm: {
+        epicIndex: this.form.modelIndex,
         epicId: this.form.modelId,
         epicName: this.form.modelName,
         epicDescribe: this.form.modelDescribe,
@@ -147,6 +155,8 @@ export default {
         epicState: this.form.modelState,
         projectId: this.form.projectId,
       },
+
+      idPattern: /^[a-zA-Z0-9_-]+$/,
     }
   },
 
@@ -180,21 +190,23 @@ export default {
           })
     },
     deleteQuestion: function () {
-      this.$axios.delete('question/delete/' + this.form.modelId).then((resp) => {
+      this.$axios.delete('question/delete/' + this.form.modelId + '/' + this.$store.state.projectId).then((resp) => {
 
       })
     },
     deleteEpic: function () {
-      this.$axios.delete('epic/delete/' + this.form.modelId).then((resp) => {
+      this.$axios.delete('epic/delete/' + this.form.modelId + '/' + this.$store.state.projectId).then((resp) => {
 
       })
     },
 
     submitUpdate: function () {
-      if (this.form.modelName === '') {
+      if (this.form.modelId === '' || this.form.modelName === '') {
         ElMessage.error('检查必填项！')
       } else {
-        if (this.form.modelName.length >= 2 && this.form.modelName.length <= 20 && this.form.modelDescribe.length <= 100) {
+        if (this.form.modelId.length >= 2 && this.form.modelId.length <= 20 && this.idPattern.test(this.form.modelId) &&
+            this.form.modelName.length >= 2 && this.form.modelName.length <= 20 &&
+            (!this.form.modelDescribe || this.form.modelDescribe.length <= 100)) {
           ElMessageBox.confirm('确定要提交修改吗?', '提示', {
             confirmButtonText: '确认', // 修改确认按钮文本
             cancelButtonText: '取消', // 修改取消按钮文本
@@ -218,19 +230,31 @@ export default {
       }
     },
     updateQuestion: function () {
-
       this.questionForm.questionId = this.form.modelId
       this.questionForm.questionName = this.form.modelName
       this.questionForm.questionDescribe = this.form.modelDescribe
       this.questionForm.questionPriority = this.form.modelPriority
-      this.questionForm. userId = this.form.userId
+      this.questionForm.userId = this.form.userId
       this.questionForm.epicId = this.form.epicId
       this.questionForm.beginTime = this.form.beginTime
       this.questionForm.endTime = this.form.endTime
 
-      this.$axios.put('question/update/' ,this.questionForm).then((resp) => {
+      if (this.questionForm.questionId !== this.model.questionId) { // id发生改变才检查重复
+        this.$axios.get('/question/' + this.questionForm.questionId + '/' + this.$store.state.projectId).then(resp => {
+          if (resp.data.data === null) { // 没有重复的id才可以加入
+            this.$axios.put('question/update/' ,this.questionForm).then((resp) => {
 
-      })
+            })
+          } else {
+            ElMessage.error('问题Id出现重复，请检查！')
+          }
+        })
+
+      } else {
+        this.$axios.put('question/update/' ,this.questionForm).then((resp) => {
+
+        })
+      }
     },
     updateEpic: function () {
 
@@ -239,9 +263,21 @@ export default {
       this.epicForm.epicDescribe = this.form.modelDescribe
       this.epicForm.epicPriority = this.form.modelPriority
 
-      this.$axios.put('epic/update/' ,this.epicForm).then((resp) => {
+      if (this.epicForm.epicId !== this.model.epicId) { // id发生改变才检查重复
+        this.$axios.get('/epic/' + this.epicForm.epicId + '/' + this.$store.state.projectId).then(resp => {
+          if (resp.data.data === null) { // 没有重复的id才可以加入
+            this.$axios.put('epic/update/' ,this.epicForm).then((resp) => {
 
-      })
+            })
+          } else {
+            ElMessage.error('史诗Id出现重复，请检查')
+          }
+        })
+      } else {
+        this.$axios.put('epic/update/' ,this.epicForm).then((resp) => {
+
+        })
+      }
     },
 
   },
