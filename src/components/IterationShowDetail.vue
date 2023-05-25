@@ -1,22 +1,15 @@
 <template>
-  <div v-if="iteration!=null" class="itxst">
+  <div v-if="iteration != null" class="itxst">
     <div class="row">
       <div>
         <span>{{ iteration.iterationName }}</span> &nbsp;&nbsp;&nbsp;&nbsp;
-        <el-popconfirm
-          confirm-button-text="确认"
-          cancel-button-text="取消"
-          :icon="InfoFilled"
-          icon-color="#626AEF"
-          :title="comfirmTitle"
-          @confirm="confirmChangeIterationState"
-          @cancel="cancelChangeIterationState"
-        >
+        <el-popconfirm confirm-button-text="确认" cancel-button-text="取消" :icon="InfoFilled" icon-color="#626AEF"
+          :title="comfirmTitle" @confirm="confirmChangeIterationState" @cancel="cancelChangeIterationState">
           <template #reference>
-            <el-tag :style="warning" style="cursor: pointer;">{{ iteration.iterationState}}</el-tag>
+            <el-tag :style="warning" style="cursor: pointer;">{{ iteration.iterationState }}</el-tag>
           </template>
         </el-popconfirm>
-        
+
       </div>
       <el-tag type='success'>{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
     </div>
@@ -24,10 +17,10 @@
     <div class="row">
       <div class="col-sm-4 border bg-light group">
         <label class="title">规划中</label>
-        <draggable :list="state.modules.group1" item-key={{ element.questionId }} ghost-class="ghost" handle=".move"
-          filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300" @start="onStart" @end="onEnd"
-          group="group1" :fallback-class="true" :fallback-on-body="true" :touch-start-threshold="50"
-          :fallback-tolerance="50" :move="onMove">
+        <draggable tag="规划中" :list="state.modules.group1" item-key={{ element.questionId }} ghost-class="ghost"
+          handle=".move" filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300"
+          @start="onStart" @end="endAndUpdate" group="group1" :fallback-class="true" :fallback-on-body="true"
+          :touch-start-threshold="50" :fallback-tolerance="50" :move="updateQuestionState">
           <template #item="{ element }">
             <div class="move" @click="click(element, '问题')">
               <div :class="false ? 'forbid item' : 'item'">
@@ -41,10 +34,10 @@
       </div>
       <div class="col-sm-4 border bg-light group">
         <label class="title">实现中</label>
-        <draggable :list="state.modules.group2" item-key={{ element.questionId }} ghost-class="ghost" handle=".move"
-          filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300" @start="onStart" @end="onEnd"
-          group="group1" :fallback-class="true" :fallback-on-body="true" :touch-start-threshold="50"
-          :fallback-tolerance="50" :move="onMove">
+        <draggable tag="实现中" :list="state.modules.group2" item-key={{ element.questionId }} ghost-class="ghost"
+          handle=".move" filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300"
+          @start="onStart" @end="endAndUpdate" group="group1" :fallback-class="true" :fallback-on-body="true"
+          :touch-start-threshold="50" :fallback-tolerance="50" :move="updateQuestionState">
           <template #item="{ element }">
             <div class="move" @click="click(element, '问题')">
               <div :class="false ? 'forbid item' : 'item'">
@@ -58,10 +51,10 @@
       </div>
       <div class="col-sm-4 border bg-light group">
         <label class="title">已实现</label>
-        <draggable :list="state.modules.group3" item-key={{ element.questionId }} ghost-class="ghost" handle=".move"
-          filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300" @start="onStart" @end="onEnd"
-          group="group1" :fallback-class="true" :fallback-on-body="true" :touch-start-threshold="50"
-          :fallback-tolerance="50" :move="onMove">
+        <draggable tag="已实现" :list="state.modules.group3" item-key={{ element.questionId }} ghost-class="ghost"
+          handle=".move" filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300"
+          @start="onStart" @end="endAndUpdate" group="group1" :fallback-class="true" :fallback-on-body="true"
+          :touch-start-threshold="50" :fallback-tolerance="50" :move="updateQuestionState">
           <template #item="{ element }">
             <div class="move" @click="click(element, '问题')">
               <div :class="false ? 'forbid item' : 'item'">
@@ -75,13 +68,13 @@
       </div>
     </div>
   </div>
-  <div v-if="iteration==null" style="text-align: center;font-size: large;"><span>当前没有迭代已开启！查看更多迭代可开启迭代</span></div>
+  <div v-if="iteration == null" style="text-align: center;font-size: large;"><span>当前没有迭代已开启！查看更多迭代可开启迭代</span></div>
 </template>
 
 
 <script >
 import Global_color from "@/app/Global_color.vue"
-import { ref, reactive } from "vue";
+import {reactive } from "vue";
 //导入draggable组件
 import draggable from "vuedraggable";
 
@@ -95,13 +88,31 @@ export default {
 
   },
   methods: {
+    //拖动卡片结束后状态更新
+    updateQuestionState(e) {
+      this.questionIdAndturnToState.questionId = e.draggedContext.element.questionId,  //得到拖动中的问题id
+      this.questionIdAndturnToState.state = e.relatedContext.component.tag   //得到目标状态
+    },
+    //拖动结束后更新状态
+    endAndUpdate() {
+      this.$axios.get("/question/update/state",
+        {params:{
+          questionId:this.questionIdAndturnToState.questionId,
+          state:this.questionIdAndturnToState.state,
+          projectId:this.questionIdAndturnToState.projectId,
+        }
+        }
+      ).then(response=>{
+        console.log(response)
+      }).catch(error=>{console.log(error)})
+    },
     click: function (model, type) {
       this.$emit('openModel', model, type)
     },
     //确认修改状态
     confirmChangeIterationState() {
       if (this.iteration.iterationState == '未开启') {
-        
+
         this.openIteration()
       } else {
 
@@ -113,17 +124,17 @@ export default {
     },
     //将迭代的状态变为开启
     openIteration() {
-      this.$axios.get("/iteration/open/"+this.iteration.iterationId).then((response)=>{
+      this.$axios.get("/iteration/open/" + this.iteration.iterationId).then((response) => {
         console.log(response)
         console.log("开启迭代")
-      }).catch((error)=>{console.log(error)})
+      }).catch((error) => { console.log(error) })
     },
     //将迭代的状态变为关闭
     closeIteration() {
-      this.$axios.get("/iteration/close/"+this.iteration.iterationId).then((response)=>{
+      this.$axios.get("/iteration/close/" + this.iteration.iterationId).then((response) => {
         console.log(response)
         console.log("关闭迭代")
-      }).catch((error)=>{console.log(error)})
+      }).catch((error) => { console.log(error) })
     },
   },
   //在页面渲染之前获取迭代数据
@@ -131,13 +142,13 @@ export default {
     //得到已开启的迭代
     this.$axios.get("/iteration/getOpenedIteration").then((response) => {
       this.iteration = response.data.data
-      if(this.iteration == null){  //目前没有迭代开启
+      if (this.iteration == null) {  //目前没有迭代开启
         return;
       }
-      if(this.iteration.iterationState=='已开启'){
-        this.comfirmTitle='确认关闭迭代?'
-      }else{
-        this.comfirmTitle='确认开启迭代?'
+      if (this.iteration.iterationState == '已开启') {
+        this.comfirmTitle = '确认关闭迭代?'
+      } else {
+        this.comfirmTitle = '确认开启迭代?'
       }
       //得到对应迭代三个状态下的问题
       this.$axios.get("/iteration/findQuestionsByState/" + this.iteration.iterationId + "/规划中").then((response) => {
@@ -163,7 +174,13 @@ export default {
         projectId: '',
       },
       comfirmTitle: '',
+      questionIdAndturnToState: {
+        questionId: '',
+        state: '',
+        projectId:this.$store.state.projectId
+      }
     }
+
   },
   setup() {
     const border_color = Global_color.button_color
@@ -275,4 +292,5 @@ body {
 .row {
   justify-content: space-between;
   margin-bottom: 12px;
-}</style>
+}
+</style>
