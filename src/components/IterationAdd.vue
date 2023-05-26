@@ -5,24 +5,26 @@
             <el-form :v-model="form">
                 <label>迭代名称</label>
                 <el-form-item>
-                    <el-input v-model="form.iterationName"></el-input>
+                    <el-input v-model="newIteration.iterationName"></el-input>
                 </el-form-item>
 
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item label="开始时间">
                         <div class="block">
-                            <el-date-picker v-model="form.startTime" type="datetime" placeholder="选择开始时间" value-format="YYYY-MM-DD" />
+                            <el-date-picker v-model="newIteration.startTime" type="datetime" placeholder="选择开始时间"
+                                value-format="YYYY-MM-DD" />
                         </div>
                     </el-form-item>
                     <el-form-item label="结束时间">
                         <div class="block">
-                            <el-date-picker v-model="form.endTime" type="datetime" placeholder="选择结束时间" value-format="YYYY-MM-DD"/>
+                            <el-date-picker v-model="newIteration.endTime" type="datetime" placeholder="选择结束时间"
+                                value-format="YYYY-MM-DD" />
                         </div>
                     </el-form-item>
                 </el-form>
                 <label>迭代目标</label>
                 <el-form-item>
-                    <el-input type="textarea" v-model="form.iterationDescribe"></el-input>
+                    <el-input type="textarea" v-model="newIteration.iterationDescribe"></el-input>
                 </el-form-item>
 
             </el-form>
@@ -51,31 +53,21 @@ export default {
     },
     setup(props, context) {
         const dialogVisible = ref(false)
-
-        const form = reactive({
-            iterationName: "",
-            iterationDescribe: "",
-            startTime: "",
-            endTime: "",
-            iterationState: "未开启",
-            projectId: this.$store.state.projectId,
-        })
         const cancelClick = () => {
             dialogVisible.value = false
         }
 
         return {
             dialogVisible,
-            form,
             cancelClick,
 
         }
     },
     methods: {
         openDialog() {
-            console.log(this.form.projectId)
+            console.log(this.newIteration.projectId)
             this.dialogVisible = true
-            this.$axios.get("/question/questions/"+this.$store.state.projectId).then(response => {
+            this.$axios.get("/question/questions/" + this.$store.state.projectId).then(response => {
                 let data = response.data.data
 
                 this.questions = data
@@ -125,7 +117,15 @@ export default {
             write: Global_color.white1,
             questions: [],  //已有问题
             value: [],     //选择的问题
-            iterationId: 1 //问题要添加进迭代Id
+            iterationId: 1,//问题要添加进的迭代的Id，默认为1
+            newIteration: {
+                iterationName: "",
+                iterationDescribe: "",
+                startTime: "",
+                endTime: "",
+                iterationState: "未开启",
+                projectId: this.$store.state.projectId,
+            }
         }
     }
 };
