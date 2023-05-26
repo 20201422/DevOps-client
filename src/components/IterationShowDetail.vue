@@ -120,6 +120,7 @@ export default {
 
         this.closeIteration()
       }
+      location.reload()
     },
     cancelChangeIterationState() {
 

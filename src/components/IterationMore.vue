@@ -96,7 +96,7 @@ export default {
     },
     showIteration(){
       this.drawer = false
-      console.log("重新加载页面")
+
     },
     //确认修改状态
     confirmChangeIterationState(iteration) {
@@ -107,6 +107,7 @@ export default {
 
         this.closeIteration(iteration)
       }
+      location.reload()
     },
     cancelChangeIterationState() {
 

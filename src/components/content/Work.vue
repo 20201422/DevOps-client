@@ -5,7 +5,7 @@
             <div style="margin-left: 12px;">
                 <el-button class="add_button" type="primary" @click="showCreate = true">快速创建+</el-button>
                 <el-button class="add_button" type="primary">工作分配</el-button>
-                <el-button class="add_button" type="primary">添加已有问题</el-button>
+                <el-button class="add_button" type="primary" @click="openAddDialog">添加已有问题</el-button>
             </div>
             <div style="margin-right: 12px;">
                 <el-tag type='warning'>{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
@@ -13,7 +13,8 @@
         </div>
         <div class="container" style="margin-top: 10px;">
 
-            <WorkTable @openQuestion="openQuestionHandler"></WorkTable>
+            <WorkTable v-if="iteration.iterationId != ''" @openQuestion="openQuestionHandler"
+                :iterationId="iteration.iterationId"></WorkTable>
         </div>
 
         <div v-show="showCreate" style="" class="row">
@@ -42,6 +43,8 @@
                 <el-button type="primary" @click="showCreate = false">取消</el-button>
             </div>
         </div>
+
+
     </div>
     <div v-if="iteration == null">
         <el-empty description="暂无数据" />
@@ -49,6 +52,20 @@
     <div v-if="dialogVisible && iteration != null">
         <UpdateModel :model="selectedQuestion" :type="selectedType" @closeDialog="closeQuestionHandler"></UpdateModel>
     </div>
+
+    <el-dialog v-model="addDialogVisible" title="添加问题" width="65%" center>
+        <el-transfer filterable v-model="value" :data="questions" :titles="['已有问题', '该迭代问题']"
+            :props="{ key: 'questionId', label: 'questionName' }"
+            style="text-align: left; display: inline-block;margin-left: 20%;" />
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="addDialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="addConfirmClick">
+                    添加
+                </el-button>
+            </span>
+        </template>
+    </el-dialog>
 </template>
 
 <script>
@@ -56,6 +73,7 @@ import { reactive, ref } from 'vue'
 import Global_color from "@/app/Global_color.vue"
 import UpdateModel from "@/components/UpdateModel.vue";
 import WorkTable from "@/components/WorkTable.vue";
+import { ElMessageBox } from "element-plus";
 export default {
     name: "Work",
 
@@ -90,7 +108,9 @@ export default {
             button_color2: Global_color.button_color,
             write: Global_color.white1,
             ok_button: Global_color.button_color,
-            dialogVisible: false,
+            model_color:Global_color.model_color,
+            dialogVisible: false,   //查看问题框
+            addDialogVisible: false,   //添加问题框
             selectedQuestion: Object,
             selectedType: '',
 
@@ -106,18 +126,20 @@ export default {
                 endTime: '',
                 iterationDescribe: '',
                 projectId: '',
-            }
+            },
+            questions: [],  //已有问题
+            value: [],     //选择的问题
         }
     },
-    beforeMount() {
+    created() {
         //得到已开启的迭代
-        this.$axios.get("/iteration/getOpenedIteration/"+this.$store.state.projectId).then((response) => {
+        this.$axios.get("/iteration/getOpenedIteration/" + this.$store.state.projectId).then((response) => {
             this.iteration = response.data.data
             if (this.iteration == null) {  //目前没有迭代开启
                 return;
             }
         })
-        this.$axios.get('user/users/idAndName/'+this.$store.state.projectId).then((resp) => {
+        this.$axios.get('user/users/idAndName/' + this.$store.state.projectId).then((resp) => {
             this.userOptions = resp.data.data
         })
     },
@@ -130,6 +152,38 @@ export default {
         closeQuestionHandler() {
             this.dialogVisible = false;
         },
+        openAddDialog() {
+            this.addDialogVisible = true;
+            this.$axios.get("/iteration/getFreeQuestion/" + this.$store.state.projectId).then(response => {
+                let data = response.data.data
+
+                this.questions = data
+
+            }).catch(error => { })
+        },
+        addConfirmClick() {
+            ElMessageBox.confirm(`确认要添加这些问题吗?`)
+                .then(() => {
+                    //将一个或多个问题添加进对应迭代
+                    for (let index = 0; index < this.value.length; index++) {
+                        this.$axios.get("/iteration/addToIteration",
+                            {
+                                params: {
+                                    questionId: this.value[index],
+                                    iterationId: this.iteration.iterationId
+                                }
+                            })
+                            .then(response => {
+                                console.log(response)
+                            }).catch(error => { console.log(error) })
+                    }
+                    this.addDialogVisible = false
+                })
+                .catch(() => {
+                    // catch error
+                    this.addDialogVisible = false
+                })
+        }
 
     },
 
@@ -168,5 +222,19 @@ export default {
 .row {
     justify-content: space-between;
     margin-top: 12px;
+}
+
+.background {
+  background-color: v-bind(model_color);
+  border-radius: 12px;
+  padding: 12px 24px 12px 24px;
+  margin-top: 12px;
+  transition: all 0.45s;
+}
+
+.background:hover {
+  box-shadow: 1px 1px 10px v-bind(shadow);
+  border-radius: 14px;
+  transform: scale(1.01);
 }
 </style>

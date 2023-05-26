@@ -67,7 +67,7 @@ export default {
         openDialog() {
             console.log(this.newIteration.projectId)
             this.dialogVisible = true
-            this.$axios.get("/question/questions/" + this.$store.state.projectId).then(response => {
+            this.$axios.get("/iteration/getFreeQuestion/" + this.$store.state.projectId).then(response => {
                 let data = response.data.data
 
                 this.questions = data
@@ -77,9 +77,9 @@ export default {
         confirmClick() {
             ElMessageBox.confirm(`确认要创建迭代吗?`)
                 .then(() => {
-                    this.$axios.post("/iteration/add", this.form).then(response => {  //添加迭代
+                    this.$axios.post("/iteration/add", this.newIteration).then(response => {  //添加迭代
                         //通过迭代名称找到迭代id
-                        this.$axios.get("/iteration/find/" + this.form.iterationName).then(response => {
+                        this.$axios.get("/iteration/find/" + this.newIteration.iterationName).then(response => {
                             this.iterationId = response.data.data
                             //将一个或多个问题添加进对应迭代
                             for (let index = 0; index < this.value.length; index++) {
