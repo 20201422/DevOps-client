@@ -68,7 +68,9 @@
       </div>
     </div>
   </div>
-  <div v-if="iteration == null" style="text-align: center;font-size: large;"><span>当前没有迭代已开启！查看更多迭代可开启迭代</span></div>
+  <div v-if="iteration == null">
+    <el-empty description="暂无数据" />
+  </div>
 </template>
 
 
@@ -140,7 +142,7 @@ export default {
   //在页面渲染之前获取迭代数据
   beforeMount() {
     //得到已开启的迭代
-    this.$axios.get("/iteration/getOpenedIteration").then((response) => {
+    this.$axios.get("/iteration/getOpenedIteration/"+this.$store.state.projectId).then((response) => {
       this.iteration = response.data.data
       if (this.iteration == null) {  //目前没有迭代开启
         return;

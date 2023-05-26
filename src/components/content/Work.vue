@@ -43,7 +43,9 @@
             </div>
         </div>
     </div>
-    <div v-if="iteration == null" style="text-align: center;font-size: large;"><span>当前工作列表为空</span></div>
+    <div v-if="iteration == null">
+        <el-empty description="暂无数据" />
+    </div>
     <div v-if="dialogVisible && iteration != null">
         <UpdateModel :model="selectedQuestion" :type="selectedType" @closeDialog="closeQuestionHandler"></UpdateModel>
     </div>
@@ -109,13 +111,13 @@ export default {
     },
     beforeMount() {
         //得到已开启的迭代
-        this.$axios.get("/iteration/getOpenedIteration").then((response) => {
+        this.$axios.get("/iteration/getOpenedIteration/"+this.$store.state.projectId).then((response) => {
             this.iteration = response.data.data
             if (this.iteration == null) {  //目前没有迭代开启
                 return;
             }
         })
-        this.$axios.get('user/users/idAndName/2429').then((resp) => {
+        this.$axios.get('user/users/idAndName/'+this.$store.state.projectId).then((resp) => {
             this.userOptions = resp.data.data
         })
     },

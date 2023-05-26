@@ -58,7 +58,7 @@ export default {
             startTime: "",
             endTime: "",
             iterationState: "未开启",
-            projectId: "1",
+            projectId: this.$store.state.projectId,
         })
         const cancelClick = () => {
             dialogVisible.value = false
@@ -73,8 +73,9 @@ export default {
     },
     methods: {
         openDialog() {
+            console.log(this.form.projectId)
             this.dialogVisible = true
-            this.$axios.get("/question/questions/2427").then(response => {
+            this.$axios.get("/question/questions/"+this.$store.state.projectId).then(response => {
                 let data = response.data.data
 
                 this.questions = data
@@ -124,7 +125,7 @@ export default {
             write: Global_color.white1,
             questions: [],  //已有问题
             value: [],     //选择的问题
-            iterationId: 1 //迭代Id
+            iterationId: 1 //问题要添加进迭代Id
         }
     }
 };

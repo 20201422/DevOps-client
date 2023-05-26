@@ -37,12 +37,12 @@
     </el-col>
     <el-col :span="6">
       <el-statistic title="🌅 迭代开始时间" :value="startYear">
-        <template #suffix>-{{startMonth}}-{{startDay}}</template>
+        <template #suffix>-&nbsp;{{startMonth}}&nbsp;-&nbsp;{{startDay}}</template>
       </el-statistic>
     </el-col>
     <el-col :span="6">
       <el-statistic title="🌄 迭代结束时间" :value="endYear">
-        <template #suffix>-{{endMonth}}-{{endDay}}</template>
+        <template #suffix>-&nbsp;{{endMonth}}&nbsp;-&nbsp;{{endDay}}</template>
       </el-statistic>
     </el-col>
     <el-col :span="6">
@@ -94,7 +94,7 @@ export default ({
 
   methods: {
     getIteration: function () {
-      this.$axios.get('iteration/getOpenedIteration').then((resp) => {
+      this.$axios.get('iteration/getOpenedIteration/'+this.$store.state.projectId).then((resp) => {
         this.iteration = resp.data.data
 
         const now = moment()

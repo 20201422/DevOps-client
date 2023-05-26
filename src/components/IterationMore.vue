@@ -88,11 +88,11 @@ export default {
   methods: {
     findIterations() {
       this.drawer = true
-      this.$axios.get("/iteration/iterations").then(response => {
+      this.$axios.get("/iteration/iterations/"+this.$store.state.projectId).then(response => {
         let data = response.data.data
         this.iterations = data
 
-      }).catch(error => { })
+      }).catch(error => {console.log(error) })
     },
     showIteration(){
       this.drawer = false
