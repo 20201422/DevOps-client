@@ -12,7 +12,10 @@ import Story from "@/components/content/Story.vue"
 import Model from "@/components/Model.vue"
 import Table from "@/components/Table.vue"
 import UpdateModel from "@/components/UpdateModel.vue"
-import StoryMap from "@/components/StoryMap.vue";
+import StoryMap from "@/components/StoryMap.vue"
+
+import Statistic from "@/components/Statistic.vue"
+import UploadFile from "@/components/UploadFile.vue"
 
 const routes = [
   {
@@ -64,6 +67,16 @@ const routes = [
     path: '/StoryMap',
     name: 'StoryMap',
     component: StoryMap,
+  },
+  {
+    path: '/Statistic',
+    name: 'Statistic',
+    component: Statistic,
+  },
+  {
+    path: '/UploadFile',
+    name: 'UploadFile',
+    component: UploadFile,
   },
 ]
 

@@ -29,6 +29,11 @@
     </el-col>
   </el-row>
   <el-divider />
+  <el-row v-if="!iteration">
+    <el-col>
+      <el-text class="mx-1" type="info" v-if="!iteration">暂无开启的迭代计划</el-text>
+    </el-col>
+  </el-row>
   <el-row v-if="iteration">
     <el-col :span="6">
       <el-statistic title="🤯 当前迭代" :value="iteration.iterationId">
@@ -97,18 +102,20 @@ export default ({
       this.$axios.get('iteration/getOpenedIteration/'+this.$store.state.projectId).then((resp) => {
         this.iteration = resp.data.data
 
-        const now = moment()
-        this.end = moment(this.iteration.endTime, 'YYYY-MM-DD')
-        this.start = moment(this.iteration.startTime, 'YYYY-MM-DD')
-        this.lastTime = this.end.diff(now, 'days')
-        this.totalTime = this.end.diff(this.start, 'days')
+        if (this.iteration != null) {
+          const now = moment()
+          this.end = moment(this.iteration.endTime, 'YYYY-MM-DD')
+          this.start = moment(this.iteration.startTime, 'YYYY-MM-DD')
+          this.lastTime = this.end.diff(now, 'days')
+          this.totalTime = this.end.diff(this.start, 'days')
 
-        this.startYear = parseInt(this.iteration.startTime.split('-')[0])
-        this.startMonth = parseInt(this.iteration.startTime.split('-')[1])
-        this.startDay = parseInt(this.iteration.startTime.split('-')[2])
-        this.endYear = parseInt(this.iteration.endTime.split('-')[0])
-        this.endMonth = parseInt(this.iteration.endTime.split('-')[1])
-        this.endDay = parseInt(this.iteration.endTime.split('-')[2])
+          this.startYear = parseInt(this.iteration.startTime.split('-')[0])
+          this.startMonth = parseInt(this.iteration.startTime.split('-')[1])
+          this.startDay = parseInt(this.iteration.startTime.split('-')[2])
+          this.endYear = parseInt(this.iteration.endTime.split('-')[0])
+          this.endMonth = parseInt(this.iteration.endTime.split('-')[1])
+          this.endDay = parseInt(this.iteration.endTime.split('-')[2])
+        }
 
       })
     },

@@ -117,7 +117,7 @@ export default {
 
     isQuestionEmpty: function (epicLists) {
       for (let epic of epicLists) {
-        if (epic.questions && epic.questions.length > 0) {
+        if (epic.epic) {
           return false;
         }
       }

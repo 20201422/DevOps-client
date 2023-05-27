@@ -1,6 +1,6 @@
 <template>
   <el-button type="primary" class="add_button" @click="this.drawer = true">添加{{ type }}</el-button>
-  <el-drawer v-model="drawer" :direction="direction" :close-on-press-escape="true">
+  <el-drawer v-model="drawer" :direction="direction">
     <template #header>
       <h4>{{ type }}</h4>
     </template>
@@ -10,7 +10,7 @@
                       :rules="[{ required: true, message: '请输入Id', trigger: 'blur' },
                         { min: 2, max: 20, message: 'Id长度在2-20', trigger: 'blur' },
                         { pattern: /^[a-zA-Z0-9_-]+$/, message: '只能包含数字、字母和下划线', trigger: 'blur' }, ]">
-          <el-input v-model="form.modelId" :placeholder="`请输入${type}Id`" />
+          <el-input v-model="form.modelId" :placeholder="`请输入${type}Id`"/>
         </el-form-item>
         <el-form-item :label="`${type}名称`" prop="modelName"
                       :rules="[{ required: true, message: '请输入名称', trigger: 'blur' },
@@ -52,11 +52,14 @@
                             :default-time="defaultTime" :disabled-date="disabledEndDate"/>
           </div>
         </el-form-item>
+        <el-form-item>
+          <UploadFile v-if="form.modelId !== ''" :modelId="form.modelId" :type="`model`" ref="uploadFile"></UploadFile>
+        </el-form-item>
       </el-form>
     </template>
     <template #footer>
       <div style="flex: auto">
-        <el-button @click="cancelClick">取消</el-button>
+        <el-button @click="deleteFile">取消</el-button>
         <el-button type="primary" @click="confirmClick">添加</el-button>
       </div>
     </template>
@@ -65,14 +68,34 @@
 
 <script>
 import { reactive, ref } from 'vue'
-import {ElMessage, ElMessageBox, ElNotification} from "element-plus"
-import Global_color from "@/app/Global_color.vue";
+import { ElMessage, ElMessageBox } from "element-plus"
+import Global_color from "@/app/Global_color.vue"
+import UploadFile from  "@/components/UploadFile.vue"
 
 export default {
   name: "Question",
 
+  components: {
+    UploadFile,
+  },
+
   props: {
     type: String,
+  },
+
+  computed: {
+    delete: function () { // 只有不是点击添加按钮关闭的抽屉，都要删除文件
+      if (!this.drawer && !this.isClickConform) {
+        this.deleteFile()
+      }
+    },
+  },
+  watch: {
+    delete: function () { // 只有不是点击添加按钮关闭的抽屉，都要删除文件
+      if (!this.drawer && !this.isClickConform) {
+        this.deleteFile()
+      }
+    },
   },
 
   setup(props) {
@@ -103,8 +126,6 @@ export default {
       return time.getTime() < form.beginTime
     }
 
-    // const
-
     const cancelClick = () => {
       drawer.value = false
     }
@@ -127,6 +148,8 @@ export default {
       button_color1: Global_color.button_color1,
       button_color2: Global_color.button_color,
       write: Global_color.white1,
+
+      isClickConform: false,
 
       questionForm: {
         questionId: this.form.modelId,
@@ -163,8 +186,21 @@ export default {
       })
     },
 
-    confirmClick: function () {
+    deleteFile: function () {
+      this.$nextTick(() => {
+        try {
+          this.$refs.uploadFile.deleteAllFiles()
+          this.$refs.uploadFile.clearFiles()
+        } catch (e) {
 
+        }
+      })
+
+      this.cancelClick()
+    },
+
+    confirmClick: function () {
+      this.isClickConform = true
       if (this.form.modelId === '' || this.form.modelName === '') {
         ElMessage.error('检查必填项！')
       } else {
@@ -177,7 +213,6 @@ export default {
                 } else if (this.type === '史诗') {
                   this.addEpic();
                 }
-                this.drawer = false
                 return Promise.resolve()
               })
               .then(() => {
@@ -205,10 +240,13 @@ export default {
         if (resp.data.data === null) { // 没有重复的id才可以加入
           this.$axios.post('/question/add', this.questionForm).then((resp) => {
             // console.log(this.questionForm)
+            this.drawer = false
             location.reload()
           }).catch((error) => {
             console.log(error)
           })
+          this.$refs.uploadFile.addDatabase()
+          this.$refs.uploadFile.clearFiles()
         } else {
           ElMessage.error('问题Id出现重复，请检查！')
         }
@@ -227,10 +265,13 @@ export default {
       this.$axios.get('/epic/' + this.epicForm.epicId + '/' + this.$store.state.projectId).then(resp => {
         if (resp.data.data === null) { // 没有重复的id才可以加入
           this.$axios.post('/epic/add', this.epicForm).then((resp) => {
+            this.drawer = false
             location.reload()
           }).catch((error) => {
             console.log(error)
           })
+          this.$refs.uploadFile.addDatabase()
+          this.$refs.uploadFile.clearFiles()
         } else {
           ElMessage.error('史诗Id出现重复，请检查')
         }

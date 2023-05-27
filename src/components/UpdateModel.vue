@@ -55,8 +55,11 @@
             </div>
           </el-form-item>
         </el-form>
-<!--        <UploadFile></UploadFile>-->
-        <el-alert v-if="type === '史诗'" title="如果要删除史诗，那么该史诗下的问题不会被删除！" type="info" show-icon />
+        <UploadFile v-if="form.modelId !== ''" :modelId="form.modelId" :type="`updateModel`" ref="uploadFile"></UploadFile>
+        <br>
+        <el-alert :title="`如果要删除${type}，那么该${type}下的文件也会被删除！`" type="warning" show-icon :closable="false" />
+        <br>
+        <el-alert v-if="type === '史诗'" title="如果要删除史诗，那么该史诗下的问题不会被删除！" type="warning" show-icon :closable="false" />
       </el-form>
     </template>
     <template #footer>
@@ -73,11 +76,14 @@
 import {reactive, ref} from 'vue'
 import {ElMessage, ElMessageBox, ElNotification} from "element-plus"
 import Global_color from "@/app/Global_color.vue";
-// import UploadFile from "@/components/UploadFile.vue"
+import UploadFile from "@/components/UploadFile.vue"
 
 export default {
   name: "UpdateTable",
-  // components: {UploadFile},
+
+  components: {
+    UploadFile
+  },
 
   props: {
     model: Object,
@@ -138,6 +144,8 @@ export default {
       button_color: Global_color.button_color,
 
       userOptions: [],
+
+      isClickConform: false,
 
       questionForm: {
         questionIndex: this.form.modelIndex,
@@ -252,6 +260,7 @@ export default {
         this.$axios.put('question/update/' ,this.questionForm).then((resp) => {
           location.reload()
         })
+        this.$refs.uploadFile.addDatabase()
       }
     },
     updateEpic: function () {
@@ -275,6 +284,7 @@ export default {
         this.$axios.put('epic/update/' ,this.epicForm).then((resp) => {
           location.reload()
         })
+        this.$refs.uploadFile.addDatabase()
       }
     },
 
