@@ -107,7 +107,7 @@ export default {
     showStoryMap: function() {
       this.$axios.get('story/' + this.$store.state.projectId).then((resp) => {
         this.storyMap.epicLists = resp.data.data.epics
-        // console.log(this.storyMap.epicLists)
+        console.log(this.storyMap.epicLists)
       })
     },
 
