@@ -128,15 +128,13 @@ export default {
     //将迭代的状态变为开启
     openIteration() {
       this.$axios.get("/iteration/open/" + this.iteration.iterationId).then((response) => {
-        console.log(response)
-        console.log("开启迭代")
+
       }).catch((error) => { console.log(error) })
     },
     //将迭代的状态变为关闭
     closeIteration() {
       this.$axios.get("/iteration/close/" + this.iteration.iterationId).then((response) => {
-        console.log(response)
-        console.log("关闭迭代")
+
       }).catch((error) => { console.log(error) })
     },
   },
