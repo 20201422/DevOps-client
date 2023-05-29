@@ -115,16 +115,15 @@ export default {
             })
             this.files[i].delete
           } else {
-            this.$axios.get('files/delete/' + this.files[i].filePath + '/'
-                + this.$store.state.projectId).then((resp) => {
-              if (resp.data.data === 'Success') {
-                this.$message.success('文件删除成功！');
-                this.$axios.delete('databaseFiles/deleteFile/' + this.files[i].fileId).then((resp) => {
-
-                })
-              } else {
-                this.$message.error('文件删除失败！');
-              }
+            this.$axios.delete('databaseFiles/deleteFile/' + this.files[i].filePath).then((resp) => {
+              this.$axios.get('files/delete/' + this.files[i].filePath + '/'
+                  + this.$store.state.projectId).then((resp) => {
+                if (resp.data.data === 'Success') {
+                  this.$message.success('文件删除成功！');
+                } else {
+                  this.$message.error('文件删除失败！');
+                }
+              })
             })
             this.files[i].delete
           }
