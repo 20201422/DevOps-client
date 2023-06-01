@@ -235,8 +235,7 @@ body {
   border-radius: 12px;
   padding: 12px 24px 12px 24px;
   margin-top: 12px;
-  /* justify-content: space-between;    能够让三列均匀分布 */
-
+  min-height: 650px;
 }
 
 .title {

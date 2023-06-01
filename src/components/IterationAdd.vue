@@ -102,11 +102,13 @@ export default {
 
 
                     this.dialogVisible = false
+                    location.reload()       
                 })
                 .catch(() => {
                     // catch error
                     this.dialogVisible = false
                 })
+            
         }
     },
 

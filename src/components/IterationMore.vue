@@ -1,46 +1,36 @@
 <template>
   <el-text class="button_text" type="primary" style="" @click="findIterations">更多迭代</el-text>
-  <el-drawer v-model="drawer" :direction="direction" :close-on-press-escape="true">
+  <el-drawer :key="drawerKey" v-model="drawer" :direction="direction" :close-on-press-escape="true">
     <template #header>
       <h4>迭代计划</h4>
     </template>
     <template #default>
 
-      <div style="margin-bottom: 10px;" v-for="iteration in iterations" :key="iteration.iterationId">
-        <el-card  class="box-card" shadow="hover">
+      <div style="margin-bottom: 10px;" v-for="iteration in iterations" :key="drawerKey">
+        <el-card class="box-card" shadow="hover">
           <template #header>
             <div class="row">
               <div>
                 &nbsp;&nbsp;
                 <span>{{ iteration.iterationName }}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                <el-popconfirm v-if="iteration.iterationState=='已开启'"
-                  confirm-button-text="确认"
-                  cancel-button-text="取消"
-                  :icon="InfoFilled"
-                  icon-color="#626AEF"
-                  title="确认关闭迭代"
-                  @confirm="confirmChangeIterationState(iteration)"
+                <el-popconfirm v-if="iteration.iterationState == '已开启'" confirm-button-text="确认" cancel-button-text="取消"
+                  :icon="InfoFilled" icon-color="#626AEF" title="确认关闭迭代" @confirm="confirmChangeIterationState(iteration)"
                   @cancel="cancelChangeIterationState">
                   <template #reference>
-                    <el-tag :style="warning" style="cursor: pointer;">{{ iteration.iterationState}}</el-tag>
+                    <el-tag :style="warning" style="cursor: pointer;">{{ iteration.iterationState }}</el-tag>
                   </template>
-                  
+
                 </el-popconfirm>
-                <el-popconfirm v-if="iteration.iterationState=='未开启'"
-                  confirm-button-text="确认"
-                  cancel-button-text="取消"
-                  :icon="InfoFilled"
-                  icon-color="#626AEF"
-                  title="确认开启迭代"
-                  @confirm="confirmChangeIterationState(iteration)"
+                <el-popconfirm v-if="iteration.iterationState == '未开启'" confirm-button-text="确认" cancel-button-text="取消"
+                  :icon="InfoFilled" icon-color="#626AEF" title="确认开启迭代" @confirm="confirmChangeIterationState(iteration)"
                   @cancel="cancelChangeIterationState">
                   <template #reference>
-                    <el-tag :style="warning" style="cursor: pointer;">{{ iteration.iterationState}}</el-tag>
+                    <el-tag :style="warning" style="cursor: pointer;">{{ iteration.iterationState }}</el-tag>
                   </template>
-                  
+
                 </el-popconfirm>
               </div>
-              <el-button @click="showIteration" class="button" text>详情</el-button>
+              <el-button @click="showIteration(iteration)" class="button" text>详情</el-button>
             </div>
           </template>
           <el-tag type='warning'>{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
@@ -55,15 +45,90 @@
       </div>
     </template>
   </el-drawer>
+
+  <!-- 点击详情的弹框 -->
+  <el-dialog :key="dialogkey" v-model="dialogVisible" width="80%">
+    <template #header>
+      <div class="row">
+        <div class="col-3">
+          <h4>{{ selectIteration.iterationName }}</h4>
+        </div>
+        <div class="col-7"></div>
+        <div class="col-2">
+          <el-button type="primary" plain @click="updateIteration">编辑</el-button>
+          <el-button type="danger" plain @click="deleteIteration">删除</el-button>
+        </div>
+      </div>
+    </template>
+    <template #default>
+      <el-dialog v-model="updateVisible" width="50%" title="编辑迭代" append-to-body draggable="true">
+        <el-input v-model="newIteration.iterationName" placeholder="Please input" />
+
+        <el-form :inline="true" class="demo-form-inline" style="margin-top: 12px;">
+          <el-form-item label="开始时间">
+            <div class="block">
+              <el-date-picker v-model="newIteration.startTime" type="datetime" placeholder="选择开始时间"
+                value-format="YYYY-MM-DD" />
+            </div>
+          </el-form-item>
+          <el-form-item label="结束时间">
+            <div class="block">
+              <el-date-picker v-model="newIteration.endTime" type="datetime" placeholder="选择结束时间"
+                value-format="YYYY-MM-DD" />
+            </div>
+          </el-form-item>
+        </el-form>
+
+        <label style="margin-top: 12px;">迭代目标</label>
+        <el-form-item>
+          <el-input type="textarea" :rows="5" v-model="newIteration.iterationDescribe"></el-input>
+        </el-form-item>
+
+        <div style="margin-left: 81%;margin-top: 10px;">
+          <el-button type="primary" @click="confirmUpdateClick">保存</el-button>
+          <el-button @click="cancelUpdateClick">取消</el-button>
+        </div>
+      </el-dialog>
+      <div class="row">
+        <div class="col-6" style="padding-right: 10px;padding-left: 10px;">
+          <div class="dialogBackground" style="padding: 12px;">
+            <div class="row">
+              <span class="col-6" style="font-size: large;">{{ selectIteration.startTime }} - {{ selectIteration.endTime
+              }} </span>
+              <span class="col-6" style="margin-top: 8px;"> <el-progress :percentage="50" /></span>
+            </div>
+            <div class="row" style="margin-top: 24px;">
+              <span class="col-4" style="font-size: x-large; text-align: center;">规划中</span>
+              <span class="col-4" style="font-size: x-large; text-align: center;">进行中</span>
+              <span class="col-4" style="font-size: x-large; text-align: center;">已实现</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-6" style="padding-right: 10px;padding-left: 10px;">
+          <div class="dialogBackground" style="padding: 12px;">
+            <div style="font-size: large;margin-bottom: 10px;"><span>迭代目标</span></div>
+            <span style="margin-top: 10px;">{{ selectIteration.iterationDescribe }}</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 15px;width: 65%;">
+        <WorkTable :key="selectIteration.iterationId" :iterationId="selectIteration.iterationId"></WorkTable>
+      </div>
+
+    </template>
+  </el-dialog>
 </template>
   
 <script>
-import { reactive, ref } from 'vue'
+import { reactive, ref } from 'vue';
 import { ElMessageBox } from "element-plus";
-import Global_color from "@/app/Global_color.vue"
+import Global_color from "@/app/Global_color.vue";
+import WorkTable from "@/components/WorkTable.vue";
 export default {
   name: "IterationMore",
-
+  components: {
+    WorkTable
+  },
   props: {
 
   },
@@ -80,28 +145,93 @@ export default {
           iterationState: '',
           startTime: '',
           endTime: '',
-          projectId: '',
+          projectId: this.$store.state.projectId,
         }
-      ]
+      ],
+      selectIteration: {
+        iterationId: '',
+        iterationName: '',
+        iterationState: '',
+        startTime: '',
+        endTime: '',
+        iterationDescribe: '',
+        projectId: this.$store.state.projectId,
+      },
+      newIteration: {
+        iterationId: '',
+        iterationName: '',
+        iterationState: '',
+        startTime: '',
+        endTime: '',
+        iterationDescribe: '',
+        projectId: this.$store.state.projectId,
+      },
+      dialogVisible: false,
+      updateVisible: false,
+      selectIterationId: '',
+      drawerKey: 0,
+      dialogkey: 0,
     }
   },
+
   methods: {
     findIterations() {
       this.drawer = true
-      this.$axios.get("/iteration/iterations/"+this.$store.state.projectId).then(response => {
+      this.$axios.get("/iteration/iterations/" + this.$store.state.projectId).then(response => {
         let data = response.data.data
         this.iterations = data
 
-      }).catch(error => {console.log(error) })
+      }).catch(error => { console.log(error) })
     },
-    showIteration(){
-      this.drawer = false
+    showIteration(iteration) {
+      // this.selectIterationId = iterationId
+      this.selectIteration = null
+      this.selectIteration = iteration
+      // this.drawer = false
+      this.dialogVisible = true
+    },
+
+
+    deleteIteration() {
+      this.$axios.get("/iteration/del/" + this.selectIteration.iterationId).then(response => {
+        this.$axios.get("/iteration/iterations/" + this.$store.state.projectId).then(response => {
+          let data = response.data.data
+          this.iterations = data
+          this.drawerKey++
+        }).catch(error => { console.log(error) })
+      }).catch(error => { console.error(error) })
+      this.dialogVisible = false
+    },
+    updateIteration() {
+      this.newIteration = this.selectIteration
+      this.updateVisible = true
+    },
+    confirmUpdateClick() {
+      ElMessageBox.confirm(`确认要修改迭代吗?`)
+        .then(() => {
+          
+          this.$axios.post("/iteration/update",this.newIteration).then(response => {
+            this.selectIteration = this.newIteration
+            this.dialogkey++
+          }).catch(error => {
+            console.error(error)
+          })
+          this.updateVisible= false
+        })
+        .catch(() => {
+          // catch error
+          this.updateVisible = false
+        })
 
     },
+    cancelUpdateClick(){
+      updateVisible=false
+    },
+
     //确认修改状态
     confirmChangeIterationState(iteration) {
       if (iteration.iterationState == '未开启') {
-        
+
         this.openIteration(iteration)
       } else {
 
@@ -114,17 +244,17 @@ export default {
     },
     //将迭代的状态变为开启
     openIteration(iteration) {
-      this.$axios.get("/iteration/open/"+iteration.iterationId).then((response)=>{
+      this.$axios.get("/iteration/open/" + iteration.iterationId).then((response) => {
         console.log(response)
 
-      }).catch((error)=>{console.log(error)})
+      }).catch((error) => { console.log(error) })
     },
     //将迭代的状态变为关闭
     closeIteration(iteration) {
-      this.$axios.get("/iteration/close/"+iteration.iterationId).then((response)=>{
+      this.$axios.get("/iteration/close/" + iteration.iterationId).then((response) => {
         console.log(response)
 
-      }).catch((error)=>{console.log(error)})
+      }).catch((error) => { console.log(error) })
     },
   },
 
@@ -213,6 +343,11 @@ export default {
 
 .row {
   justify-content: space-between;
+}
+
+.dialogBackground {
+  background-color: #f5f5f7;
+  min-height: 180px;
 }
 </style>
   

@@ -26,7 +26,7 @@
             </div>
             <div style="">
                 <el-form-item label="优先级">
-                    <el-radio-group v-model="form.modelPriority" :fill="button_color2">
+                    <el-radio-group v-model="form.questionPriority" :fill="button_color2">
                         <el-radio-button label="低" /><el-radio-button label="中" /><el-radio-button label="高" />
                     </el-radio-group>
                 </el-form-item>
@@ -38,7 +38,7 @@
                 </el-select>
             </div>
             <div style="margin-right: 12px;">
-                <el-button type="primary">创建</el-button>
+                <el-button type="primary" @click="fastAddQuestion">创建</el-button>
 
                 <el-button type="primary" @click="showCreate = false">取消</el-button>
             </div>
@@ -89,11 +89,8 @@ export default {
         const form = reactive({
             questionId: '',
             questionName: '',
-            questionDescribe: '',
-            questionPriority: '低',
-            userId: ref(''),
-            beginTime: '',
-            endTime: '',
+            questionPriority: '',
+            userId: '',
         })
 
         return {
@@ -113,10 +110,6 @@ export default {
             addDialogVisible: false,   //添加问题框
             selectedQuestion: Object,
             selectedType: '',
-
-            form: {
-
-            },
             userOptions: [],
             iteration: {
                 iterationId: '',
@@ -183,6 +176,22 @@ export default {
                     // catch error
                     this.addDialogVisible = false
                 })
+        },
+        fastAddQuestion(){
+            this.$axios.get("/question/fastAdd" , {
+                params:{
+                    questionId: this.form.questionId,
+                    questionName: this.form.questionName,
+                    questionPriority: this.form.questionPriority,
+                    userId: this.form.userId,
+                    iterationId:this.iteration.iterationId,
+                    projectId:this.$store.state.projectId
+                }
+            
+            }).then((response) => {
+                console.log(response)
+            }).catch((error) => {console.log(error)})
+            location.reload()
         }
 
     },

@@ -100,7 +100,7 @@ export default {
 
     methods: {
         showQuestion: function () {
-            console.log(this.iterationId)
+           
             this.$axios.get('/iteration/findQuestionByIterationId/'+ this.iterationId ).then((resp) => {
                 this.tableData = resp.data.data
                 // console.log(this.tableData)
