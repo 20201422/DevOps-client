@@ -260,7 +260,6 @@ export default {
         this.$axios.put('question/update/' ,this.questionForm).then((resp) => {
           location.reload()
         })
-        this.$refs.uploadFile.addDatabase()
       }
     },
     updateEpic: function () {
@@ -284,7 +283,6 @@ export default {
         this.$axios.put('epic/update/' ,this.epicForm).then((resp) => {
           location.reload()
         })
-        this.$refs.uploadFile.addDatabase()
       }
     },
 
