@@ -101,7 +101,7 @@ export default {
         {params:{
           questionId:this.questionIdAndturnToState.questionId,
           state:this.questionIdAndturnToState.state,
-          projectId:this.questionIdAndturnToState.projectId,
+          projectId:this.$store.state.projectId
         }
         }
       ).then(response=>{

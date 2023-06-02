@@ -42,8 +42,9 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import { ElMessageBox } from "element-plus";
+import { ElMessage } from 'element-plus'
 import Global_color from "@/app/Global_color.vue"
 export default {
 
@@ -94,21 +95,22 @@ export default {
                                         console.log(response)
                                     }).catch(error => { console.log(error) })
                             }
+                            ElMessage({
+                                message: '创建成功',
+                                type: 'success',
+                            })
+                            this.dialogVisible = false
+                            location.reload()
                         }).catch((error) => { console.log(error) })
                     }).catch((error) => {
                         console.log(error)
                     })
-
-
-
-                    this.dialogVisible = false
-                    location.reload()       
                 })
                 .catch(() => {
                     // catch error
                     this.dialogVisible = false
                 })
-            
+
         }
     },
 

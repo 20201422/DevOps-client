@@ -61,6 +61,7 @@
       </div>
     </template>
     <template #default>
+      <!-- 编辑迭代对话框 -->
       <el-dialog v-model="updateVisible" width="50%" title="编辑迭代" append-to-body draggable="true">
         <el-input v-model="newIteration.iterationName" placeholder="Please input" />
 
@@ -95,12 +96,17 @@
             <div class="row">
               <span class="col-6" style="font-size: large;">{{ selectIteration.startTime }} - {{ selectIteration.endTime
               }} </span>
-              <span class="col-6" style="margin-top: 8px;"> <el-progress :percentage="50" /></span>
+              <span class="col-6" style="margin-top: 8px;"> <el-progress :percentage="progress" /></span>
             </div>
             <div class="row" style="margin-top: 24px;">
               <span class="col-4" style="font-size: x-large; text-align: center;">规划中</span>
               <span class="col-4" style="font-size: x-large; text-align: center;">进行中</span>
               <span class="col-4" style="font-size: x-large; text-align: center;">已实现</span>
+            </div>
+            <div class="row" style="margin-top: 24px;">
+              <span class="col-4" style="font-size: x-large; text-align: center;">{{ toBeCompletedQuestionSum }}</span>
+              <span class="col-4" style="font-size: x-large; text-align: center;">{{ underwaySum }}</span>
+              <span class="col-4" style="font-size: x-large; text-align: center;">{{ completedQuestionSum }}</span>
             </div>
           </div>
         </div>
@@ -122,6 +128,7 @@
 <script>
 import { reactive, ref } from 'vue';
 import { ElMessageBox } from "element-plus";
+import { ElNotification } from 'element-plus'
 import Global_color from "@/app/Global_color.vue";
 import WorkTable from "@/components/WorkTable.vue";
 export default {
@@ -171,6 +178,12 @@ export default {
       selectIterationId: '',
       drawerKey: 0,
       dialogkey: 0,
+      questions: [],  //点开详情后要统计的问题
+      allQuestionSum: 0,  //问题总数
+      toBeCompletedQuestionSum: 0, //规划中的问题数
+      underwaySum: 0, //实现中的问题数
+      completedQuestionSum: 0, //已实现问题数
+      progress: 0, // 进度:已实现的问题/问题总数
     }
   },
 
@@ -184,10 +197,30 @@ export default {
       }).catch(error => { console.log(error) })
     },
     showIteration(iteration) {
-      // this.selectIterationId = iterationId
       this.selectIteration = null
       this.selectIteration = iteration
-      // this.drawer = false
+      this.allQuestionSum = 0
+      this.toBeCompletedQuestionSum = 0
+      this.underwaySum = 0
+      this.completedQuestionSum = 0
+      // 统计问题
+      this.$axios.get("/iteration/findQuestionByIterationId/" + this.selectIteration.iterationId)
+        .then(response => {
+          this.questions = response.data.data
+          this.allQuestionSum = this.questions.length // 问题总数
+          for (let i = 0; i < this.questions.length; i++) {
+            if (this.questions[i].questionState === '规划中') {  // 统计规划中问题数
+              this.toBeCompletedQuestionSum++
+            }
+            if (this.questions[i].questionState === '实现中') {  // 统计实现中问题数
+              this.underwaySum++
+            }
+            if (this.questions[i].questionState === '已实现') {  // 统计已实现问题数
+              this.completedQuestionSum++
+            }
+          }
+          this.progress = this.completedQuestionSum * 100 / this.allQuestionSum
+        }).catch(error => { console.log(error) })
       this.dialogVisible = true
     },
 
@@ -209,14 +242,14 @@ export default {
     confirmUpdateClick() {
       ElMessageBox.confirm(`确认要修改迭代吗?`)
         .then(() => {
-          
-          this.$axios.post("/iteration/update",this.newIteration).then(response => {
+
+          this.$axios.post("/iteration/update", this.newIteration).then(response => {
             this.selectIteration = this.newIteration
             this.dialogkey++
           }).catch(error => {
             console.error(error)
           })
-          this.updateVisible= false
+          this.updateVisible = false
         })
         .catch(() => {
           // catch error
@@ -224,8 +257,8 @@ export default {
         })
 
     },
-    cancelUpdateClick(){
-      updateVisible=false
+    cancelUpdateClick() {
+      updateVisible = false
     },
 
     //确认修改状态
@@ -237,7 +270,7 @@ export default {
 
         this.closeIteration(iteration)
       }
-      location.reload()
+
     },
     cancelChangeIterationState() {
 
@@ -245,14 +278,25 @@ export default {
     //将迭代的状态变为开启
     openIteration(iteration) {
       this.$axios.get("/iteration/open/" + iteration.iterationId).then((response) => {
-        console.log(response)
+        this.$axios.get("/iteration/" + iteration.iterationId).then(response => {
+          if (response.data.data.iterationState == '未开启') {
+            ElNotification({
+              title: 'Warning',
+              message: '无法开启，已经存在开启的迭代计划！',
+              type: 'warning',
+            })
+          }else {
+            location.reload()
+          }
+        }).catch(error => { console.error(error) })
+        
 
       }).catch((error) => { console.log(error) })
     },
     //将迭代的状态变为关闭
     closeIteration(iteration) {
       this.$axios.get("/iteration/close/" + iteration.iterationId).then((response) => {
-        console.log(response)
+        location.reload()
 
       }).catch((error) => { console.log(error) })
     },
