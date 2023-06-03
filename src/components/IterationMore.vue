@@ -1,6 +1,6 @@
 <template>
   <el-text class="button_text" type="primary" style="" @click="findIterations">更多迭代</el-text>
-  <el-drawer :key="drawerKey" v-model="drawer" :direction="direction" :close-on-press-escape="true">
+  <el-drawer  :key="drawerKey" v-model="drawer" :direction="direction" :close-on-press-escape="true">
     <template #header>
       <h4>迭代计划</h4>
     </template>
@@ -144,6 +144,7 @@ export default {
       button_color1: Global_color.button_color1,
       button_color2: Global_color.button_color,
       write: Global_color.white1,
+      cardBackgroundColor: Global_color.blue,
       iterations: [
         {
           iterationId: '',
@@ -284,6 +285,7 @@ export default {
               title: 'Warning',
               message: '无法开启，已经存在开启的迭代计划！',
               type: 'warning',
+              position: 'top-left',
             })
           }else {
             location.reload()
@@ -351,7 +353,15 @@ export default {
 <style scoped>
 .box-card {
   width: 400px;
+  
 }
+/* el-card{
+  background-color:#f8f9fa;
+} */
+el-drawer{
+  background-color:#f8f9fa;
+}
+
 
 .button_text {
 

@@ -24,7 +24,10 @@
           <template #item="{ element }">
             <div class="move" @click="click(element, '问题')">
               <div :class="false ? 'forbid item' : 'item'">
-                <label>{{ element.questionName }}</label>
+                <div class="row" style="margin-top: 12px;">
+                  <label style="margin-left: 8%;font-size: 18px;">{{ element.questionName }}</label>
+                  <span :style="getPriorityStyle(element.questionPriority)">{{ element.questionPriority }}&nbsp;</span>
+                </div>
                 <p>{{ element.questionDescribe }}</p>
                 <p>处理人：{{ element.userName }}</p>
               </div>
@@ -41,7 +44,10 @@
           <template #item="{ element }">
             <div class="move" @click="click(element, '问题')">
               <div :class="false ? 'forbid item' : 'item'">
-                <label>{{ element.questionName }}</label>
+                <div class="row" style="margin-top: 12px;">
+                  <label style="margin-left: 8%;font-size: 18px;">{{ element.questionName }}</label>
+                  <span :style="getPriorityStyle(element.questionPriority)">{{ element.questionPriority }}&nbsp;</span>
+                </div>
                 <p>{{ element.questionDescribe }}</p>
                 <p>处理人：{{ element.userName }}</p>
               </div>
@@ -58,7 +64,10 @@
           <template #item="{ element }">
             <div class="move" @click="click(element, '问题')">
               <div :class="false ? 'forbid item' : 'item'">
-                <label>{{ element.questionName }}</label>
+                <div class="row" style="margin-top: 12px;">
+                  <label style="margin-left: 8%;font-size: 18px;">{{ element.questionName }}</label>
+                  <span :style="getPriorityStyle(element.questionPriority)">{{ element.questionPriority }}&nbsp;</span>
+                </div>
                 <p>{{ element.questionDescribe }}</p>
                 <p>处理人：{{ element.userName }}</p>
               </div>
@@ -76,7 +85,7 @@
 
 <script >
 import Global_color from "@/app/Global_color.vue"
-import {reactive } from "vue";
+import { reactive } from "vue";
 //导入draggable组件
 import draggable from "vuedraggable";
 
@@ -93,20 +102,21 @@ export default {
     //拖动卡片结束后状态更新
     updateQuestionState(e) {
       this.questionIdAndturnToState.questionId = e.draggedContext.element.questionId,  //得到拖动中的问题id
-      this.questionIdAndturnToState.state = e.relatedContext.component.tag   //得到目标状态
+        this.questionIdAndturnToState.state = e.relatedContext.component.tag   //得到目标状态
     },
     //拖动结束后更新状态
     endAndUpdate() {
       this.$axios.get("/question/update/state",
-        {params:{
-          questionId:this.questionIdAndturnToState.questionId,
-          state:this.questionIdAndturnToState.state,
-          projectId:this.$store.state.projectId
+        {
+          params: {
+            questionId: this.questionIdAndturnToState.questionId,
+            state: this.questionIdAndturnToState.state,
+            projectId: this.$store.state.projectId
+          }
         }
-        }
-      ).then(response=>{
+      ).then(response => {
         console.log(response)
-      }).catch(error=>{console.log(error)})
+      }).catch(error => { console.log(error) })
     },
     click: function (model, type) {
       this.$emit('openModel', model, type)
@@ -141,7 +151,7 @@ export default {
   //在页面渲染之前获取迭代数据
   beforeMount() {
     //得到已开启的迭代
-    this.$axios.get("/iteration/getOpenedIteration/"+this.$store.state.projectId).then((response) => {
+    this.$axios.get("/iteration/getOpenedIteration/" + this.$store.state.projectId).then((response) => {
       this.iteration = response.data.data
       if (this.iteration == null) {  //目前没有迭代开启
         return;
@@ -178,14 +188,25 @@ export default {
       questionIdAndturnToState: {
         questionId: '',
         state: '',
-        projectId:this.$store.state.projectId
+        projectId: this.$store.state.projectId
       }
     }
 
   },
   setup() {
     const border_color = Global_color.button_color
-
+    const getPriorityStyle = (priority) => {
+      switch (priority) {
+        case '高':
+          return 'color: ' + Global_color.red + ';font-size:8px;margin-right:10%;';
+        case '中':
+          return 'color: ' + Global_color.yellow1 + ';font-size:8px;margin-right:10%;';
+        case '低':
+          return 'color: ' + Global_color.blue + ';font-size:8px;margin-right:10%;';
+        default:
+          return '';
+      }
+    }
     const state = reactive({
 
       /*工作台的数据结构
@@ -218,6 +239,7 @@ export default {
       onMove,
       state,
       border_color,
+      getPriorityStyle,
     }
   }
 }
@@ -291,6 +313,5 @@ body {
 
 .row {
   justify-content: space-between;
-  margin-bottom: 12px;
 }
 </style>
