@@ -175,6 +175,7 @@ export default {
   },
   data() {
     return {
+      shadow: Global_color.shadow_color,
       iteration: {
         iterationId: '',
         iterationName: '',
@@ -258,6 +259,12 @@ body {
   padding: 12px 24px 12px 24px;
   margin-top: 12px;
   min-height: 650px;
+  transition: all 0.45s;
+}
+.itxst:hover {
+  box-shadow: 1px 1px 10px v-bind(shadow);
+  border-radius: 14px;
+  transform: scale(1.01);
 }
 
 .title {

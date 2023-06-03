@@ -4,7 +4,6 @@
         <div class="row">
             <div style="margin-left: 12px;">
                 <el-button class="add_button" type="primary" @click="showCreate = true">快速创建+</el-button>
-                <el-button class="add_button" type="primary">工作分配</el-button>
                 <el-button class="add_button" type="primary" @click="openAddDialog">添加已有问题</el-button>
             </div>
             <div style="margin-right: 12px;">
@@ -103,6 +102,7 @@ export default {
         return {
             button_color1: Global_color.button_color1,
             button_color2: Global_color.button_color,
+            shadow: Global_color.shadow_color,
             write: Global_color.white1,
             ok_button: Global_color.button_color,
             model_color:Global_color.model_color,
@@ -207,6 +207,12 @@ export default {
     padding: 12px 24px 12px 24px;
     margin-bottom: 24px;
     min-height: 650px;
+    transition: all 0.45s;
+}
+.projects:hover {
+  box-shadow: 1px 1px 10px v-bind(shadow);
+  border-radius: 14px;
+  transform: scale(1.01);
 }
 
 .add_button {
