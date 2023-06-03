@@ -2,13 +2,13 @@
     <footer>
         <hr>
         <div class="footer-help">
-            需要更多帮助？致电 400-820-8820。
+            需要更多帮助？致电 400-820-882X。
         </div>
         <div class="footer">
             <p>DevOps采用符合业界标准的加密技术对您提交的信息进行保密。</p>
             <hr>
             Copyright ©️ 2023 20201422-23 lnc.保留所有权利<br>
-            蒙ICP备2023001109号 营业执照 无线电发射设备销售备案编号11201910351200
+            蒙ICP备2023001109号
         </div>
     </footer>
 </template>
