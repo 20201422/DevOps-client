@@ -1,6 +1,6 @@
 <template>
   <el-text class="button_text" type="primary" style="" @click="findIterations">更多迭代</el-text>
-  <el-drawer  :key="drawerKey" v-model="drawer" :direction="direction" :close-on-press-escape="true">
+  <el-drawer :key="drawerKey" v-model="drawer" :direction="direction" :close-on-press-escape="true">
     <template #header>
       <h4>迭代计划</h4>
     </template>
@@ -117,8 +117,13 @@
           </div>
         </div>
       </div>
-      <div style="margin-top: 15px;width: 65%;">
-        <WorkTable :key="selectIteration.iterationId" :iterationId="selectIteration.iterationId"></WorkTable>
+      <div class="row">
+        <div class="col-7" style="margin-top: 30px">
+          <WorkTable :key="selectIteration.iterationId" :iterationId="selectIteration.iterationId"></WorkTable>
+        </div>
+        <div class="col-5">
+          <Echarts :key="chartkey" :personalProgress=personalProgress></Echarts>
+        </div>
       </div>
 
     </template>
@@ -131,10 +136,13 @@ import { ElMessageBox } from "element-plus";
 import { ElNotification } from 'element-plus'
 import Global_color from "@/app/Global_color.vue";
 import WorkTable from "@/components/WorkTable.vue";
+import Echarts from "@/components/Echarts.vue";
+
 export default {
   name: "IterationMore",
   components: {
-    WorkTable
+    WorkTable,
+    Echarts
   },
   props: {
 
@@ -185,6 +193,14 @@ export default {
       underwaySum: 0, //实现中的问题数
       completedQuestionSum: 0, //已实现问题数
       progress: 0, // 进度:已实现的问题/问题总数
+      personalProgress: {
+        '瑞祥': 0,
+        '堃芃': 0,
+        '慧强': 0,
+        '滔滔': 0,
+        '刘彤': 0,
+      },
+      chartkey:0
     }
   },
 
@@ -204,23 +220,81 @@ export default {
       this.toBeCompletedQuestionSum = 0
       this.underwaySum = 0
       this.completedQuestionSum = 0
+      this.personalProgress['瑞祥'] = 0
+      this.personalProgress['堃芃'] = 0
+      this.personalProgress['慧强'] = 0
+      this.personalProgress['滔滔'] = 0
+      this.personalProgress['刘彤'] = 0
       // 统计问题
       this.$axios.get("/iteration/findQuestionByIterationId/" + this.selectIteration.iterationId)
         .then(response => {
           this.questions = response.data.data
           this.allQuestionSum = this.questions.length // 问题总数
+          let sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0, sum5 = 0
+          let finishSum1 = 0, finishSum2 = 0, finishSum3 = 0, finishSum4 = 0, finishSum5 = 0
           for (let i = 0; i < this.questions.length; i++) {
             if (this.questions[i].questionState === '规划中') {  // 统计规划中问题数
               this.toBeCompletedQuestionSum++
             }
+
             if (this.questions[i].questionState === '实现中') {  // 统计实现中问题数
               this.underwaySum++
             }
-            if (this.questions[i].questionState === '已实现') {  // 统计已实现问题数
-              this.completedQuestionSum++
+            if (this.questions[i].userName === '瑞祥') {
+              sum1++
+              if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
+                this.completedQuestionSum++
+                finishSum1++
+              }
+            }
+            if (this.questions[i].userName === '堃芃') {
+              sum2++
+              if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
+                this.completedQuestionSum++
+                finishSum2++
+              }
+            }
+            if (this.questions[i].userName === '慧强') {
+              sum3++
+              if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
+                this.completedQuestionSum++
+                finishSum3++
+              }
+            }
+            if (this.questions[i].userName === '滔滔') {
+              sum4++
+              if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
+                this.completedQuestionSum++
+                finishSum4++
+              }
+            }
+            if (this.questions[i].userName === '刘彤') {
+              sum5++
+              if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
+                this.completedQuestionSum++
+                finishSum5++
+              }
             }
           }
+          if(sum1!=0){
+            console.log(sum1)
+            console.log(finishSum1)
+            this.personalProgress['瑞祥'] = finishSum1/sum1
+          }
+          if(sum2!=0){
+            this.personalProgress['堃芃'] = finishSum2/sum2
+          }
+          if(sum3!=0){
+            this.personalProgress['慧强'] = finishSum3/sum3
+          }
+          if(sum4!=0){
+            this.personalProgress['滔滔'] = finishSum4/sum4
+          }
+          if(sum5!=0){
+            this.personalProgress['刘彤'] = finishSum5/sum5
+          }
           this.progress = this.completedQuestionSum * 100 / this.allQuestionSum
+          this.chartkey++
         }).catch(error => { console.log(error) })
       this.dialogVisible = true
     },
@@ -287,11 +361,11 @@ export default {
               type: 'warning',
               position: 'top-left',
             })
-          }else {
+          } else {
             location.reload()
           }
         }).catch(error => { console.error(error) })
-        
+
 
       }).catch((error) => { console.log(error) })
     },
@@ -353,13 +427,14 @@ export default {
 <style scoped>
 .box-card {
   width: 400px;
-  
+
 }
+
 /* el-card{
   background-color:#f8f9fa;
 } */
-el-drawer{
-  background-color:#f8f9fa;
+el-drawer {
+  background-color: #f8f9fa;
 }
 
 

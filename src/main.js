@@ -9,15 +9,15 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import "bootstrap-icons/font/bootstrap-icons.css"
 
-
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-
 import axios from '@/config/axios'
 // import VueAxios from 'vue-axios'
+import * as echarts from 'echarts'
 
 const app = createApp(App)
 app.config.globalProperties.$axios = axios
+app.config.globalProperties.$echarts = echarts
 
 //element-plus 报错 ResizeObserver loop limit exceeded 解决
 const debounce = (fn, delay) => {
