@@ -20,8 +20,8 @@
                         disable-transitions>{{ item.row.questionState }}</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column prop="questionBeginTime" label="⏳ 开始时间" width="130" align="center" sortable />
-            <el-table-column prop="questionEndTime" label="⌛️ 结束时间" width="130" align="center" sortable />
+            <el-table-column prop="beginTime" label="⏳ 开始时间" width="130" align="center" sortable :formatter="formateTime" />
+            <el-table-column prop="endTime" label="⌛️ 结束时间" width="130" align="center" sortable :formatter="formateTime" />
             <el-table-column fixed="right" label="操作" width="120" align="center">
                 <template #default="index">
                     <el-button link type="primary" size="large" @click.prevent="openQuestion(index.row)">
@@ -44,7 +44,7 @@ export default {
     },
 
     props: {
-        iterationId:Number
+        iterationId: Number
     },
 
     setup(props, context) {
@@ -100,8 +100,8 @@ export default {
 
     methods: {
         showQuestion: function () {
-           
-            this.$axios.get('/iteration/findQuestionByIterationId/'+ this.iterationId ).then((resp) => {
+
+            this.$axios.get('/iteration/findQuestionByIterationId/' + this.iterationId).then((resp) => {
                 this.tableData = resp.data.data
                 // console.log(this.tableData)
             })
@@ -112,6 +112,18 @@ export default {
                 this.users = resp.data.data.map(user => ({ text: user.userName, value: user.userId }))
                 // console.log(this.users)
             })
+        },
+        formateTime: function (row, column, cellValue) {
+            if (cellValue != null && cellValue !== '') {  // 有时间才处理
+                const date = new Date(cellValue)
+                const year = date.getFullYear()
+                const month = date.getMonth() + 1
+                const day = date.getDate()
+
+                return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
+            } else {
+                return null
+            }
         },
     },
 
