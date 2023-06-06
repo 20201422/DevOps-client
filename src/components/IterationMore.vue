@@ -200,7 +200,7 @@ export default {
         '滔滔': 0,
         '刘彤': 0,
       },
-      chartkey:0
+      chartkey: 0
     }
   },
 
@@ -240,58 +240,81 @@ export default {
             if (this.questions[i].questionState === '实现中') {  // 统计实现中问题数
               this.underwaySum++
             }
-            if (this.questions[i].userName === '瑞祥') {
-              sum1++
-              if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
-                this.completedQuestionSum++
+            if (this.questions[i].questionState === '已实现') {  // 统计已实现问题数
+              this.completedQuestionSum++
+              if (this.questions[i].userName === '瑞祥') {
+                sum1++
                 finishSum1++
               }
-            }
-            if (this.questions[i].userName === '堃芃') {
-              sum2++
-              if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
-                this.completedQuestionSum++
+              if (this.questions[i].userName === '堃芃') {
+                sum2++
                 finishSum2++
               }
-            }
-            if (this.questions[i].userName === '慧强') {
-              sum3++
-              if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
-                this.completedQuestionSum++
+              if (this.questions[i].userName === '慧强') {
+                sum3++
                 finishSum3++
               }
-            }
-            if (this.questions[i].userName === '滔滔') {
-              sum4++
-              if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
-                this.completedQuestionSum++
+              if (this.questions[i].userName === '滔滔') {
+                sum4++
                 finishSum4++
               }
-            }
-            if (this.questions[i].userName === '刘彤') {
-              sum5++
-              if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
-                this.completedQuestionSum++
+              if (this.questions[i].userName === '刘彤') {
+                sum5++
                 finishSum5++
               }
             }
+            // if (this.questions[i].userName === '瑞祥') {
+            //   sum1++
+            //   if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
+            //     this.completedQuestionSum++
+            //     finishSum1++
+            //   }
+            // }
+            // if (this.questions[i].userName === '堃芃') {
+            //   sum2++
+            //   if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
+            //     this.completedQuestionSum++
+            //     finishSum2++
+            //   }
+            // }
+            // if (this.questions[i].userName === '慧强') {
+            //   sum3++
+            //   if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
+            //     this.completedQuestionSum++
+            //     finishSum3++
+            //   }
+            // }
+            // if (this.questions[i].userName === '滔滔') {
+            //   sum4++
+            //   if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
+            //     this.completedQuestionSum++
+            //     finishSum4++
+            //   }
+            // }
+            // if (this.questions[i].userName === '刘彤') {
+            //   sum5++
+            //   if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
+            //     this.completedQuestionSum++
+            //     finishSum5++
+            //   }
+            // }
           }
-          if(sum1!=0){
+          if (sum1 != 0) {
             console.log(sum1)
             console.log(finishSum1)
-            this.personalProgress['瑞祥'] = finishSum1/sum1
+            this.personalProgress['瑞祥'] = finishSum1 / sum1
           }
-          if(sum2!=0){
-            this.personalProgress['堃芃'] = finishSum2/sum2
+          if (sum2 != 0) {
+            this.personalProgress['堃芃'] = finishSum2 / sum2
           }
-          if(sum3!=0){
-            this.personalProgress['慧强'] = finishSum3/sum3
+          if (sum3 != 0) {
+            this.personalProgress['慧强'] = finishSum3 / sum3
           }
-          if(sum4!=0){
-            this.personalProgress['滔滔'] = finishSum4/sum4
+          if (sum4 != 0) {
+            this.personalProgress['滔滔'] = finishSum4 / sum4
           }
-          if(sum5!=0){
-            this.personalProgress['刘彤'] = finishSum5/sum5
+          if (sum5 != 0) {
+            this.personalProgress['刘彤'] = finishSum5 / sum5
           }
           this.progress = this.completedQuestionSum * 100 / this.allQuestionSum
           this.chartkey++
