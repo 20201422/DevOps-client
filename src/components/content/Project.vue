@@ -1,13 +1,13 @@
 <template>
   <div class="projects">
     <el-descriptions :title="`${ projectId } - ${ projectName }`">
-      <el-descriptions-item label="&nbsp;&nbsp;项目Id：">{{ projectId }}</el-descriptions-item>
-      <el-descriptions-item label="&nbsp;&nbsp;&nbsp;&nbsp;项目名称：">{{ projectName }}</el-descriptions-item>
+      <el-descriptions-item label="&nbsp;&nbsp;项目Id">{{ projectId }}</el-descriptions-item>
+      <el-descriptions-item label="&nbsp;&nbsp;&nbsp;&nbsp;项目名称">{{ projectName }}</el-descriptions-item>
       <el-descriptions-item label="项目组长">{{userName}} - {{userId}}</el-descriptions-item>
-      <el-descriptions-item label="&nbsp;&nbsp;项目状态：">
+      <el-descriptions-item label="&nbsp;&nbsp;项目状态">
         <el-tag size="small" :type="projectState === '进行中' ? '' : 'success' ">{{ projectState }}</el-tag>
       </el-descriptions-item>
-      <el-descriptions-item label="&nbsp;&nbsp;&nbsp;&nbsp;项目成员：">
+      <el-descriptions-item label="&nbsp;&nbsp;&nbsp;&nbsp;项目成员">
         <span v-for="user in projectUser" :key="user.userId">
           {{ user.userName }} - {{ user.userId }}&nbsp;&nbsp;
         </span>
