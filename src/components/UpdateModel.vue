@@ -45,7 +45,7 @@
           <el-form-item label="开始时间">
             <div class="block">
               <el-date-picker v-model="form.beginTime" type="datetime" placeholder="选择开始时间"
-                              :default-time="defaultTime" :disabled-date="disabledEndDate"/>
+                              :default-time="defaultTime" :disabled-date="disabledBeginDate"/>
             </div>
           </el-form-item>
           <el-form-item label="结束时间">
