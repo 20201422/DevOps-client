@@ -1,5 +1,8 @@
 <template>
-  <el-text class="button_text" type="primary" style="" @click="findIterations">更多迭代</el-text>
+  <div>
+    <el-button style="margin-bottom: 4px;margin-right: 5px;" @click="showIteration(openedIteration)" class="button" text>详情</el-button>
+    <el-text class="button_text" type="primary" style="" @click="findIterations">更多迭代</el-text>
+  </div>
   <el-drawer :key="drawerKey" v-model="drawer" :direction="direction" :close-on-press-escape="true">
     <template #header>
       <h4>迭代计划</h4>
@@ -200,10 +203,16 @@ export default {
         '滔滔': 0,
         '刘彤': 0,
       },
-      chartkey: 0
+      chartkey: 0,
+      openedIteration: ''
     }
   },
-
+  beforeMount() {
+    //得到已开启的迭代
+    this.$axios.get("/iteration/getOpenedIteration/" + this.$store.state.projectId).then((response) => {
+      this.openedIteration = response.data.data
+    }).catch((error) => { console.log(error) });
+  },
   methods: {
     findIterations() {
       this.drawer = true
@@ -263,41 +272,6 @@ export default {
                 finishSum5++
               }
             }
-            // if (this.questions[i].userName === '瑞祥') {
-            //   sum1++
-            //   if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
-            //     this.completedQuestionSum++
-            //     finishSum1++
-            //   }
-            // }
-            // if (this.questions[i].userName === '堃芃') {
-            //   sum2++
-            //   if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
-            //     this.completedQuestionSum++
-            //     finishSum2++
-            //   }
-            // }
-            // if (this.questions[i].userName === '慧强') {
-            //   sum3++
-            //   if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
-            //     this.completedQuestionSum++
-            //     finishSum3++
-            //   }
-            // }
-            // if (this.questions[i].userName === '滔滔') {
-            //   sum4++
-            //   if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
-            //     this.completedQuestionSum++
-            //     finishSum4++
-            //   }
-            // }
-            // if (this.questions[i].userName === '刘彤') {
-            //   sum5++
-            //   if (this.questions[i].questionState === '已实现') {  // 统计实现中问题数
-            //     this.completedQuestionSum++
-            //     finishSum5++
-            //   }
-            // }
           }
           if (sum1 != 0) {
             console.log(sum1)
@@ -356,7 +330,7 @@ export default {
 
     },
     cancelUpdateClick() {
-      updateVisible = false
+      this.updateVisible = false
     },
 
     //确认修改状态
