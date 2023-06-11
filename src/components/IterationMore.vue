@@ -140,6 +140,7 @@ import { ElNotification } from 'element-plus'
 import Global_color from "@/app/Global_color.vue";
 import WorkTable from "@/components/WorkTable.vue";
 import Echarts from "@/components/Echarts.vue";
+import { toInteger } from 'lodash';
 
 export default {
   name: "IterationMore",
@@ -290,7 +291,7 @@ export default {
           if (sum5 != 0) {
             this.personalProgress['刘彤'] = finishSum5 / sum5
           }
-          this.progress = this.completedQuestionSum * 100 / this.allQuestionSum
+          this.progress =  toInteger(this.completedQuestionSum * 100 / this.allQuestionSum)
           this.chartkey++
         }).catch(error => { console.log(error) })
       this.dialogVisible = true
