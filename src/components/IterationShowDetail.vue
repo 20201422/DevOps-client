@@ -101,7 +101,7 @@ export default {
   methods: {
     //拖动卡片结束后状态更新
     updateQuestionState(e) {
-      console.log("拖拽结束")
+      // console.log("拖拽结束")
       this.questionIdAndturnToState.questionId = e.draggedContext.element.questionId,  //得到拖动中的问题id
         this.questionIdAndturnToState.state = e.relatedContext.component.tag   //得到目标状态
     },
@@ -117,8 +117,10 @@ export default {
             }
           }
         ).then(response => {
-          console.log(response)
-        }).catch(error => { console.log(error) })
+          // console.log(response)
+        }).catch(error => {
+          // console.log(error)
+        })
       }
 
     },
@@ -226,11 +228,11 @@ export default {
     });
     //拖拽开始的事件
     const onStart = () => {
-      console.log("开始拖拽");
+      // console.log("开始拖拽");
     };
     //拖拽结束的事件
     const onEnd = () => {
-      console.log("结束拖拽");
+      // console.log("结束拖拽");
     };
     const onMove = (e, originalEvent) => {
       //不允许停靠
