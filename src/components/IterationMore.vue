@@ -141,7 +141,6 @@ import Global_color from "@/app/Global_color.vue";
 import WorkTable from "@/components/WorkTable.vue";
 import Echarts from "@/components/Echarts.vue";
 import { toInteger } from 'lodash';
-import { toInteger } from 'lodash';
 
 export default {
   name: "IterationMore",
