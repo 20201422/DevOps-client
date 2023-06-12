@@ -132,7 +132,7 @@
     </template>
   </el-dialog>
 </template>
-  
+
 <script>
 import { reactive, ref } from 'vue';
 import { ElMessageBox } from "element-plus";
@@ -140,6 +140,7 @@ import { ElNotification } from 'element-plus'
 import Global_color from "@/app/Global_color.vue";
 import WorkTable from "@/components/WorkTable.vue";
 import Echarts from "@/components/Echarts.vue";
+import { toInteger } from 'lodash';
 import { toInteger } from 'lodash';
 
 export default {
@@ -421,7 +422,7 @@ export default {
 }
 
 </script>
-  
+
 <style scoped>
 .box-card {
   width: 400px;
@@ -477,4 +478,3 @@ el-drawer {
   min-height: 180px;
 }
 </style>
-  
