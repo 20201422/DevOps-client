@@ -4,20 +4,20 @@
         <el-dialog title="创建迭代" v-model="dialogVisible" width="70%">
             <el-form :v-model="form">
                 <label>迭代名称</label>
-                <el-form-item>
+                <el-form-item :rules="[{ required: true, message: '请输入Id', trigger: 'blur'}]">
                     <el-input v-model="newIteration.iterationName"></el-input>
                 </el-form-item>
 
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item label="开始时间">
                         <div class="block">
-                            <el-date-picker v-model="newIteration.startTime" type="datetime" placeholder="选择开始时间"
+                            <el-date-picker :rules="[{ required: true}]" v-model="newIteration.startTime" type="datetime" placeholder="选择开始时间"
                                 value-format="YYYY-MM-DD" />
                         </div>
                     </el-form-item>
                     <el-form-item label="结束时间">
                         <div class="block">
-                            <el-date-picker v-model="newIteration.endTime" type="datetime" placeholder="选择结束时间"
+                            <el-date-picker :rules="[{ required: true}]" v-model="newIteration.endTime" type="datetime" placeholder="选择结束时间"
                                 value-format="YYYY-MM-DD" />
                         </div>
                     </el-form-item>

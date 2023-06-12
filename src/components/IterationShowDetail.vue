@@ -101,22 +101,26 @@ export default {
   methods: {
     //拖动卡片结束后状态更新
     updateQuestionState(e) {
+      console.log("拖拽结束")
       this.questionIdAndturnToState.questionId = e.draggedContext.element.questionId,  //得到拖动中的问题id
         this.questionIdAndturnToState.state = e.relatedContext.component.tag   //得到目标状态
     },
     //拖动结束后更新状态
     endAndUpdate() {
-      this.$axios.get("/question/update/state",
-        {
-          params: {
-            questionId: this.questionIdAndturnToState.questionId,
-            state: this.questionIdAndturnToState.state,
-            projectId: this.$store.state.projectId
+      if (this.questionIdAndturnToState.state != '') {
+        this.$axios.get("/question/update/state",
+          {
+            params: {
+              questionId: this.questionIdAndturnToState.questionId,
+              state: this.questionIdAndturnToState.state,
+              projectId: this.$store.state.projectId
+            }
           }
-        }
-      ).then(response => {
-        console.log(response)
-      }).catch(error => { console.log(error) })
+        ).then(response => {
+          console.log(response)
+        }).catch(error => { console.log(error) })
+      }
+
     },
     click: function (model, type) {
       this.$emit('openModel', model, type)
@@ -261,6 +265,7 @@ body {
   min-height: 650px;
   transition: all 0.45s;
 }
+
 .itxst:hover {
   box-shadow: 1px 1px 10px v-bind(shadow);
   border-radius: 14px;
