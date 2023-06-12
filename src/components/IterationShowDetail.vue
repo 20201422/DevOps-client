@@ -226,11 +226,11 @@ export default {
     });
     //拖拽开始的事件
     const onStart = () => {
-      console.log("开始拖拽");
+      // console.log("开始拖拽");
     };
     //拖拽结束的事件
     const onEnd = () => {
-      console.log("结束拖拽");
+      // console.log("结束拖拽");
     };
     const onMove = (e, originalEvent) => {
       //不允许停靠
