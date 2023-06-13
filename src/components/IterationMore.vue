@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-button style="margin-bottom: 4px;margin-right: 5px;" @click="showIteration(openedIteration)" class="button" text>详情</el-button>
+    <el-button style="margin-bottom: 4px;margin-right: 5px;" @click="showIteration(openedIteration)" class="button"
+      text>详情</el-button>
     <el-text class="button_text" type="primary" style="" @click="findIterations">更多迭代</el-text>
   </div>
   <el-drawer :key="drawerKey" v-model="drawer" :direction="direction" :close-on-press-escape="true">
@@ -245,10 +246,41 @@ export default {
           for (let i = 0; i < this.questions.length; i++) {
             if (this.questions[i].questionState === '规划中') {  // 统计规划中问题数
               this.toBeCompletedQuestionSum++
+              if (this.questions[i].userName === '瑞祥') {
+                sum1++
+              }
+              if (this.questions[i].userName === '堃芃') {
+                sum2++
+                finishSum2++
+              }
+              if (this.questions[i].userName === '慧强') {
+                sum3++
+              }
+              if (this.questions[i].userName === '滔滔') {
+                sum4++
+              }
+              if (this.questions[i].userName === '刘彤') {
+                sum5++
+              }
             }
 
             if (this.questions[i].questionState === '实现中') {  // 统计实现中问题数
               this.underwaySum++
+              if (this.questions[i].userName === '瑞祥') {
+                sum1++
+              }
+              if (this.questions[i].userName === '堃芃') {
+                sum2++
+              }
+              if (this.questions[i].userName === '慧强') {
+                sum3++
+              }
+              if (this.questions[i].userName === '滔滔') {
+                sum4++
+              }
+              if (this.questions[i].userName === '刘彤') {
+                sum5++
+              }
             }
             if (this.questions[i].questionState === '已实现') {  // 统计已实现问题数
               this.completedQuestionSum++
@@ -291,7 +323,7 @@ export default {
           if (sum5 != 0) {
             this.personalProgress['刘彤'] = finishSum5 / sum5
           }
-          this.progress =  toInteger(this.completedQuestionSum * 100 / this.allQuestionSum)
+          this.progress = toInteger(this.completedQuestionSum * 100 / this.allQuestionSum)
           this.chartkey++
         }).catch(error => { console.log(error) })
       this.dialogVisible = true
