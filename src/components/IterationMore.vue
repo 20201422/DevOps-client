@@ -307,8 +307,8 @@ export default {
             }
           }
           if (sum1 != 0) {
-            console.log(sum1)
-            console.log(finishSum1)
+            // console.log(sum1)
+            // console.log(finishSum1)
             this.personalProgress['瑞祥'] = finishSum1 / sum1
           }
           if (sum2 != 0) {
