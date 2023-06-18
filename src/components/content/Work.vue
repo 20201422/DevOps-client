@@ -151,7 +151,7 @@ export default {
                 let data = response.data.data
 
                 this.questions = data
-
+                location.reload()
             }).catch(error => { })
         },
         addConfirmClick() {

@@ -1,85 +1,93 @@
 <template>
-  <div v-if="iteration != null" class="itxst">
-    <div class="row">
-      <div>
-        <span>{{ iteration.iterationName }}</span> &nbsp;&nbsp;&nbsp;&nbsp;
-        <el-popconfirm confirm-button-text="确认" cancel-button-text="取消" :icon="InfoFilled" icon-color="#626AEF"
-          :title="comfirmTitle" @confirm="confirmChangeIterationState" @cancel="cancelChangeIterationState">
-          <template #reference>
-            <el-tag :style="warning" style="cursor: pointer;">{{ iteration.iterationState }}</el-tag>
-          </template>
-        </el-popconfirm>
+  <el-scrollbar>
+    <div style="max-height:680px; min-height:240px;" class="itxst">
+      <div v-if="iteration != null">
+        <div class="row">
+          <div>
+            <span>{{ iteration.iterationName }}</span> &nbsp;&nbsp;&nbsp;&nbsp;
+            <el-popconfirm confirm-button-text="确认" cancel-button-text="取消" :icon="InfoFilled" icon-color="#626AEF"
+              :title="comfirmTitle" @confirm="confirmChangeIterationState" @cancel="cancelChangeIterationState">
+              <template #reference>
+                <el-tag :style="warning" style="cursor: pointer;">{{ iteration.iterationState }}</el-tag>
+              </template>
+            </el-popconfirm>
 
-      </div>
-      <el-tag type='success'>{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
-    </div>
+          </div>
+          <el-tag type='success'>{{ iteration.startTime }}~{{ iteration.endTime }}</el-tag>
+        </div>
 
-    <div class="row">
-      <div class="col-sm-4 border bg-light group">
-        <label class="title">规划中</label>
-        <draggable tag="规划中" :list="state.modules.group1" item-key={{ element.questionId }} ghost-class="ghost"
-          handle=".move" filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300"
-          @start="onStart" @end="endAndUpdate" group="group1" :fallback-class="true" :fallback-on-body="true"
-          :touch-start-threshold="50" :fallback-tolerance="50" :move="updateQuestionState">
-          <template #item="{ element }">
-            <div class="move" @click="click(element, '问题')">
-              <div :class="false ? 'forbid item' : 'item'">
-                <div class="row" style="margin-top: 12px;">
-                  <label style="margin-left: 8%;font-size: 18px;">{{ element.questionName }}</label>
-                  <span :style="getPriorityStyle(element.questionPriority)">{{ element.questionPriority }}&nbsp;</span>
+        <div class="row">
+          <div class="col-sm-4 border bg-light group">
+            <label class="title">规划中</label>
+            <draggable tag="规划中" :list="state.modules.group1" item-key={{ element.questionId }} ghost-class="ghost"
+              handle=".move" filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300"
+              @start="onStart" @end="endAndUpdate" group="group1" :fallback-class="true" :fallback-on-body="true"
+              :touch-start-threshold="50" :fallback-tolerance="50" :move="updateQuestionState">
+              <template #item="{ element }">
+                <div class="move" @click="click(element, '问题')">
+                  <div :class="false ? 'forbid item' : 'item'">
+                    <div class="row" style="margin-top: 12px;">
+                      <label style="margin-left: 8%;font-size: 18px;">{{ element.questionName }}</label>
+                      <span :style="getPriorityStyle(element.questionPriority)">{{ element.questionPriority
+                      }}&nbsp;</span>
+                    </div>
+                    <p>{{ element.questionDescribe }}</p>
+                    <p>处理人：{{ element.userName }}</p>
+                  </div>
                 </div>
-                <p>{{ element.questionDescribe }}</p>
-                <p>处理人：{{ element.userName }}</p>
-              </div>
-            </div>
-          </template>
-        </draggable>
+              </template>
+            </draggable>
+          </div>
+          <div class="col-sm-4 border bg-light group">
+            <label class="title">实现中</label>
+            <draggable tag="实现中" :list="state.modules.group2" item-key={{ element.questionId }} ghost-class="ghost"
+              handle=".move" filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300"
+              @start="onStart" @end="endAndUpdate" group="group1" :fallback-class="true" :fallback-on-body="true"
+              :touch-start-threshold="50" :fallback-tolerance="50" :move="updateQuestionState">
+              <template #item="{ element }">
+                <div class="move" @click="click(element, '问题')">
+                  <div :class="false ? 'forbid item' : 'item'">
+                    <div class="row" style="margin-top: 12px;">
+                      <label style="margin-left: 8%;font-size: 18px;">{{ element.questionName }}</label>
+                      <span :style="getPriorityStyle(element.questionPriority)">{{ element.questionPriority
+                      }}&nbsp;</span>
+                    </div>
+                    <p>{{ element.questionDescribe }}</p>
+                    <p>处理人：{{ element.userName }}</p>
+                  </div>
+                </div>
+              </template>
+            </draggable>
+          </div>
+          <div class="col-sm-4 border bg-light group">
+            <label class="title">已实现</label>
+            <draggable tag="已实现" :list="state.modules.group3" item-key={{ element.questionId }} ghost-class="ghost"
+              handle=".move" filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300"
+              @start="onStart" @end="endAndUpdate" group="group1" :fallback-class="true" :fallback-on-body="true"
+              :touch-start-threshold="50" :fallback-tolerance="50" :move="updateQuestionState">
+              <template #item="{ element }">
+                <div class="move" @click="click(element, '问题')">
+                  <div :class="false ? 'forbid item' : 'item'">
+                    <div class="row" style="margin-top: 12px;">
+                      <label style="margin-left: 8%;font-size: 18px;">{{ element.questionName }}</label>
+                      <span :style="getPriorityStyle(element.questionPriority)">{{ element.questionPriority
+                      }}&nbsp;</span>
+                    </div>
+                    <p>{{ element.questionDescribe }}</p>
+                    <p>处理人：{{ element.userName }}</p>
+                  </div>
+                </div>
+              </template>
+            </draggable>
+          </div>
+        </div>
       </div>
-      <div class="col-sm-4 border bg-light group">
-        <label class="title">实现中</label>
-        <draggable tag="实现中" :list="state.modules.group2" item-key={{ element.questionId }} ghost-class="ghost"
-          handle=".move" filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300"
-          @start="onStart" @end="endAndUpdate" group="group1" :fallback-class="true" :fallback-on-body="true"
-          :touch-start-threshold="50" :fallback-tolerance="50" :move="updateQuestionState">
-          <template #item="{ element }">
-            <div class="move" @click="click(element, '问题')">
-              <div :class="false ? 'forbid item' : 'item'">
-                <div class="row" style="margin-top: 12px;">
-                  <label style="margin-left: 8%;font-size: 18px;">{{ element.questionName }}</label>
-                  <span :style="getPriorityStyle(element.questionPriority)">{{ element.questionPriority }}&nbsp;</span>
-                </div>
-                <p>{{ element.questionDescribe }}</p>
-                <p>处理人：{{ element.userName }}</p>
-              </div>
-            </div>
-          </template>
-        </draggable>
-      </div>
-      <div class="col-sm-4 border bg-light group">
-        <label class="title">已实现</label>
-        <draggable tag="已实现" :list="state.modules.group3" item-key={{ element.questionId }} ghost-class="ghost"
-          handle=".move" filter=".forbid" :force-fallback="true" chosen-class="chosenClass" animation="300"
-          @start="onStart" @end="endAndUpdate" group="group1" :fallback-class="true" :fallback-on-body="true"
-          :touch-start-threshold="50" :fallback-tolerance="50" :move="updateQuestionState">
-          <template #item="{ element }">
-            <div class="move" @click="click(element, '问题')">
-              <div :class="false ? 'forbid item' : 'item'">
-                <div class="row" style="margin-top: 12px;">
-                  <label style="margin-left: 8%;font-size: 18px;">{{ element.questionName }}</label>
-                  <span :style="getPriorityStyle(element.questionPriority)">{{ element.questionPriority }}&nbsp;</span>
-                </div>
-                <p>{{ element.questionDescribe }}</p>
-                <p>处理人：{{ element.userName }}</p>
-              </div>
-            </div>
-          </template>
-        </draggable>
+
+      <div v-if="iteration == null">
+        <el-empty description="暂无数据" />
       </div>
     </div>
-  </div>
-  <div v-if="iteration == null">
-    <el-empty description="暂无数据" />
-  </div>
+  </el-scrollbar>
 </template>
 
 
@@ -268,11 +276,11 @@ body {
   transition: all 0.45s;
 }
 
-.itxst:hover {
-  box-shadow: 1px 1px 10px v-bind(shadow);
-  border-radius: 14px;
-  transform: scale(1.01);
-}
+//.itxst:hover {
+//  box-shadow: 1px 1px 10px v-bind(shadow);
+//  border-radius: 14px;
+//  transform: scale(1.01);
+//}
 
 .title {
   margin-bottom: 10px;
