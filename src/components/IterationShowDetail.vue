@@ -276,12 +276,6 @@ body {
   transition: all 0.45s;
 }
 
-//.itxst:hover {
-//  box-shadow: 1px 1px 10px v-bind(shadow);
-//  border-radius: 14px;
-//  transform: scale(1.01);
-//}
-
 .title {
   margin-bottom: 10px;
 }
