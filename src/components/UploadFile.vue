@@ -38,8 +38,8 @@ export default {
 
   data() {
     return {
-      uploadUrl: 'https://kunpeng24.cn:9090/files/upload/' + this.$store.state.projectId,
-      downloadUrl: 'https://kunpeng24.cn:9090/files/',
+      uploadUrl: 'http://localhost:9090/files/upload/' + this.$store.state.projectId,
+      downloadUrl: 'http://localhost:9090/files/',
 
       files: [],
     }
