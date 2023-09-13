@@ -39,7 +39,7 @@ export default {
                 '越野越心驰。强硬坚固，不止肉眼可见,随时迎接各种挑战。',
                 'Apple致力于为世界各地的人们提供更好更广泛的受教育机会。',],
             advertisementLink:[
-                'http://clsty.top:8090',
+                'https://kunpeng24.cn/LFouse',
                 'https://www.apple.com.cn',
                 'https://www.nchu.edu.cn',
                 'https://kunpeng24.cn',

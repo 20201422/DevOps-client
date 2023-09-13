@@ -2,7 +2,7 @@ import axios from "axios"
 import { ElMessage } from 'element-plus'
 import router from '@/router' // 导入路由实例
 
-axios.defaults.baseURL = "https://localhost:9090"
+axios.defaults.baseURL = "https://kunpeng24.cn:9090"
 
 const request = axios.create({
     timeout: 7242,
